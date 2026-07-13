@@ -1,7 +1,15 @@
 R_DEF: Internal format may change without notice
 local
+drawable ic_widget_arrow_down
+drawable ic_widget_arrow_up
+drawable ic_widget_calendar
+drawable ic_widget_trophy
+drawable ic_widget_wallet
 drawable kazio_logo_bg
 drawable kazio_logo_transparent
+drawable widget_card_bg
+drawable widget_card_bg_green
+drawable widget_main_bg
 layout widget_initial_layout
 xml kazio_large_widget_info
 xml kazio_small_widget_info
