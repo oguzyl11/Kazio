@@ -93,4 +93,10 @@ class AuthViewModel @Inject constructor(
     fun logout() {
         _uiState.update { it.copy(isAuthenticated = false, pinInput = "", nameInput = "", emailInput = "", errorMessage = null) }
     }
+
+    fun resetAccount() {
+        viewModelScope.launch {
+            dataStoreRepository.clearUser()
+        }
+    }
 }

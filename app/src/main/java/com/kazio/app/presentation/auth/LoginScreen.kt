@@ -24,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 fun LoginScreen(
     onLoginSuccess: () -> Unit,
+    onResetAccount: () -> Unit,
     viewModel: AuthViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -118,6 +119,21 @@ fun LoginScreen(
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Text("Giriş Yap", style = MaterialTheme.typography.titleMedium)
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            TextButton(
+                onClick = {
+                    viewModel.resetAccount()
+                    onResetAccount()
+                }
+            ) {
+                Text(
+                    text = "Hesabımı Sıfırla (Tüm Verileri Sil)",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.labelLarge
+                )
             }
         }
     }

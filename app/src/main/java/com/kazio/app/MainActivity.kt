@@ -65,11 +65,18 @@ class MainActivity : ComponentActivity() {
                         })
                     }
                     composable("login") {
-                        LoginScreen(onLoginSuccess = {
-                            navController.navigate("main") {
-                                popUpTo("login") { inclusive = true }
+                        LoginScreen(
+                            onLoginSuccess = {
+                                navController.navigate("main") {
+                                    popUpTo("login") { inclusive = true }
+                                }
+                            },
+                            onResetAccount = {
+                                navController.navigate("register") {
+                                    popUpTo(0)
+                                }
                             }
-                        })
+                        )
                     }
                     navigation(startDestination = "dashboard", route = "main") {
                         composable("dashboard") {
