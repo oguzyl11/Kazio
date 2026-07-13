@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.kazio.app.data.local.datastore.DataStoreRepository
 import com.kazio.app.domain.usecase.EndShiftUseCase
 import com.kazio.app.domain.usecase.GetActiveShiftUseCase
+import com.kazio.app.domain.usecase.GetRecommendationsUseCase
 import com.kazio.app.domain.usecase.GetSummaryUseCase
 import com.kazio.app.domain.usecase.StartShiftUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
     private val getSummaryUseCase: GetSummaryUseCase,
+    private val getRecommendationsUseCase: GetRecommendationsUseCase,
     private val getActiveShiftUseCase: GetActiveShiftUseCase,
     private val startShiftUseCase: StartShiftUseCase,
     private val endShiftUseCase: EndShiftUseCase,
@@ -43,8 +45,9 @@ class DashboardViewModel @Inject constructor(
         getSummaryUseCase(getStartOfDay(currentTimestamp.value), getEndOfDay(currentTimestamp.value)),
         getActiveShiftUseCase(),
         tickerFlow,
-        dataStoreRepository.userPreferencesFlow
-    ) { summaryResult, activeShift, currentTime, preferences ->
+        dataStoreRepository.userPreferencesFlow,
+        getRecommendationsUseCase()
+    ) { summaryResult, activeShift, currentTime, preferences, recommendations ->
         val durationStr = if (activeShift != null) {
             val diff = currentTime - activeShift.startAt
             val hours = (diff / (1000 * 60 * 60))
@@ -61,7 +64,8 @@ class DashboardViewModel @Inject constructor(
             activeShift = activeShift,
             activeShiftDurationStr = durationStr,
             platformProfits = summaryResult.platformProfits.take(3),
-            showOnboarding = !preferences.isOnboardingSeen
+            showOnboarding = !preferences.isOnboardingSeen,
+            recommendations = recommendations
         ) as DashboardUiState
     }
         .catch { e ->

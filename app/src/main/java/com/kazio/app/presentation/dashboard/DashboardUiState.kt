@@ -1,6 +1,7 @@
 package com.kazio.app.presentation.dashboard
 
 import com.kazio.app.domain.model.PlatformProfit
+import com.kazio.app.domain.model.Recommendation
 import com.kazio.app.domain.model.Shift
 
 sealed interface DashboardUiState {
@@ -12,7 +13,8 @@ sealed interface DashboardUiState {
         val activeShift: Shift?,
         val activeShiftDurationStr: String = "",
         val platformProfits: List<PlatformProfit> = emptyList(),
-        val showOnboarding: Boolean = false
+        val showOnboarding: Boolean = false,
+        val recommendations: List<Recommendation> = emptyList()
     ) : DashboardUiState
     data class Error(val message: String) : DashboardUiState
 }

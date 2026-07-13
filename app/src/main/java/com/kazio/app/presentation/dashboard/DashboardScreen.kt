@@ -6,6 +6,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -27,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kazio.app.domain.model.PlatformProfit
+import com.kazio.app.domain.model.Recommendation
+import com.kazio.app.domain.model.RecommendationType
 import com.kazio.app.presentation.components.ShowcaseOverlay
 import com.kazio.app.presentation.components.ShowcaseTarget
 import java.text.NumberFormat
@@ -313,6 +317,26 @@ private fun DashboardContent(
             }
         }
 
+        // Recommendations
+        if (state.recommendations.isNotEmpty()) {
+            item {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Text(text = "Size Özel Tavsiyeler", style = MaterialTheme.typography.headlineMedium, color = com.kazio.app.presentation.theme.TextPrimary)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    LazyRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        contentPadding = PaddingValues(end = 20.dp)
+                    ) {
+                        items(state.recommendations) { recommendation ->
+                            RecommendationCard(recommendation)
+                        }
+                    }
+                }
+            }
+        }
+
         // Recent Transactions List
         if (state.platformProfits.isNotEmpty()) {
             item {
@@ -401,5 +425,40 @@ private fun PlatformListItem(profit: PlatformProfit, formatter: NumberFormat) {
         }
         Spacer(modifier = Modifier.width(16.dp))
         Text(text = "+${formatter.format(profit.totalIncome)}", style = MaterialTheme.typography.labelLarge, color = borderColor)
+    }
+}
+
+@Composable
+fun RecommendationCard(recommendation: Recommendation) {
+    val (icon, color) = when (recommendation.type) {
+        RecommendationType.POSITIVE -> Icons.Default.CheckCircle to MaterialTheme.colorScheme.primary
+        RecommendationType.NEGATIVE -> Icons.Default.Warning to MaterialTheme.colorScheme.error
+        RecommendationType.INFO -> Icons.Default.Info to MaterialTheme.colorScheme.secondary
+    }
+
+    Column(
+        modifier = Modifier
+            .width(280.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(com.kazio.app.presentation.theme.SurfaceMidnight)
+            .border(1.dp, MaterialTheme.colorScheme.surfaceContainer, RoundedCornerShape(12.dp))
+            .padding(16.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(icon, contentDescription = null, tint = color, modifier = Modifier.size(24.dp))
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = recommendation.title,
+                style = MaterialTheme.typography.titleMedium,
+                color = com.kazio.app.presentation.theme.TextPrimary,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = recommendation.description,
+            style = MaterialTheme.typography.bodyMedium,
+            color = com.kazio.app.presentation.theme.TextSecondary
+        )
     }
 }
