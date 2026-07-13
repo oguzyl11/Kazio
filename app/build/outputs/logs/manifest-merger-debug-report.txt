@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:2:1-32:12
-INJECTED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:2:1-32:12
-INJECTED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:2:1-32:12
-INJECTED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:2:1-32:12
+ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:2:1-43:12
+INJECTED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:2:1-43:12
+INJECTED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:2:1-43:12
+INJECTED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:2:1-43:12
 MERGED from [androidx.glance:glance:1.0.0] C:\Users\OGUZHAN\.gradle\caches\8.11.1\transforms\fdabfa657e6f959ed0df16c254d21f5a\transformed\glance-1.0.0\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.glance:glance-material3:1.0.0] C:\Users\OGUZHAN\.gradle\caches\8.11.1\transforms\66f5bac234bd5edfd6bb4122e1352c3b\transformed\glance-material3-1.0.0\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.glance:glance-appwidget:1.0.0] C:\Users\OGUZHAN\.gradle\caches\8.11.1\transforms\463532d7fede0ed717650c4447972f6a\transformed\glance-appwidget-1.0.0\AndroidManifest.xml:17:1-56:12
@@ -89,8 +89,8 @@ MERGED from [com.google.dagger:dagger-lint-aar:2.51.1] C:\Users\OGUZHAN\.gradle\
 	xmlns:android
 		ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:2:11-69
 application
-ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:4:5-30:19
-INJECTED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:4:5-30:19
+ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:4:5-41:19
+INJECTED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:4:5-41:19
 MERGED from [androidx.glance:glance-appwidget:1.0.0] C:\Users\OGUZHAN\.gradle\caches\8.11.1\transforms\463532d7fede0ed717650c4447972f6a\transformed\glance-appwidget-1.0.0\AndroidManifest.xml:22:5-54:19
 MERGED from [androidx.glance:glance-appwidget:1.0.0] C:\Users\OGUZHAN\.gradle\caches\8.11.1\transforms\463532d7fede0ed717650c4447972f6a\transformed\glance-appwidget-1.0.0\AndroidManifest.xml:22:5-54:19
 MERGED from [androidx.core:core-remoteviews:1.0.0] C:\Users\OGUZHAN\.gradle\caches\8.11.1\transforms\55e8912cb53497ab10d3eaa801be9318\transformed\core-remoteviews-1.0.0\AndroidManifest.xml:23:5-28:19
@@ -149,12 +149,12 @@ category#android.intent.category.LAUNCHER
 ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:16:17-77
 	android:name
 		ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:16:27-74
-receiver#com.kazio.app.widget.KazioAppWidgetReceiver
+receiver#com.kazio.app.widget.KazioSmallWidgetReceiver
 ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:20:9-29:20
 	android:exported
 		ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:22:13-36
 	android:name
-		ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:21:13-58
+		ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:21:13-60
 intent-filter#action:name:android.appwidget.action.APPWIDGET_UPDATE
 ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:23:13-25:29
 action#android.appwidget.action.APPWIDGET_UPDATE
@@ -162,11 +162,17 @@ ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.
 	android:name
 		ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:24:25-81
 meta-data#android.appwidget.provider
-ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:26:13-28:61
+ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:26:13-28:67
 	android:resource
-		ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:28:17-58
+		ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:28:17-64
 	android:name
 		ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:27:17-58
+receiver#com.kazio.app.widget.KazioLargeWidgetReceiver
+ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:31:9-40:20
+	android:exported
+		ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:33:13-36
+	android:name
+		ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:32:13-60
 uses-sdk
 INJECTED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml

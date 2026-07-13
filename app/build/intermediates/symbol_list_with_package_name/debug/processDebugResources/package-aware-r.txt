@@ -1701,4 +1701,5 @@ styleable NavGraphNavigator startDestination
 styleable NavHost navGraph
 styleable NavInclude graph
 styleable Navigator android_label android_id route
-xml kazio_widget_info
+xml kazio_large_widget_info
+xml kazio_small_widget_info

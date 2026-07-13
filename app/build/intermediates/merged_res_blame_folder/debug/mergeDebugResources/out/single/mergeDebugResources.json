@@ -1,7 +1,7 @@
 [
     {
-        "merged": "com.kazio.app-debug-70:/xml_kazio_widget_info.xml.flat",
-        "source": "com.kazio.app-main-72:/xml/kazio_widget_info.xml"
+        "merged": "com.kazio.app-debug-70:/xml_kazio_small_widget_info.xml.flat",
+        "source": "com.kazio.app-main-72:/xml/kazio_small_widget_info.xml"
     },
     {
         "merged": "com.kazio.app-debug-70:/layout_widget_initial_layout.xml.flat",
@@ -14,5 +14,9 @@
     {
         "merged": "com.kazio.app-debug-70:/drawable_kazio_logo_transparent.png.flat",
         "source": "com.kazio.app-main-72:/drawable/kazio_logo_transparent.png"
+    },
+    {
+        "merged": "com.kazio.app-debug-70:/xml_kazio_large_widget_info.xml.flat",
+        "source": "com.kazio.app-main-72:/xml/kazio_large_widget_info.xml"
     }
 ]

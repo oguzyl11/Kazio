@@ -7,6 +7,7 @@ import com.kazio.app.presentation.addincome.AddIncomeViewModel_HiltModules;
 import com.kazio.app.presentation.auth.AuthViewModel_HiltModules;
 import com.kazio.app.presentation.dashboard.DashboardViewModel_HiltModules;
 import com.kazio.app.presentation.summary.SummaryViewModel_HiltModules;
+import com.kazio.app.widget.WidgetEntryPoint;
 import dagger.Binds;
 import dagger.Component;
 import dagger.Module;
@@ -141,6 +142,7 @@ public final class KazioApplication_HiltComponents {
   )
   @Singleton
   public abstract static class SingletonC implements KazioApplication_GeneratedInjector,
+      WidgetEntryPoint,
       FragmentGetContextFix.FragmentGetContextFixEntryPoint,
       HiltWrapper_ActivityRetainedComponentManager_ActivityRetainedComponentBuilderEntryPoint,
       ServiceComponentManager.ServiceComponentBuilderEntryPoint,

@@ -41,7 +41,7 @@
         </activity>
 
         <receiver
-            android:name="com.kazio.app.widget.KazioAppWidgetReceiver"
+            android:name="com.kazio.app.widget.KazioSmallWidgetReceiver"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -49,7 +49,18 @@
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/kazio_widget_info" />
+                android:resource="@xml/kazio_small_widget_info" />
+        </receiver>
+        <receiver
+            android:name="com.kazio.app.widget.KazioLargeWidgetReceiver"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/kazio_large_widget_info" />
         </receiver>
 
         <activity

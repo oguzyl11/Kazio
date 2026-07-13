@@ -3,4 +3,5 @@ local
 drawable kazio_logo_bg
 drawable kazio_logo_transparent
 layout widget_initial_layout
-xml kazio_widget_info
+xml kazio_large_widget_info
+xml kazio_small_widget_info
