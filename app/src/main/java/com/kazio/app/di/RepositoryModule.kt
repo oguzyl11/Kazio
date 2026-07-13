@@ -2,9 +2,11 @@ package com.kazio.app.di
 
 import com.kazio.app.data.repository.ExpenseRepositoryImpl
 import com.kazio.app.data.repository.IncomeRepositoryImpl
+import com.kazio.app.data.repository.PlatformRepositoryImpl
 import com.kazio.app.data.repository.ShiftRepositoryImpl
 import com.kazio.app.domain.repository.ExpenseRepository
 import com.kazio.app.domain.repository.IncomeRepository
+import com.kazio.app.domain.repository.PlatformRepository
 import com.kazio.app.domain.repository.ShiftRepository
 import dagger.Binds
 import dagger.Module
@@ -32,4 +34,10 @@ abstract class RepositoryModule {
     abstract fun bindShiftRepository(
         shiftRepositoryImpl: ShiftRepositoryImpl
     ): ShiftRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindPlatformRepository(
+        platformRepositoryImpl: PlatformRepositoryImpl
+    ): PlatformRepository
 }

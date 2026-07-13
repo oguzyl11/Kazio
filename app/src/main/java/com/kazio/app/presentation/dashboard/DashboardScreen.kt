@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -17,6 +19,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,16 +33,39 @@ import java.util.Locale
 
 @Composable
 fun DashboardScreen(
-    viewModel: DashboardViewModel = hiltViewModel(),
-    onAddIncomeClick: () -> Unit,
-    onAddExpenseClick: () -> Unit
+    viewModel: DashboardViewModel = hiltViewModel()
 ) {
+    var showMenu by remember { mutableStateOf(false) }
+    var showIncomeSheet by remember { mutableStateOf(false) }
+    var showExpenseSheet by remember { mutableStateOf(false) }
+
     val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = onAddIncomeClick) {
-                Icon(Icons.Default.Add, contentDescription = "Ekle")
+            Box {
+                FloatingActionButton(onClick = { showMenu = true }) {
+                    Icon(Icons.Default.Add, contentDescription = "Ekle")
+                }
+                DropdownMenu(
+                    expanded = showMenu,
+                    onDismissRequest = { showMenu = false }
+                ) {
+                    DropdownMenuItem(
+                        text = { Text("Gelir Ekle") },
+                        onClick = {
+                            showMenu = false
+                            showIncomeSheet = true
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text("Gider Ekle") },
+                        onClick = {
+                            showMenu = false
+                            showExpenseSheet = true
+                        }
+                    )
+                }
             }
         }
     ) { paddingValues ->
@@ -59,6 +87,18 @@ fun DashboardScreen(
                 }
             }
         }
+    }
+
+    if (showIncomeSheet) {
+        com.kazio.app.presentation.addincome.AddIncomeBottomSheet(
+            onDismissRequest = { showIncomeSheet = false }
+        )
+    }
+
+    if (showExpenseSheet) {
+        com.kazio.app.presentation.addexpense.AddExpenseBottomSheet(
+            onDismissRequest = { showExpenseSheet = false }
+        )
     }
 }
 

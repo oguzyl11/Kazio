@@ -13,6 +13,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import javax.inject.Provider
 import javax.inject.Singleton
 
 @Module
@@ -20,12 +24,28 @@ import javax.inject.Singleton
 object DatabaseModule {
     @Provides
     @Singleton
-    fun provideKazioDatabase(@ApplicationContext context: Context): KazioDatabase {
+    fun provideKazioDatabase(
+        @ApplicationContext context: Context,
+        provider: Provider<KazioDatabase>
+    ): KazioDatabase {
         return Room.databaseBuilder(
             context,
             KazioDatabase::class.java,
             "kazio_db"
-        ).build()
+        ).addCallback(object : androidx.room.RoomDatabase.Callback() {
+            override fun onCreate(db: androidx.sqlite.db.SupportSQLiteDatabase) {
+                super.onCreate(db)
+                GlobalScope.launch(Dispatchers.IO) {
+                    val platformDao = provider.get().platformDao()
+                    platformDao.insertPlatform(com.kazio.app.data.local.room.PlatformEntity(name = "Trendyol Go", colorTag = "#FF8A65", isCustom = false))
+                    platformDao.insertPlatform(com.kazio.app.data.local.room.PlatformEntity(name = "Getir", colorTag = "#9575CD", isCustom = false))
+                    platformDao.insertPlatform(com.kazio.app.data.local.room.PlatformEntity(name = "Yemeksepeti", colorTag = "#E57373", isCustom = false))
+                    platformDao.insertPlatform(com.kazio.app.data.local.room.PlatformEntity(name = "Uber", colorTag = "#90A4AE", isCustom = false))
+                    platformDao.insertPlatform(com.kazio.app.data.local.room.PlatformEntity(name = "Bolt", colorTag = "#81C784", isCustom = false))
+                    platformDao.insertPlatform(com.kazio.app.data.local.room.PlatformEntity(name = "BiTaksi", colorTag = "#FFD54F", isCustom = false))
+                }
+            }
+        }).build()
     }
 
     @Provides

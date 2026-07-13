@@ -20,10 +20,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    DashboardScreen(
-                        onAddIncomeClick = { /* TODO */ },
-                        onAddExpenseClick = { /* TODO */ }
-                    )
+                    DashboardScreen()
                 }
             }
         }
