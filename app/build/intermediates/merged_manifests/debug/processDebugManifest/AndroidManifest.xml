@@ -21,7 +21,8 @@
         android:debuggable="true"
         android:extractNativeLibs="false"
         android:label="Kazio"
-        android:supportsRtl="true" >
+        android:supportsRtl="true"
+        android:testOnly="true" >
         <activity
             android:name="com.kazio.app.MainActivity"
             android:exported="true" >
