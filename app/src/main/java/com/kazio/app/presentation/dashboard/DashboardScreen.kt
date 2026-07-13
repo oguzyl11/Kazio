@@ -1,38 +1,28 @@
 package com.kazio.app.presentation.dashboard
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.kazio.app.domain.model.PlatformProfit
 import java.text.NumberFormat
 import java.util.Locale
 
 @Composable
 fun DashboardScreen(
+    onNavigateToSummary: () -> Unit,
     viewModel: DashboardViewModel = hiltViewModel()
 ) {
     var showMenu by remember { mutableStateOf(false) }
@@ -83,7 +73,7 @@ fun DashboardScreen(
                     Text(text = "Hata: ${state.message}", color = MaterialTheme.colorScheme.error)
                 }
                 is DashboardUiState.Success -> {
-                    DashboardContent(state)
+                    DashboardContent(state, onNavigateToSummary)
                 }
             }
         }
@@ -103,12 +93,19 @@ fun DashboardScreen(
 }
 
 @Composable
-private fun DashboardContent(state: DashboardUiState.Success) {
+private fun DashboardContent(
+    state: DashboardUiState.Success,
+    onNavigateToSummary: () -> Unit
+) {
     val formatter = NumberFormat.getCurrencyInstance(Locale("tr", "TR"))
     val isPositive = state.dailyNetProfit >= 0
     val color = if (isPositive) Color(0xFF4CAF50) else Color(0xFFE53935)
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = Modifier.fillMaxSize().padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.height(32.dp))
         Text(
             text = "Bugün net kazancın",
             style = MaterialTheme.typography.titleMedium
@@ -125,8 +122,56 @@ private fun DashboardContent(state: DashboardUiState.Success) {
         if (state.activeShift != null) {
             Text(
                 text = "Vardiya Aktif",
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary
             )
         }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        // Mini Platform List
+        if (state.platformProfits.isNotEmpty()) {
+            Column(modifier = Modifier.fillMaxWidth()) {
+                state.platformProfits.forEach { profit ->
+                    MiniPlatformProfitItem(profit, formatter)
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+                
+                TextButton(
+                    onClick = onNavigateToSummary,
+                    modifier = Modifier.align(Alignment.End)
+                ) {
+                    Text("Tümünü gör")
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(64.dp)) // FAB padding
+    }
+}
+
+@Composable
+private fun MiniPlatformProfitItem(profit: PlatformProfit, formatter: NumberFormat) {
+    val color = try {
+        Color(android.graphics.Color.parseColor(profit.colorTag))
+    } catch (e: Exception) {
+        MaterialTheme.colorScheme.primary
+    }
+
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .size(12.dp)
+                    .clip(RoundedCornerShape(6.dp))
+                    .background(color)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = profit.platformName, style = MaterialTheme.typography.bodyMedium)
+        }
+        Text(text = formatter.format(profit.totalIncome), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
     }
 }
