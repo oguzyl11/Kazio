@@ -6,5 +6,7 @@ data class UserPreferences(
     val userName: String,
     val userEmail: String,
     val userPin: String,
-    val isOnboardingSeen: Boolean
+    val isOnboardingSeen: Boolean,
+    val vehicleModel: String = "",
+    val vehiclePlate: String = ""
 )

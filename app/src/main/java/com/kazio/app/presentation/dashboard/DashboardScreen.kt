@@ -99,14 +99,7 @@ fun DashboardScreen(
                             letterSpacing = 2.sp
                         )
                     }
-                    Box(
-                        modifier = Modifier
-                            .size(32.dp)
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                    ) {
-                        Icon(Icons.Default.Person, contentDescription = "Profile", tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.align(Alignment.Center))
-                    }
+                    // Removed profile icon
                 }
             }
         ) { paddingValues ->

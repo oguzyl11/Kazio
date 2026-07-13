@@ -26,6 +26,8 @@ class DataStoreRepository @Inject constructor(
         val USER_EMAIL = stringPreferencesKey("user_email")
         val USER_PIN = stringPreferencesKey("user_pin")
         val IS_ONBOARDING_SEEN = booleanPreferencesKey("is_onboarding_seen")
+        val VEHICLE_MODEL = stringPreferencesKey("vehicle_model")
+        val VEHICLE_PLATE = stringPreferencesKey("vehicle_plate")
     }
 
     val userPreferencesFlow: Flow<UserPreferences> = context.dataStore.data
@@ -43,6 +45,8 @@ class DataStoreRepository @Inject constructor(
             val userEmail = preferences[PreferencesKeys.USER_EMAIL] ?: ""
             val userPin = preferences[PreferencesKeys.USER_PIN] ?: ""
             val isOnboardingSeen = preferences[PreferencesKeys.IS_ONBOARDING_SEEN] ?: false
+            val vehicleModel = preferences[PreferencesKeys.VEHICLE_MODEL] ?: ""
+            val vehiclePlate = preferences[PreferencesKeys.VEHICLE_PLATE] ?: ""
 
             UserPreferences(
                 isRegistered = isRegistered,
@@ -50,7 +54,9 @@ class DataStoreRepository @Inject constructor(
                 userName = userName,
                 userEmail = userEmail,
                 userPin = userPin,
-                isOnboardingSeen = isOnboardingSeen
+                isOnboardingSeen = isOnboardingSeen,
+                vehicleModel = vehicleModel,
+                vehiclePlate = vehiclePlate
             )
         }
 
@@ -76,6 +82,14 @@ class DataStoreRepository @Inject constructor(
         }
     }
 
+    suspend fun updateProfile(name: String, vehicleModel: String, vehiclePlate: String) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.USER_NAME] = name
+            preferences[PreferencesKeys.VEHICLE_MODEL] = vehicleModel
+            preferences[PreferencesKeys.VEHICLE_PLATE] = vehiclePlate
+        }
+    }
+
     suspend fun clearUser() {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.IS_REGISTERED] = false
@@ -83,6 +97,8 @@ class DataStoreRepository @Inject constructor(
             preferences[PreferencesKeys.USER_NAME] = ""
             preferences[PreferencesKeys.USER_EMAIL] = ""
             preferences[PreferencesKeys.USER_PIN] = ""
+            preferences[PreferencesKeys.VEHICLE_MODEL] = ""
+            preferences[PreferencesKeys.VEHICLE_PLATE] = ""
         }
     }
 }
