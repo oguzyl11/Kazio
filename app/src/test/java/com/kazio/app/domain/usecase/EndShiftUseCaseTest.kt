@@ -35,15 +35,15 @@ class EndShiftUseCaseTest {
 
     @Test
     fun `ends shift successfully`() = runTest {
-        val activeShift = Shift(1, 1000L, null, null)
+        val activeShift = Shift(1, 1L, 1000L, null, null)
         every { getActiveShiftUseCase() } returns flowOf(activeShift)
-        coEvery { shiftRepository.endShift(any()) } returns Unit
+        coEvery { shiftRepository.endShift(any(), any()) } returns Unit
 
         val result = useCase()
         assertTrue(result.isSuccess)
         
         coVerify { 
-            shiftRepository.endShift(match { it.id == 1L && it.endedAt != null }) 
+            shiftRepository.endShift(1L, any()) 
         }
     }
 }

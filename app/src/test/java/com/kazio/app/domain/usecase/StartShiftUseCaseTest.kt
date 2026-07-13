@@ -27,7 +27,7 @@ class StartShiftUseCaseTest {
 
     @Test
     fun `fails if active shift exists`() = runTest {
-        val activeShift = Shift(1, 1000L, null, null)
+        val activeShift = Shift(1, 1L, 1000L, null, null)
         every { getActiveShiftUseCase() } returns flowOf(activeShift)
 
         val result = useCase()
@@ -37,7 +37,7 @@ class StartShiftUseCaseTest {
     @Test
     fun `starts shift successfully`() = runTest {
         every { getActiveShiftUseCase() } returns flowOf(null)
-        coEvery { shiftRepository.startShift(any()) } returns 1L
+        coEvery { shiftRepository.startShift(any(), any(), any()) } returns 1L
 
         val result = useCase()
         assertTrue(result.isSuccess)

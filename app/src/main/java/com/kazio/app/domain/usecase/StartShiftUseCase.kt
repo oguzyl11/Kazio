@@ -16,13 +16,11 @@ class StartShiftUseCase @Inject constructor(
             return Result.failure(IllegalStateException("Zaten devam eden bir vardiya var."))
         }
 
-        val shift = Shift(
-            startedAt = Calendar.getInstance().timeInMillis,
-            endedAt = null,
+        val id = shiftRepository.startShift(
+            vehicleId = 1L, // Dummy for MVP
+            startAt = Calendar.getInstance().timeInMillis,
             note = null
         )
-        
-        val id = shiftRepository.startShift(shift)
         return Result.success(id)
     }
 }

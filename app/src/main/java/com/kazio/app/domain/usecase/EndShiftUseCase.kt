@@ -13,8 +13,10 @@ class EndShiftUseCase @Inject constructor(
         val activeShift = getActiveShiftUseCase().firstOrNull()
             ?: return Result.failure(IllegalStateException("Aktif bir vardiya bulunamadı."))
 
-        val endedShift = activeShift.copy(endedAt = Calendar.getInstance().timeInMillis)
-        shiftRepository.endShift(endedShift)
+        shiftRepository.endShift(
+            shiftId = activeShift.id,
+            endAt = Calendar.getInstance().timeInMillis
+        )
         return Result.success(Unit)
     }
 }

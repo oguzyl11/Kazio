@@ -7,7 +7,6 @@ import com.kazio.app.data.local.room.IncomeDao
 import com.kazio.app.data.local.room.KazioDatabase
 import com.kazio.app.data.local.room.PlatformDao
 import com.kazio.app.data.local.room.ShiftDao
-import com.kazio.app.data.local.room.VehicleDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -59,7 +58,4 @@ object DatabaseModule {
 
     @Provides
     fun providePlatformDao(database: KazioDatabase): PlatformDao = database.platformDao()
-
-    @Provides
-    fun provideVehicleDao(database: KazioDatabase): VehicleDao = database.vehicleDao()
 }

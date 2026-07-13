@@ -42,7 +42,7 @@ class DashboardViewModel @Inject constructor(
         tickerFlow
     ) { summaryResult, activeShift, currentTime ->
         val durationStr = if (activeShift != null) {
-            val diff = currentTime - activeShift.startedAt
+            val diff = currentTime - activeShift.startAt
             val hours = (diff / (1000 * 60 * 60))
             val minutes = (diff / (1000 * 60)) % 60
             String.format(Locale.getDefault(), "%02d:%02d", hours, minutes)
