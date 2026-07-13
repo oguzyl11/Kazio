@@ -124,23 +124,19 @@ class MainActivity : ComponentActivity() {
                         composable("settings") {
                             Scaffold(
                                 bottomBar = {
-                                    BottomNavigationBar(
-                                        currentRoute = "settings",
-                                        onNavigate = { route ->
-                                            if (route != "settings") {
-                                                navController.navigate(route) {
-                                                    popUpTo("dashboard")
-                                                }
-                                            }
-                                        }
-                                    )
+                                    BottomNavigationBar(currentRoute = "settings", onNavigate = { navController.navigate(it) })
                                 }
                             ) { paddingValues ->
                                 Box(modifier = Modifier.padding(paddingValues)) {
                                     SettingsScreen(
                                         onLogout = {
                                             navController.navigate("login") {
-                                                popUpTo("main") { inclusive = true }
+                                                popUpTo(0)
+                                            }
+                                        },
+                                        onRestartOnboarding = {
+                                            navController.navigate("dashboard") {
+                                                popUpTo("main")
                                             }
                                         }
                                     )

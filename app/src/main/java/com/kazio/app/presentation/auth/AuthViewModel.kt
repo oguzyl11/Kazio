@@ -99,4 +99,10 @@ class AuthViewModel @Inject constructor(
             dataStoreRepository.clearUser()
         }
     }
+
+    fun restartOnboarding() {
+        viewModelScope.launch {
+            dataStoreRepository.updateOnboardingSeen(false)
+        }
+    }
 }

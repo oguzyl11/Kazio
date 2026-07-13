@@ -19,6 +19,7 @@ import com.kazio.app.presentation.auth.AuthViewModel
 @Composable
 fun SettingsScreen(
     onLogout: () -> Unit,
+    onRestartOnboarding: () -> Unit,
     viewModel: AuthViewModel = hiltViewModel()
 ) {
     val preferences by viewModel.userPreferences.collectAsState()
@@ -69,7 +70,10 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
-                    onClick = { /* Reset Onboarding logic will be handled via ViewModel if needed or added later */ },
+                    onClick = {
+                        viewModel.restartOnboarding()
+                        onRestartOnboarding()
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surfaceVariant, contentColor = MaterialTheme.colorScheme.onSurface)
                 ) {
