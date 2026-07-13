@@ -22,6 +22,7 @@ class DataStoreRepository @Inject constructor(
     private object PreferencesKeys {
         val IS_REGISTERED = booleanPreferencesKey("is_registered")
         val USER_NAME = stringPreferencesKey("user_name")
+        val USER_EMAIL = stringPreferencesKey("user_email")
         val USER_PIN = stringPreferencesKey("user_pin")
         val IS_ONBOARDING_SEEN = booleanPreferencesKey("is_onboarding_seen")
     }
@@ -37,20 +38,23 @@ class DataStoreRepository @Inject constructor(
         .map { preferences ->
             val isRegistered = preferences[PreferencesKeys.IS_REGISTERED] ?: false
             val userName = preferences[PreferencesKeys.USER_NAME] ?: ""
+            val userEmail = preferences[PreferencesKeys.USER_EMAIL] ?: ""
             val userPin = preferences[PreferencesKeys.USER_PIN] ?: ""
             val isOnboardingSeen = preferences[PreferencesKeys.IS_ONBOARDING_SEEN] ?: false
 
             UserPreferences(
                 isRegistered = isRegistered,
                 userName = userName,
+                userEmail = userEmail,
                 userPin = userPin,
                 isOnboardingSeen = isOnboardingSeen
             )
         }
 
-    suspend fun registerUser(name: String, pin: String) {
+    suspend fun registerUser(name: String, email: String, pin: String) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.USER_NAME] = name
+            preferences[PreferencesKeys.USER_EMAIL] = email
             preferences[PreferencesKeys.USER_PIN] = pin
             preferences[PreferencesKeys.IS_REGISTERED] = true
         }
@@ -66,6 +70,7 @@ class DataStoreRepository @Inject constructor(
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.IS_REGISTERED] = false
             preferences[PreferencesKeys.USER_NAME] = ""
+            preferences[PreferencesKeys.USER_EMAIL] = ""
             preferences[PreferencesKeys.USER_PIN] = ""
         }
     }

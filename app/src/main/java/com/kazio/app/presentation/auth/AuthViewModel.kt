@@ -16,6 +16,7 @@ import javax.inject.Inject
 
 data class AuthUiState(
     val nameInput: String = "",
+    val emailInput: String = "",
     val pinInput: String = "",
     val errorMessage: String? = null,
     val isAuthenticated: Boolean = false
@@ -40,6 +41,10 @@ class AuthViewModel @Inject constructor(
         _uiState.update { it.copy(nameInput = name, errorMessage = null) }
     }
 
+    fun onEmailChange(email: String) {
+        _uiState.update { it.copy(emailInput = email, errorMessage = null) }
+    }
+
     fun onPinChange(pin: String) {
         if (pin.length <= 4) { // 4 haneli PIN
             _uiState.update { it.copy(pinInput = pin, errorMessage = null) }
@@ -48,31 +53,44 @@ class AuthViewModel @Inject constructor(
 
     fun register() {
         val name = _uiState.value.nameInput
+        val email = _uiState.value.emailInput
         val pin = _uiState.value.pinInput
 
-        if (name.isBlank() || pin.length < 4) {
-            _uiState.update { it.copy(errorMessage = "Lütfen adınızı ve 4 haneli bir PIN girin.") }
+        if (name.isBlank() || email.isBlank() || pin.length < 4) {
+            _uiState.update { it.copy(errorMessage = "Lütfen tüm alanları doldurun ve 4 haneli PIN girin.") }
+            return
+        }
+        
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            _uiState.update { it.copy(errorMessage = "Lütfen geçerli bir e-posta adresi girin.") }
             return
         }
 
         viewModelScope.launch {
-            dataStoreRepository.registerUser(name, pin)
+            dataStoreRepository.registerUser(name, email, pin)
             _uiState.update { it.copy(isAuthenticated = true) }
         }
     }
 
     fun login() {
+        val enteredEmail = _uiState.value.emailInput
         val enteredPin = _uiState.value.pinInput
+        val savedEmail = userPreferences.value?.userEmail
         val savedPin = userPreferences.value?.userPin
 
-        if (enteredPin == savedPin) {
+        if (enteredEmail.isBlank() || enteredPin.isBlank()) {
+            _uiState.update { it.copy(errorMessage = "Lütfen e-posta adresinizi ve PIN kodunuzu girin.") }
+            return
+        }
+
+        if (enteredEmail.equals(savedEmail, ignoreCase = true) && enteredPin == savedPin) {
             _uiState.update { it.copy(isAuthenticated = true) }
         } else {
-            _uiState.update { it.copy(errorMessage = "Hatalı PIN.") }
+            _uiState.update { it.copy(errorMessage = "Hatalı e-posta veya PIN.") }
         }
     }
 
     fun logout() {
-        _uiState.update { it.copy(isAuthenticated = false, pinInput = "", nameInput = "", errorMessage = null) }
+        _uiState.update { it.copy(isAuthenticated = false, pinInput = "", nameInput = "", emailInput = "", errorMessage = null) }
     }
 }

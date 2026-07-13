@@ -6,6 +6,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DeliveryDining
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -72,7 +74,21 @@ fun RegisterScreen(
                 value = uiState.nameInput,
                 onValueChange = viewModel::onNameChange,
                 label = { Text("Adınız") },
+                leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) },
                 singleLine = true,
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = uiState.emailInput,
+                onValueChange = viewModel::onEmailChange,
+                label = { Text("E-posta Adresiniz") },
+                leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp)
             )

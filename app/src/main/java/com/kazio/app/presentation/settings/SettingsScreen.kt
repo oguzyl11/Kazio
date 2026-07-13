@@ -54,6 +54,8 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 
                 Text(text = "Adınız: ${preferences?.userName ?: ""}", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = "E-posta: ${preferences?.userEmail ?: ""}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Spacer(modifier = Modifier.height(32.dp))
 
                 Divider(color = MaterialTheme.colorScheme.surfaceVariant)
