@@ -32,6 +32,17 @@ fun DashboardScreen(
     val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
+        topBar = {
+            if (uiState is DashboardUiState.Success) {
+                val successState = uiState as DashboardUiState.Success
+                ShiftBar(
+                    activeShift = successState.activeShift,
+                    durationStr = successState.activeShiftDurationStr,
+                    onStartShift = viewModel::startShift,
+                    onEndShift = viewModel::endShift
+                )
+            }
+        },
         floatingActionButton = {
             Box {
                 FloatingActionButton(onClick = { showMenu = true }) {
@@ -117,19 +128,9 @@ private fun DashboardContent(
             fontWeight = FontWeight.Bold,
             color = color
         )
-        
-        Spacer(modifier = Modifier.height(16.dp))
-        if (state.activeShift != null) {
-            Text(
-                text = "Vardiya Aktif",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primary
-            )
-        }
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // Mini Platform List
         if (state.platformProfits.isNotEmpty()) {
             Column(modifier = Modifier.fillMaxWidth()) {
                 state.platformProfits.forEach { profit ->
@@ -145,7 +146,7 @@ private fun DashboardContent(
                 }
             }
         }
-        Spacer(modifier = Modifier.height(64.dp)) // FAB padding
+        Spacer(modifier = Modifier.height(64.dp))
     }
 }
 

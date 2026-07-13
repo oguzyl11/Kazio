@@ -8,6 +8,7 @@ sealed interface DashboardUiState {
     data class Success(
         val dailyNetProfit: Double,
         val activeShift: Shift?,
+        val activeShiftDurationStr: String = "",
         val platformProfits: List<PlatformProfit> = emptyList()
     ) : DashboardUiState
     data class Error(val message: String) : DashboardUiState
