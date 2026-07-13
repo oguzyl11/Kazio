@@ -20,7 +20,9 @@
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:debuggable="true"
         android:extractNativeLibs="false"
+        android:icon="@drawable/kazio_logo_bg"
         android:label="Kazio"
+        android:roundIcon="@drawable/kazio_logo_bg"
         android:supportsRtl="true"
         android:testOnly="true" >
         <activity

@@ -4,6 +4,8 @@
     <application
         android:name=".KazioApplication"
         android:allowBackup="true"
+        android:icon="@drawable/kazio_logo_bg"
+        android:roundIcon="@drawable/kazio_logo_bg"
         android:label="Kazio"
         android:supportsRtl="true">
         <activity
