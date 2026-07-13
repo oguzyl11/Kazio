@@ -7,14 +7,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Analytics
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
@@ -26,48 +25,35 @@ fun BottomNavigationBar(
     currentRoute: String,
     onNavigate: (String) -> Unit
 ) {
+    val screenBgColor = MaterialTheme.colorScheme.background
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.Transparent)
-            .padding(horizontal = 24.dp, vertical = 16.dp),
+            .height(100.dp)
+            .background(Color.Transparent),
         contentAlignment = Alignment.BottomCenter
     ) {
+        // The background bar
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .shadow(16.dp, RoundedCornerShape(32.dp))
+                .height(76.dp)
                 .background(
                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                    shape = RoundedCornerShape(32.dp)
+                    shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
                 )
-                .padding(horizontal = 24.dp, vertical = 12.dp),
+                .padding(horizontal = 48.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             // Sol: Özet
             BottomNavItem(
-                icon = Icons.Default.Analytics,
+                icon = Icons.Default.BarChart,
                 label = "Özet",
                 selected = currentRoute == "summary",
                 onClick = { onNavigate("summary") }
             )
-
-            // Orta: Logo (Ana Ekran)
-            Box(
-                modifier = Modifier
-                    .size(56.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primaryContainer)
-                    .clickable { onNavigate("dashboard") },
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.kazio_logo_transparent),
-                    contentDescription = "Ana Ekran",
-                    modifier = Modifier.size(32.dp)
-                )
-            }
 
             // Sağ: Ayarlar
             BottomNavItem(
@@ -75,6 +61,27 @@ fun BottomNavigationBar(
                 label = "Ayarlar",
                 selected = currentRoute == "settings",
                 onClick = { onNavigate("settings") }
+            )
+        }
+
+        // Orta: Logo (Ana Ekran)
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 4.dp)
+                .size(80.dp)
+                .clip(CircleShape)
+                .background(screenBgColor) // Simulate the cutout with a border ring matching background
+                .padding(6.dp) // The gap size
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.primary)
+                .clickable { onNavigate("dashboard") },
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.kazio_logo_transparent),
+                contentDescription = "Ana Ekran",
+                modifier = Modifier.size(40.dp)
             )
         }
     }
@@ -93,7 +100,7 @@ private fun BottomNavItem(
         modifier = Modifier
             .clip(RoundedCornerShape(16.dp))
             .clickable(onClick = onClick)
-            .padding(8.dp),
+            .padding(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

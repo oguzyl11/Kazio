@@ -432,26 +432,20 @@ public final class DaggerKazioApplication_HiltComponents_SingletonC {
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
-      static String com_kazio_app_presentation_addexpense_AddExpenseViewModel = "com.kazio.app.presentation.addexpense.AddExpenseViewModel";
-
-      static String com_kazio_app_presentation_settings_SettingsViewModel = "com.kazio.app.presentation.settings.SettingsViewModel";
-
-      static String com_kazio_app_presentation_addincome_AddIncomeViewModel = "com.kazio.app.presentation.addincome.AddIncomeViewModel";
+      static String com_kazio_app_presentation_auth_AuthViewModel = "com.kazio.app.presentation.auth.AuthViewModel";
 
       static String com_kazio_app_presentation_summary_SummaryViewModel = "com.kazio.app.presentation.summary.SummaryViewModel";
 
       static String com_kazio_app_presentation_dashboard_DashboardViewModel = "com.kazio.app.presentation.dashboard.DashboardViewModel";
 
-      static String com_kazio_app_presentation_auth_AuthViewModel = "com.kazio.app.presentation.auth.AuthViewModel";
+      static String com_kazio_app_presentation_settings_SettingsViewModel = "com.kazio.app.presentation.settings.SettingsViewModel";
+
+      static String com_kazio_app_presentation_addincome_AddIncomeViewModel = "com.kazio.app.presentation.addincome.AddIncomeViewModel";
+
+      static String com_kazio_app_presentation_addexpense_AddExpenseViewModel = "com.kazio.app.presentation.addexpense.AddExpenseViewModel";
 
       @KeepFieldType
-      AddExpenseViewModel com_kazio_app_presentation_addexpense_AddExpenseViewModel2;
-
-      @KeepFieldType
-      SettingsViewModel com_kazio_app_presentation_settings_SettingsViewModel2;
-
-      @KeepFieldType
-      AddIncomeViewModel com_kazio_app_presentation_addincome_AddIncomeViewModel2;
+      AuthViewModel com_kazio_app_presentation_auth_AuthViewModel2;
 
       @KeepFieldType
       SummaryViewModel com_kazio_app_presentation_summary_SummaryViewModel2;
@@ -460,7 +454,13 @@ public final class DaggerKazioApplication_HiltComponents_SingletonC {
       DashboardViewModel com_kazio_app_presentation_dashboard_DashboardViewModel2;
 
       @KeepFieldType
-      AuthViewModel com_kazio_app_presentation_auth_AuthViewModel2;
+      SettingsViewModel com_kazio_app_presentation_settings_SettingsViewModel2;
+
+      @KeepFieldType
+      AddIncomeViewModel com_kazio_app_presentation_addincome_AddIncomeViewModel2;
+
+      @KeepFieldType
+      AddExpenseViewModel com_kazio_app_presentation_addexpense_AddExpenseViewModel2;
     }
   }
 
@@ -540,20 +540,20 @@ public final class DaggerKazioApplication_HiltComponents_SingletonC {
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
-      static String com_kazio_app_presentation_settings_SettingsViewModel = "com.kazio.app.presentation.settings.SettingsViewModel";
+      static String com_kazio_app_presentation_summary_SummaryViewModel = "com.kazio.app.presentation.summary.SummaryViewModel";
 
       static String com_kazio_app_presentation_addincome_AddIncomeViewModel = "com.kazio.app.presentation.addincome.AddIncomeViewModel";
 
       static String com_kazio_app_presentation_auth_AuthViewModel = "com.kazio.app.presentation.auth.AuthViewModel";
 
-      static String com_kazio_app_presentation_addexpense_AddExpenseViewModel = "com.kazio.app.presentation.addexpense.AddExpenseViewModel";
+      static String com_kazio_app_presentation_settings_SettingsViewModel = "com.kazio.app.presentation.settings.SettingsViewModel";
 
-      static String com_kazio_app_presentation_summary_SummaryViewModel = "com.kazio.app.presentation.summary.SummaryViewModel";
+      static String com_kazio_app_presentation_addexpense_AddExpenseViewModel = "com.kazio.app.presentation.addexpense.AddExpenseViewModel";
 
       static String com_kazio_app_presentation_dashboard_DashboardViewModel = "com.kazio.app.presentation.dashboard.DashboardViewModel";
 
       @KeepFieldType
-      SettingsViewModel com_kazio_app_presentation_settings_SettingsViewModel2;
+      SummaryViewModel com_kazio_app_presentation_summary_SummaryViewModel2;
 
       @KeepFieldType
       AddIncomeViewModel com_kazio_app_presentation_addincome_AddIncomeViewModel2;
@@ -562,10 +562,10 @@ public final class DaggerKazioApplication_HiltComponents_SingletonC {
       AuthViewModel com_kazio_app_presentation_auth_AuthViewModel2;
 
       @KeepFieldType
-      AddExpenseViewModel com_kazio_app_presentation_addexpense_AddExpenseViewModel2;
+      SettingsViewModel com_kazio_app_presentation_settings_SettingsViewModel2;
 
       @KeepFieldType
-      SummaryViewModel com_kazio_app_presentation_summary_SummaryViewModel2;
+      AddExpenseViewModel com_kazio_app_presentation_addexpense_AddExpenseViewModel2;
 
       @KeepFieldType
       DashboardViewModel com_kazio_app_presentation_dashboard_DashboardViewModel2;
