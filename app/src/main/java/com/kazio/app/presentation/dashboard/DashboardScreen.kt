@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kazio.app.domain.model.PlatformProfit
 import java.text.NumberFormat
@@ -46,14 +47,19 @@ fun DashboardScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    IconButton(onClick = { /* Menu */ }, modifier = Modifier.offset(x = (-12).dp)) {
-                        Icon(Icons.Default.Menu, contentDescription = "Menu", tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(28.dp))
-                    }
+                    Icon(
+                        Icons.Default.DeliveryDining,
+                        contentDescription = "Logo",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(32.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "KuryePanel",
+                        text = "KAZIO",
                         style = MaterialTheme.typography.headlineMedium,
                         color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.ExtraBold,
+                        letterSpacing = 2.sp
                     )
                 }
                 Box(
@@ -266,6 +272,11 @@ private fun PlatformListItem(profit: PlatformProfit, formatter: NumberFormat) {
         MaterialTheme.colorScheme.primary
     }
 
+    val animatedProgress by androidx.compose.animation.core.animateFloatAsState(
+        targetValue = profit.percentage,
+        animationSpec = androidx.compose.animation.core.tween(durationMillis = 1000, easing = androidx.compose.animation.core.FastOutSlowInEasing)
+    )
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -273,7 +284,6 @@ private fun PlatformListItem(profit: PlatformProfit, formatter: NumberFormat) {
             .clip(RoundedCornerShape(8.dp))
             .background(com.kazio.app.presentation.theme.SurfaceMidnight)
             .border(width = 1.dp, color = MaterialTheme.colorScheme.surfaceContainer, shape = RoundedCornerShape(8.dp))
-            // Left border effect
             .drawBehind {
                 drawLine(
                     color = borderColor,
@@ -297,8 +307,25 @@ private fun PlatformListItem(profit: PlatformProfit, formatter: NumberFormat) {
         Spacer(modifier = Modifier.width(16.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(text = profit.platformName, style = MaterialTheme.typography.labelLarge, color = com.kazio.app.presentation.theme.TextPrimary)
-            Text(text = "Gelir Dağılımı", style = MaterialTheme.typography.labelMedium, color = com.kazio.app.presentation.theme.TextSecondary)
+            
+            Spacer(modifier = Modifier.height(4.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(4.dp)
+                    .clip(RoundedCornerShape(2.dp))
+                    .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(animatedProgress)
+                        .height(4.dp)
+                        .clip(RoundedCornerShape(2.dp))
+                        .background(borderColor)
+                )
+            }
         }
+        Spacer(modifier = Modifier.width(16.dp))
         Text(text = "+${formatter.format(profit.totalIncome)}", style = MaterialTheme.typography.labelLarge, color = borderColor)
     }
 }

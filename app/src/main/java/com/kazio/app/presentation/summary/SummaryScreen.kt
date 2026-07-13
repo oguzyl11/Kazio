@@ -204,6 +204,11 @@ private fun PlatformProfitItem(profit: PlatformProfit, formatter: NumberFormat) 
                 Text(text = "Gelir", style = MaterialTheme.typography.labelMedium, color = com.kazio.app.presentation.theme.TextSecondary)
                 Text(text = "${(profit.percentage * 100).toInt()}%", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
             }
+            val animatedProgress by androidx.compose.animation.core.animateFloatAsState(
+                targetValue = profit.percentage,
+                animationSpec = androidx.compose.animation.core.tween(durationMillis = 1000, easing = androidx.compose.animation.core.FastOutSlowInEasing)
+            )
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -213,7 +218,7 @@ private fun PlatformProfitItem(profit: PlatformProfit, formatter: NumberFormat) 
             ) {
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth(profit.percentage)
+                        .fillMaxWidth(animatedProgress)
                         .height(8.dp)
                         .clip(RoundedCornerShape(4.dp))
                         .background(borderColor)

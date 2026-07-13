@@ -50,7 +50,7 @@ fun BottomNavigationBar(
             icon = Icons.Default.Settings,
             label = "Ayarlar",
             selected = currentRoute == "settings",
-            onClick = { /* onNavigate("settings") */ }
+            onClick = { onNavigate("settings") }
         )
     }
 }

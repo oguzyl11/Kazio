@@ -15,6 +15,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.kazio.app.presentation.components.BottomNavigationBar
 import com.kazio.app.presentation.dashboard.DashboardScreen
+import com.kazio.app.presentation.settings.SettingsScreen
 import com.kazio.app.presentation.summary.SummaryScreen
 import com.kazio.app.presentation.theme.KazioTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,6 +56,9 @@ class MainActivity : ComponentActivity() {
                                 SummaryScreen(
                                     onNavigateBack = { navController.popBackStack() }
                                 )
+                            }
+                            composable("settings") {
+                                SettingsScreen()
                             }
                         }
                     }
