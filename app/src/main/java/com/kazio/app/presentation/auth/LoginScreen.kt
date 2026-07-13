@@ -13,6 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -53,15 +54,9 @@ fun LoginScreen(
             Image(
                 painter = painterResource(id = R.drawable.kazio_logo_transparent),
                 contentDescription = "Logo",
-                modifier = Modifier.size(80.dp)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "KAZIO",
-                style = MaterialTheme.typography.displayMedium,
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.ExtraBold,
-                letterSpacing = 4.sp
+                modifier = Modifier
+                    .fillMaxWidth(0.6f)
+                    .heightIn(max = 200.dp)
             )
             
             Spacer(modifier = Modifier.height(32.dp))
@@ -74,15 +69,23 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
+            val textFieldColors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                unfocusedBorderColor = Color.Transparent,
+            )
+
             OutlinedTextField(
                 value = uiState.emailInput,
                 onValueChange = viewModel::onEmailChange,
                 label = { Text("E-posta Adresi") },
-                leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
+                leadingIcon = { Icon(Icons.Default.Email, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = textFieldColors,
                 isError = uiState.errorMessage != null
             )
 
@@ -92,12 +95,13 @@ fun LoginScreen(
                 value = uiState.pinInput,
                 onValueChange = viewModel::onPinChange,
                 label = { Text("PIN Kodu") },
-                leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
+                leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = textFieldColors,
                 isError = uiState.errorMessage != null
             )
 
@@ -116,10 +120,15 @@ fun LoginScreen(
                 onClick = viewModel::login,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp),
-                shape = RoundedCornerShape(12.dp)
+                    .height(60.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp, pressedElevation = 0.dp)
             ) {
-                Text("Giriş Yap", style = MaterialTheme.typography.titleMedium)
+                Text("Giriş Yap", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
             }
 
             Spacer(modifier = Modifier.height(24.dp))
