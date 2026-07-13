@@ -45,12 +45,16 @@ fun DashboardScreen(
     // Showcase States
     var incomeButtonRect by remember { mutableStateOf<Rect?>(null) }
     var expenseButtonRect by remember { mutableStateOf<Rect?>(null) }
+    var shiftCardRect by remember { mutableStateOf<Rect?>(null) }
+    var summaryGridRect by remember { mutableStateOf<Rect?>(null) }
     var showcaseStep by remember { mutableIntStateOf(0) }
 
-    val currentShowcaseTarget = remember(showcaseStep, incomeButtonRect, expenseButtonRect) {
+    val currentShowcaseTarget = remember(showcaseStep, incomeButtonRect, expenseButtonRect, shiftCardRect, summaryGridRect) {
         when (showcaseStep) {
             1 -> incomeButtonRect?.let { ShowcaseTarget(it, "Gelir Ekle", "Buraya dokunarak kazançlarınızı hızlıca kaydedebilirsiniz.") }
             2 -> expenseButtonRect?.let { ShowcaseTarget(it, "Gider Ekle", "Yakıt veya yemek gibi giderlerinizi buradan ekleyebilirsiniz.") }
+            3 -> shiftCardRect?.let { ShowcaseTarget(it, "Vardiya Kontrolü", "Çalışmaya başladığınızda vardiyanızı buradan başlatıp bitirebilirsiniz.") }
+            4 -> summaryGridRect?.let { ShowcaseTarget(it, "Günlük Durum", "Günlük toplam gelir ve giderinizi anlık olarak buradan takip edebilirsiniz.") }
             else -> null
         }
     }
@@ -124,7 +128,9 @@ fun DashboardScreen(
                             onIncomeClick = { showIncomeSheet = true },
                             onExpenseClick = { showExpenseSheet = true },
                             onIncomePositioned = { incomeButtonRect = it },
-                            onExpensePositioned = { expenseButtonRect = it }
+                            onExpensePositioned = { expenseButtonRect = it },
+                            onShiftCardPositioned = { shiftCardRect = it },
+                            onSummaryGridPositioned = { summaryGridRect = it }
                         )
                     }
                 }
@@ -137,7 +143,7 @@ fun DashboardScreen(
                 isVisible = showcaseStep > 0,
                 currentTarget = currentShowcaseTarget,
                 onNext = {
-                    if (showcaseStep < 2) {
+                    if (showcaseStep < 4) {
                         showcaseStep++
                     } else {
                         showcaseStep = 0
@@ -174,7 +180,9 @@ private fun DashboardContent(
     onIncomeClick: () -> Unit,
     onExpenseClick: () -> Unit,
     onIncomePositioned: (Rect) -> Unit,
-    onExpensePositioned: (Rect) -> Unit
+    onExpensePositioned: (Rect) -> Unit,
+    onShiftCardPositioned: (Rect) -> Unit,
+    onSummaryGridPositioned: (Rect) -> Unit
 ) {
     val formatter = NumberFormat.getCurrencyInstance(Locale("tr", "TR"))
     val isOnline = state.activeShift != null
@@ -191,6 +199,7 @@ private fun DashboardContent(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .onGloballyPositioned { onShiftCardPositioned(it.boundsInRoot()) }
                     .clip(RoundedCornerShape(12.dp))
                     .background(com.kazio.app.presentation.theme.SurfaceMidnight.copy(alpha = 0.8f))
                     .border(1.dp, MaterialTheme.colorScheme.surfaceContainer, RoundedCornerShape(12.dp))
@@ -262,7 +271,10 @@ private fun DashboardContent(
 
         // Income/Expense Summary Grid
         item {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth().onGloballyPositioned { onSummaryGridPositioned(it.boundsInRoot()) },
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
                 // Income Card
                 Column(
                     modifier = Modifier
