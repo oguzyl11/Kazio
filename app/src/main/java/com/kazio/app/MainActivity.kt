@@ -12,10 +12,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.launch
 import com.kazio.app.data.local.datastore.DataStoreRepository
 import com.kazio.app.presentation.auth.LoginScreen
 import com.kazio.app.presentation.auth.RegisterScreen
@@ -50,10 +52,12 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 
                 // Determine Start Destination
-                val startDestination = if (preferences?.isRegistered == true) {
+                val startDestination = if (preferences?.isRegistered != true) {
+                    "register"
+                } else if (preferences?.isLoggedIn != true) {
                     "login"
                 } else {
-                    "register"
+                    "main"
                 }
 
                 NavHost(navController = navController, startDestination = startDestination) {
@@ -130,8 +134,11 @@ class MainActivity : ComponentActivity() {
                                 Box(modifier = Modifier.padding(paddingValues)) {
                                     SettingsScreen(
                                         onLogout = {
-                                            navController.navigate("login") {
-                                                popUpTo(0)
+                                            lifecycleScope.launch {
+                                                dataStoreRepository.setLoggedIn(false)
+                                                navController.navigate("login") {
+                                                    popUpTo(0)
+                                                }
                                             }
                                         },
                                         onRestartOnboarding = {

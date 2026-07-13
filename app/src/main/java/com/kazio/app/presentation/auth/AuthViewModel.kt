@@ -52,12 +52,18 @@ class AuthViewModel @Inject constructor(
     }
 
     fun register() {
-        val name = _uiState.value.nameInput
-        val email = _uiState.value.emailInput
+        val name = _uiState.value.nameInput.trim()
+        val email = _uiState.value.emailInput.trim()
         val pin = _uiState.value.pinInput
 
         if (name.isBlank() || email.isBlank() || pin.length < 4) {
             _uiState.update { it.copy(errorMessage = "Lütfen tüm alanları doldurun ve 4 haneli PIN girin.") }
+            return
+        }
+        
+        val weakPins = listOf("0000", "1111", "2222", "3333", "4444", "5555", "6666", "7777", "8888", "9999", "1234", "4321", "2580")
+        if (weakPins.contains(pin)) {
+            _uiState.update { it.copy(errorMessage = "Çok zayıf bir PIN seçtiniz. Lütfen daha güvenli bir PIN belirleyin.") }
             return
         }
         
@@ -73,7 +79,7 @@ class AuthViewModel @Inject constructor(
     }
 
     fun login() {
-        val enteredEmail = _uiState.value.emailInput
+        val enteredEmail = _uiState.value.emailInput.trim()
         val enteredPin = _uiState.value.pinInput
         val savedEmail = userPreferences.value?.userEmail
         val savedPin = userPreferences.value?.userPin
@@ -84,7 +90,10 @@ class AuthViewModel @Inject constructor(
         }
 
         if (enteredEmail.equals(savedEmail, ignoreCase = true) && enteredPin == savedPin) {
-            _uiState.update { it.copy(isAuthenticated = true) }
+            viewModelScope.launch {
+                dataStoreRepository.setLoggedIn(true)
+                _uiState.update { it.copy(isAuthenticated = true) }
+            }
         } else {
             _uiState.update { it.copy(errorMessage = "Hatalı e-posta veya PIN.") }
         }

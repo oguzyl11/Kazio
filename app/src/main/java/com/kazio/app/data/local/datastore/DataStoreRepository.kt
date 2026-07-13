@@ -21,6 +21,7 @@ class DataStoreRepository @Inject constructor(
 ) {
     private object PreferencesKeys {
         val IS_REGISTERED = booleanPreferencesKey("is_registered")
+        val IS_LOGGED_IN = booleanPreferencesKey("is_logged_in")
         val USER_NAME = stringPreferencesKey("user_name")
         val USER_EMAIL = stringPreferencesKey("user_email")
         val USER_PIN = stringPreferencesKey("user_pin")
@@ -37,6 +38,7 @@ class DataStoreRepository @Inject constructor(
         }
         .map { preferences ->
             val isRegistered = preferences[PreferencesKeys.IS_REGISTERED] ?: false
+            val isLoggedIn = preferences[PreferencesKeys.IS_LOGGED_IN] ?: false
             val userName = preferences[PreferencesKeys.USER_NAME] ?: ""
             val userEmail = preferences[PreferencesKeys.USER_EMAIL] ?: ""
             val userPin = preferences[PreferencesKeys.USER_PIN] ?: ""
@@ -44,6 +46,7 @@ class DataStoreRepository @Inject constructor(
 
             UserPreferences(
                 isRegistered = isRegistered,
+                isLoggedIn = isLoggedIn,
                 userName = userName,
                 userEmail = userEmail,
                 userPin = userPin,
@@ -57,6 +60,7 @@ class DataStoreRepository @Inject constructor(
             preferences[PreferencesKeys.USER_EMAIL] = email
             preferences[PreferencesKeys.USER_PIN] = pin
             preferences[PreferencesKeys.IS_REGISTERED] = true
+            preferences[PreferencesKeys.IS_LOGGED_IN] = true
         }
     }
 
@@ -66,9 +70,16 @@ class DataStoreRepository @Inject constructor(
         }
     }
 
+    suspend fun setLoggedIn(loggedIn: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.IS_LOGGED_IN] = loggedIn
+        }
+    }
+
     suspend fun clearUser() {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.IS_REGISTERED] = false
+            preferences[PreferencesKeys.IS_LOGGED_IN] = false
             preferences[PreferencesKeys.USER_NAME] = ""
             preferences[PreferencesKeys.USER_EMAIL] = ""
             preferences[PreferencesKeys.USER_PIN] = ""
