@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.kazio.app-mergeDebugResources-60:/values/values.xml",
+            "outputFile": "com.kazio.app-mergeDebugResources-61:/values/values.xml",
             "map": [
                 {
                     "source": "C:\\Users\\OGUZHAN\\.gradle\\caches\\8.11.1\\transforms\\f6bc544b7ff0afa8ec61cc539a581c93\\transformed\\startup-runtime-1.1.1\\res\\values\\values.xml",

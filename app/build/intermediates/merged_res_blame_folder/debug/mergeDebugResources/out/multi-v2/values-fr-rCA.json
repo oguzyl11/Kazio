@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.kazio.app-mergeDebugResources-60:/values-fr-rCA/values-fr-rCA.xml",
+            "outputFile": "com.kazio.app-mergeDebugResources-61:/values-fr-rCA/values-fr-rCA.xml",
             "map": [
                 {
                     "source": "C:\\Users\\OGUZHAN\\.gradle\\caches\\8.11.1\\transforms\\c693931866daa2230234e8a0fd6f4d39\\transformed\\material3-release\\res\\values-fr-rCA\\values-fr-rCA.xml",

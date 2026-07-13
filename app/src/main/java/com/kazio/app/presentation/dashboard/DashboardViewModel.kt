@@ -52,6 +52,8 @@ class DashboardViewModel @Inject constructor(
 
         DashboardUiState.Success(
             dailyNetProfit = summaryResult.netProfit,
+            totalIncome = summaryResult.totalIncome,
+            totalExpense = summaryResult.totalExpense,
             activeShift = activeShift,
             activeShiftDurationStr = durationStr,
             platformProfits = summaryResult.platformProfits.take(3)
