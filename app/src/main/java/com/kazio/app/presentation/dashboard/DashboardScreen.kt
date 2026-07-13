@@ -15,12 +15,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kazio.app.domain.model.PlatformProfit
+import com.kazio.app.presentation.components.ShowcaseOverlay
+import com.kazio.app.presentation.components.ShowcaseTarget
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -29,105 +34,119 @@ fun DashboardScreen(
     onNavigateToSummary: () -> Unit,
     viewModel: DashboardViewModel = hiltViewModel()
 ) {
-    var showMenu by remember { mutableStateOf(false) }
     var showIncomeSheet by remember { mutableStateOf(false) }
     var showExpenseSheet by remember { mutableStateOf(false) }
 
     val uiState by viewModel.uiState.collectAsState()
 
-    Scaffold(
-        topBar = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(64.dp)
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(horizontal = 20.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        Icons.Default.DeliveryDining,
-                        contentDescription = "Logo",
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(32.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "KAZIO",
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.ExtraBold,
-                        letterSpacing = 2.sp
-                    )
-                }
-                Box(
+    // Showcase States
+    var incomeButtonRect by remember { mutableStateOf<Rect?>(null) }
+    var expenseButtonRect by remember { mutableStateOf<Rect?>(null) }
+    var showcaseStep by remember { mutableIntStateOf(0) }
+
+    val currentShowcaseTarget = remember(showcaseStep, incomeButtonRect, expenseButtonRect) {
+        when (showcaseStep) {
+            1 -> incomeButtonRect?.let { ShowcaseTarget(it, "Gelir Ekle", "Buraya dokunarak kazançlarınızı hızlıca kaydedebilirsiniz.") }
+            2 -> expenseButtonRect?.let { ShowcaseTarget(it, "Gider Ekle", "Yakıt veya yemek gibi giderlerinizi buradan ekleyebilirsiniz.") }
+            else -> null
+        }
+    }
+
+    LaunchedEffect(uiState) {
+        if (uiState is DashboardUiState.Success) {
+            val state = uiState as DashboardUiState.Success
+            if (state.showOnboarding && showcaseStep == 0) {
+                showcaseStep = 1
+            }
+        }
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Scaffold(
+            topBar = {
+                Row(
                     modifier = Modifier
-                        .size(32.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+                        .fillMaxWidth()
+                        .height(64.dp)
+                        .background(MaterialTheme.colorScheme.background)
+                        .padding(horizontal = 20.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Icon(Icons.Default.Person, contentDescription = "Profile", tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.align(Alignment.Center))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Default.DeliveryDining,
+                            contentDescription = "Logo",
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(32.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "KAZIO",
+                            style = MaterialTheme.typography.headlineMedium,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.ExtraBold,
+                            letterSpacing = 2.sp
+                        )
+                    }
+                    Box(
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+                    ) {
+                        Icon(Icons.Default.Person, contentDescription = "Profile", tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.align(Alignment.Center))
+                    }
                 }
             }
-        },
-        floatingActionButton = {
-            Box {
-                FloatingActionButton(
-                    onClick = { showMenu = true },
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
-                    shape = RoundedCornerShape(16.dp),
-                    modifier = Modifier.size(56.dp)
-                ) {
-                    Icon(Icons.Default.Add, contentDescription = "Ekle", modifier = Modifier.size(32.dp))
-                }
-                DropdownMenu(
-                    expanded = showMenu,
-                    onDismissRequest = { showMenu = false },
-                    modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                ) {
-                    DropdownMenuItem(
-                        text = { Text("Gelir Ekle", color = MaterialTheme.colorScheme.onSurface) },
-                        onClick = {
-                            showMenu = false
-                            showIncomeSheet = true
-                        }
-                    )
-                    DropdownMenuItem(
-                        text = { Text("Gider Ekle", color = MaterialTheme.colorScheme.onSurface) },
-                        onClick = {
-                            showMenu = false
-                            showExpenseSheet = true
-                        }
-                    )
+        ) { paddingValues ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .background(MaterialTheme.colorScheme.background)
+            ) {
+                when (val state = uiState) {
+                    is DashboardUiState.Loading -> {
+                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center), color = MaterialTheme.colorScheme.primary)
+                    }
+                    is DashboardUiState.Error -> {
+                        Text(text = "Hata: ${state.message}", color = MaterialTheme.colorScheme.error, modifier = Modifier.align(Alignment.Center))
+                    }
+                    is DashboardUiState.Success -> {
+                        DashboardContent(
+                            state = state,
+                            onNavigateToSummary = onNavigateToSummary,
+                            onStartShift = viewModel::startShift,
+                            onEndShift = viewModel::endShift,
+                            onIncomeClick = { showIncomeSheet = true },
+                            onExpenseClick = { showExpenseSheet = true },
+                            onIncomePositioned = { incomeButtonRect = it },
+                            onExpensePositioned = { expenseButtonRect = it }
+                        )
+                    }
                 }
             }
         }
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .background(MaterialTheme.colorScheme.background)
-        ) {
-            when (val state = uiState) {
-                is DashboardUiState.Loading -> {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center), color = MaterialTheme.colorScheme.primary)
+
+        // Showcase Overlay
+        if (uiState is DashboardUiState.Success && showcaseStep > 0) {
+            ShowcaseOverlay(
+                isVisible = showcaseStep > 0,
+                currentTarget = currentShowcaseTarget,
+                onNext = {
+                    if (showcaseStep < 2) {
+                        showcaseStep++
+                    } else {
+                        showcaseStep = 0
+                        viewModel.completeOnboarding()
+                    }
+                },
+                onSkip = {
+                    showcaseStep = 0
+                    viewModel.completeOnboarding()
                 }
-                is DashboardUiState.Error -> {
-                    Text(text = "Hata: ${state.message}", color = MaterialTheme.colorScheme.error, modifier = Modifier.align(Alignment.Center))
-                }
-                is DashboardUiState.Success -> {
-                    DashboardContent(
-                        state = state,
-                        onNavigateToSummary = onNavigateToSummary,
-                        onStartShift = viewModel::startShift,
-                        onEndShift = viewModel::endShift
-                    )
-                }
-            }
+            )
         }
     }
 
@@ -149,7 +168,11 @@ private fun DashboardContent(
     state: DashboardUiState.Success,
     onNavigateToSummary: () -> Unit,
     onStartShift: () -> Unit,
-    onEndShift: () -> Unit
+    onEndShift: () -> Unit,
+    onIncomeClick: () -> Unit,
+    onExpenseClick: () -> Unit,
+    onIncomePositioned: (Rect) -> Unit,
+    onExpensePositioned: (Rect) -> Unit
 ) {
     val formatter = NumberFormat.getCurrencyInstance(Locale("tr", "TR"))
     val isOnline = state.activeShift != null
@@ -159,7 +182,7 @@ private fun DashboardContent(
             .fillMaxSize()
             .padding(horizontal = 20.dp),
         contentPadding = PaddingValues(top = 16.dp, bottom = 80.dp),
-        verticalArrangement = Arrangement.spacedBy(32.dp)
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         // Profit Header Section
         item {
@@ -194,6 +217,43 @@ private fun DashboardContent(
                         style = MaterialTheme.typography.labelLarge,
                         color = if (isOnline) MaterialTheme.colorScheme.primary else com.kazio.app.presentation.theme.TextSecondary
                     )
+                }
+            }
+        }
+
+        // Action Buttons (Income / Expense)
+        item {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                Button(
+                    onClick = onIncomeClick,
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(72.dp)
+                        .onGloballyPositioned { onIncomePositioned(it.boundsInRoot()) },
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer, contentColor = MaterialTheme.colorScheme.onPrimaryContainer)
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(24.dp))
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text("Gelir Ekle", style = MaterialTheme.typography.labelMedium)
+                    }
+                }
+
+                Button(
+                    onClick = onExpenseClick,
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(72.dp)
+                        .onGloballyPositioned { onExpensePositioned(it.boundsInRoot()) },
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer, contentColor = MaterialTheme.colorScheme.onErrorContainer)
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(Icons.Default.Remove, contentDescription = null, modifier = Modifier.size(24.dp))
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text("Gider Ekle", style = MaterialTheme.typography.labelMedium)
+                    }
                 }
             }
         }
@@ -239,7 +299,7 @@ private fun DashboardContent(
             }
         }
 
-        // Recent Transactions List (Mocked using platform profits for MVP)
+        // Recent Transactions List
         if (state.platformProfits.isNotEmpty()) {
             item {
                 Column(modifier = Modifier.fillMaxWidth()) {

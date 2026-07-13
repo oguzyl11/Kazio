@@ -2,6 +2,7 @@ package com.kazio.app.presentation.dashboard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kazio.app.data.local.datastore.DataStoreRepository
 import com.kazio.app.domain.usecase.EndShiftUseCase
 import com.kazio.app.domain.usecase.GetActiveShiftUseCase
 import com.kazio.app.domain.usecase.GetSummaryUseCase
@@ -11,6 +12,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
@@ -24,7 +26,8 @@ class DashboardViewModel @Inject constructor(
     private val getSummaryUseCase: GetSummaryUseCase,
     private val getActiveShiftUseCase: GetActiveShiftUseCase,
     private val startShiftUseCase: StartShiftUseCase,
-    private val endShiftUseCase: EndShiftUseCase
+    private val endShiftUseCase: EndShiftUseCase,
+    private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
 
     private val currentTimestamp = MutableStateFlow(Calendar.getInstance().timeInMillis)
@@ -39,8 +42,9 @@ class DashboardViewModel @Inject constructor(
     val uiState: StateFlow<DashboardUiState> = combine(
         getSummaryUseCase(getStartOfDay(currentTimestamp.value), getEndOfDay(currentTimestamp.value)),
         getActiveShiftUseCase(),
-        tickerFlow
-    ) { summaryResult, activeShift, currentTime ->
+        tickerFlow,
+        dataStoreRepository.userPreferencesFlow
+    ) { summaryResult, activeShift, currentTime, preferences ->
         val durationStr = if (activeShift != null) {
             val diff = currentTime - activeShift.startAt
             val hours = (diff / (1000 * 60 * 60))
@@ -56,13 +60,24 @@ class DashboardViewModel @Inject constructor(
             totalExpense = summaryResult.totalExpense,
             activeShift = activeShift,
             activeShiftDurationStr = durationStr,
-            platformProfits = summaryResult.platformProfits.take(3)
+            platformProfits = summaryResult.platformProfits.take(3),
+            showOnboarding = !preferences.isOnboardingSeen
+        ) as DashboardUiState
+    }
+        .catch { e ->
+            emit(DashboardUiState.Error(e.message ?: "Bilinmeyen bir hata oluştu"))
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = DashboardUiState.Loading
         )
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = DashboardUiState.Loading
-    )
+
+    fun completeOnboarding() {
+        viewModelScope.launch {
+            dataStoreRepository.updateOnboardingSeen(true)
+        }
+    }
 
     fun startShift() {
         viewModelScope.launch {

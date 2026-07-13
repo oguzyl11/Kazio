@@ -11,7 +11,8 @@ sealed interface DashboardUiState {
         val totalExpense: Double,
         val activeShift: Shift?,
         val activeShiftDurationStr: String = "",
-        val platformProfits: List<PlatformProfit> = emptyList()
+        val platformProfits: List<PlatformProfit> = emptyList(),
+        val showOnboarding: Boolean = false
     ) : DashboardUiState
     data class Error(val message: String) : DashboardUiState
 }
