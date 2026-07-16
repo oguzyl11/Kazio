@@ -23,7 +23,8 @@ class AddExpenseUseCase @Inject constructor(
         amount: Double,
         category: ExpenseCategory,
         shiftId: Long?,
-        note: String?
+        note: String?,
+        occurredAt: Long? = null
     ): AddExpenseResult {
         if (amount <= 0) return AddExpenseResult.Error(AddExpenseResult.Reason.AMOUNT_MUST_BE_POSITIVE)
         if (amount > 50_000) return AddExpenseResult.Error(AddExpenseResult.Reason.AMOUNT_TOO_LARGE)
@@ -32,7 +33,7 @@ class AddExpenseUseCase @Inject constructor(
             shiftId = shiftId,
             category = category,
             amount = amount,
-            occurredAt = Calendar.getInstance().timeInMillis,
+            occurredAt = occurredAt ?: Calendar.getInstance().timeInMillis,
             note = note
         )
         val id = expenseRepository.addExpense(entry)

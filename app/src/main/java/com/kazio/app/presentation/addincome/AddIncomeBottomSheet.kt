@@ -32,6 +32,28 @@ fun AddIncomeBottomSheet(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
+    var showDatePicker by remember { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = uiState.selectedDateMillis ?: System.currentTimeMillis()
+    )
+
+    if (showDatePicker) {
+        DatePickerDialog(
+            onDismissRequest = { showDatePicker = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    showDatePicker = false
+                    viewModel.onDateSelect(datePickerState.selectedDateMillis)
+                }) { Text("Tamam") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDatePicker = false }) { Text("İptal") }
+            }
+        ) {
+            DatePicker(state = datePickerState)
+        }
+    }
+
     LaunchedEffect(existingIncome) {
         viewModel.setEditingIncome(existingIncome)
     }
@@ -130,8 +152,17 @@ fun AddIncomeBottomSheet(
                         .padding(top = 8.dp)
                 )
             }
+            Spacer(modifier = Modifier.height(16.dp))
 
-            Spacer(modifier = Modifier.height(32.dp))
+            TextButton(onClick = { showDatePicker = true }) {
+                val dateText = uiState.selectedDateMillis?.let {
+                    val format = java.text.SimpleDateFormat("dd MMM yyyy", java.util.Locale.getDefault())
+                    format.format(java.util.Date(it))
+                } ?: "Tarih Seç (Opsiyonel)"
+                Text(dateText, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 onClick = viewModel::saveIncome,

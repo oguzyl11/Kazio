@@ -61,8 +61,18 @@ class AddIncomeViewModel @Inject constructor(
             if (amountStr.endsWith(".0")) {
                 amountStr = amountStr.substring(0, amountStr.length - 2)
             }
-            _uiState.update { it.copy(amount = amountStr, selectedPlatformId = income.platformId) }
+            _uiState.update { 
+                it.copy(
+                    amount = amountStr, 
+                    selectedPlatformId = income.platformId,
+                    selectedDateMillis = income.occurredAt
+                ) 
+            }
         }
+    }
+
+    fun onDateSelect(dateMillis: Long?) {
+        _uiState.update { it.copy(selectedDateMillis = dateMillis) }
     }
 
     fun onAmountChange(amount: String) {
@@ -89,7 +99,7 @@ class AddIncomeViewModel @Inject constructor(
                         shiftId = editingShiftId,
                         platformId = platformId ?: 0,
                         amount = amount,
-                        occurredAt = editingOccurredAt ?: System.currentTimeMillis(),
+                        occurredAt = _uiState.value.selectedDateMillis ?: System.currentTimeMillis(),
                         note = null
                     )
                 )
@@ -100,7 +110,8 @@ class AddIncomeViewModel @Inject constructor(
                     amount = amount,
                     platformId = platformId ?: 0,
                     shiftId = shiftId,
-                    note = null
+                    note = null,
+                    occurredAt = _uiState.value.selectedDateMillis
                 )
             }
 

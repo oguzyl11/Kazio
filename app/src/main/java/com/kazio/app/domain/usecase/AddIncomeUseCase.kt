@@ -23,7 +23,8 @@ class AddIncomeUseCase @Inject constructor(
         amount: Double,
         platformId: Long,
         shiftId: Long?,
-        note: String?
+        note: String?,
+        occurredAt: Long? = null
     ): AddIncomeResult {
         if (amount <= 0) return AddIncomeResult.Error(AddIncomeResult.Reason.AMOUNT_MUST_BE_POSITIVE)
         if (amount > 50_000) return AddIncomeResult.Error(AddIncomeResult.Reason.AMOUNT_TOO_LARGE)
@@ -33,7 +34,7 @@ class AddIncomeUseCase @Inject constructor(
             shiftId = shiftId,
             platformId = platformId,
             amount = amount,
-            occurredAt = Calendar.getInstance().timeInMillis,
+            occurredAt = occurredAt ?: Calendar.getInstance().timeInMillis,
             note = note
         )
         val id = incomeRepository.addIncome(entry)

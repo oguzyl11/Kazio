@@ -8,5 +8,6 @@ data class AddExpenseUiState(
     val note: String = "",
     val isLoading: Boolean = false,
     val error: String? = null,
-    val isSuccess: Boolean = false
+    val isSuccess: Boolean = false,
+    val selectedDateMillis: Long? = null
 )
