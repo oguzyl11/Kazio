@@ -63,6 +63,18 @@ fun DashboardScreen(
         }
     }
 
+    val context = androidx.compose.ui.platform.LocalContext.current
+
+    LaunchedEffect(Unit) {
+        viewModel.pdfUriEvent.collect { uri ->
+            val intent = android.content.Intent(android.content.Intent.ACTION_VIEW).apply {
+                setDataAndType(uri, "application/pdf")
+                flags = android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
+            }
+            context.startActivity(android.content.Intent.createChooser(intent, "PDF Raporunu Görüntüle/Paylaş"))
+        }
+    }
+
     LaunchedEffect(uiState) {
         if (uiState is DashboardUiState.Success) {
             val state = uiState as DashboardUiState.Success
@@ -100,7 +112,7 @@ fun DashboardScreen(
                     }
                     
                     IconButton(
-                        onClick = { viewModel.generateMonthlyReport() },
+                        onClick = { viewModel.generateMonthlyReport(context) },
                         modifier = Modifier.align(Alignment.CenterEnd)
                     ) {
                         Icon(
