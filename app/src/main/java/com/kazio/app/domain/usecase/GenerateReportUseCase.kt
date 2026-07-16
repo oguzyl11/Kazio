@@ -32,7 +32,7 @@ class GenerateReportUseCase @Inject constructor(
                 calendar.set(Calendar.MILLISECOND, 0)
             }
             ReportType.WEEKLY -> {
-                titleFormat = "Bu Hafta (${SimpleDateFormat("ww. Hafta - yyyy", Locale("tr", "TR")).format(Date())})"
+                titleFormat = "Bu Hafta (${SimpleDateFormat("ww. 'Hafta -' yyyy", Locale("tr", "TR")).format(Date())})"
                 calendar.set(Calendar.DAY_OF_WEEK, calendar.firstDayOfWeek)
                 calendar.set(Calendar.HOUR_OF_DAY, 0)
                 calendar.set(Calendar.MINUTE, 0)
