@@ -10,6 +10,9 @@ interface IncomeDao {
     @Query("SELECT * FROM incomes WHERE occurredAt >= :startAt AND occurredAt <= :endAt")
     fun getIncomesForDateRange(startAt: Long, endAt: Long): Flow<List<IncomeEntity>>
 
+    @Query("SELECT * FROM incomes WHERE shiftId = :shiftId")
+    fun getIncomesForShift(shiftId: Long): Flow<List<IncomeEntity>>
+
     @Insert
     suspend fun insertIncome(income: IncomeEntity): Long
 

@@ -12,6 +12,7 @@ sealed interface DashboardUiState {
         val totalExpense: Double,
         val activeShift: Shift?,
         val activeShiftDurationStr: String = "",
+        val activeShiftIncome: Double = 0.0,
         val platformProfits: List<PlatformProfit> = emptyList(),
         val showOnboarding: Boolean = false,
         val recommendations: List<Recommendation> = emptyList()
