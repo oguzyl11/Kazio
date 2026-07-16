@@ -3,6 +3,7 @@ package com.kazio.app.data.local.room
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -12,6 +13,9 @@ interface ExpenseDao {
 
     @Insert
     suspend fun insertExpense(expense: ExpenseEntity): Long
+
+    @Update
+    suspend fun updateExpense(expense: ExpenseEntity)
 
     @Query("DELETE FROM expenses WHERE id = :id")
     suspend fun deleteExpense(id: Long)

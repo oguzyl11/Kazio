@@ -28,6 +28,10 @@ class IncomeRepositoryImpl @Inject constructor(
         return incomeDao.insertIncome(entry.toEntity())
     }
 
+    override suspend fun updateIncome(entry: IncomeEntry) {
+        incomeDao.updateIncome(entry.toEntity())
+    }
+
     override suspend fun deleteIncome(id: Long) {
         incomeDao.deleteIncome(id)
     }

@@ -26,10 +26,15 @@ import com.kazio.app.presentation.theme.SurfaceMidnight
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddIncomeBottomSheet(
+    existingIncome: com.kazio.app.domain.model.IncomeEntry? = null,
     onDismissRequest: () -> Unit,
     viewModel: AddIncomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(existingIncome) {
+        viewModel.setEditingIncome(existingIncome)
+    }
 
     LaunchedEffect(uiState.isSuccess) {
         if (uiState.isSuccess) {
@@ -50,7 +55,11 @@ fun AddIncomeBottomSheet(
                 .padding(bottom = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Gelir Ekle", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.primary)
+            Text(
+                text = if (existingIncome != null) "Gelir Düzenle" else "Gelir Ekle", 
+                style = MaterialTheme.typography.headlineMedium, 
+                color = MaterialTheme.colorScheme.primary
+            )
             Spacer(modifier = Modifier.height(24.dp))
 
             LazyRow(
@@ -139,7 +148,7 @@ fun AddIncomeBottomSheet(
                 if (uiState.isLoading) {
                     CircularProgressIndicator(modifier = Modifier.size(24.dp), color = MaterialTheme.colorScheme.onPrimary)
                 } else {
-                    Text("Kaydet", style = MaterialTheme.typography.labelLarge)
+                    Text(if (existingIncome != null) "Güncelle" else "Kaydet", style = MaterialTheme.typography.labelLarge)
                 }
             }
         }

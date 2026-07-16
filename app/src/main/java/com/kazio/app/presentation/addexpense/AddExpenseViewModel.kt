@@ -15,14 +15,41 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+import com.kazio.app.domain.usecase.UpdateExpenseUseCase
+import com.kazio.app.domain.model.ExpenseEntry
+
 @HiltViewModel
 class AddExpenseViewModel @Inject constructor(
     private val getActiveShiftUseCase: GetActiveShiftUseCase,
-    private val addExpenseUseCase: AddExpenseUseCase
+    private val addExpenseUseCase: AddExpenseUseCase,
+    private val updateExpenseUseCase: UpdateExpenseUseCase
 ) : ViewModel() {
+
+    private var editingExpenseId: Long? = null
+    private var editingOccurredAt: Long? = null
+    private var editingShiftId: Long? = null
 
     private val _uiState = MutableStateFlow(AddExpenseUiState())
     val uiState: StateFlow<AddExpenseUiState> = _uiState.asStateFlow()
+
+    fun setEditingExpense(expense: ExpenseEntry?) {
+        if (expense == null) {
+            editingExpenseId = null
+            editingOccurredAt = null
+            editingShiftId = null
+            _uiState.update { it.copy(amount = "", selectedCategory = null) }
+        } else {
+            editingExpenseId = expense.id
+            editingOccurredAt = expense.occurredAt
+            editingShiftId = expense.shiftId
+            
+            var amountStr = expense.amount.toString()
+            if (amountStr.endsWith(".0")) {
+                amountStr = amountStr.substring(0, amountStr.length - 2)
+            }
+            _uiState.update { it.copy(amount = amountStr, selectedCategory = expense.category) }
+        }
+    }
 
     fun onAmountChange(amount: String) {
         _uiState.update { it.copy(amount = amount, error = null) }
@@ -45,15 +72,28 @@ class AddExpenseViewModel @Inject constructor(
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            val activeShift = getActiveShiftUseCase().firstOrNull()
-            val shiftId = activeShift?.id
-
-            val result = addExpenseUseCase(
-                amount = amount,
-                category = category,
-                shiftId = shiftId,
-                note = null
-            )
+            
+            val result = if (editingExpenseId != null) {
+                updateExpenseUseCase(
+                    ExpenseEntry(
+                        id = editingExpenseId!!,
+                        shiftId = editingShiftId,
+                        category = category,
+                        amount = amount,
+                        occurredAt = editingOccurredAt ?: System.currentTimeMillis(),
+                        note = null
+                    )
+                )
+            } else {
+                val activeShift = getActiveShiftUseCase().firstOrNull()
+                val shiftId = activeShift?.id
+                addExpenseUseCase(
+                    amount = amount,
+                    category = category,
+                    shiftId = shiftId,
+                    note = null
+                )
+            }
 
             when (result) {
                 is AddExpenseResult.Success -> {

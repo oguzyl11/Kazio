@@ -7,5 +7,6 @@ interface IncomeRepository {
     fun getIncomesForDateRange(startAt: Long, endAt: Long): Flow<List<IncomeEntry>>
     fun getIncomesForShift(shiftId: Long): Flow<List<IncomeEntry>>
     suspend fun addIncome(entry: IncomeEntry): Long
+    suspend fun updateIncome(entry: IncomeEntry)
     suspend fun deleteIncome(id: Long)
 }

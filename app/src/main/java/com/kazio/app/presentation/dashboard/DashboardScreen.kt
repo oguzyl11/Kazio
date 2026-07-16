@@ -45,6 +45,9 @@ fun DashboardScreen(
     var showIncomeSheet by remember { mutableStateOf(false) }
     var showExpenseSheet by remember { mutableStateOf(false) }
     var showReportOptions by remember { mutableStateOf(false) }
+    var showTransactions by remember { mutableStateOf(false) }
+    var editingIncome by remember { mutableStateOf<com.kazio.app.domain.model.IncomeEntry?>(null) }
+    var editingExpense by remember { mutableStateOf<com.kazio.app.domain.model.ExpenseEntry?>(null) }
 
     val uiState by viewModel.uiState.collectAsState()
 
@@ -126,7 +129,8 @@ fun DashboardScreen(
                             onIncomePositioned = { incomeButtonRect = it },
                             onExpensePositioned = { expenseButtonRect = it },
                             onShiftCardPositioned = { shiftCardRect = it },
-                            onSummaryGridPositioned = { summaryGridRect = it }
+                            onSummaryGridPositioned = { summaryGridRect = it },
+                            onShowTransactions = { showTransactions = true }
                         )
                     }
                 }
@@ -156,13 +160,37 @@ fun DashboardScreen(
 
     if (showIncomeSheet) {
         com.kazio.app.presentation.addincome.AddIncomeBottomSheet(
-            onDismissRequest = { showIncomeSheet = false }
+            onDismissRequest = { 
+                showIncomeSheet = false
+                editingIncome = null
+            },
+            existingIncome = editingIncome
         )
     }
 
     if (showExpenseSheet) {
         com.kazio.app.presentation.addexpense.AddExpenseBottomSheet(
-            onDismissRequest = { showExpenseSheet = false }
+            onDismissRequest = { 
+                showExpenseSheet = false
+                editingExpense = null
+            },
+            existingExpense = editingExpense
+        )
+    }
+
+    if (showTransactions) {
+        com.kazio.app.presentation.transactions.TransactionsBottomSheet(
+            onDismissRequest = { showTransactions = false },
+            onEditIncome = { income ->
+                editingIncome = income
+                showTransactions = false
+                showIncomeSheet = true
+            },
+            onEditExpense = { expense ->
+                editingExpense = expense
+                showTransactions = false
+                showExpenseSheet = true
+            }
         )
     }
 
@@ -188,7 +216,8 @@ private fun DashboardContent(
     onIncomePositioned: (Rect) -> Unit,
     onExpensePositioned: (Rect) -> Unit,
     onShiftCardPositioned: (Rect) -> Unit,
-    onSummaryGridPositioned: (Rect) -> Unit
+    onSummaryGridPositioned: (Rect) -> Unit,
+    onShowTransactions: () -> Unit
 ) {
     val formatter = NumberFormat.getCurrencyInstance(Locale("tr", "TR"))
     val isOnline = state.activeShift != null
@@ -252,7 +281,7 @@ private fun DashboardContent(
             }
         }
 
-        // Action Buttons (Income / Expense)
+        // Action Buttons (Income / Expense / Transactions)
         item {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 Button(
@@ -286,6 +315,21 @@ private fun DashboardContent(
                         Text("Gider Ekle", style = MaterialTheme.typography.labelMedium)
                     }
                 }
+            }
+        }
+
+        item {
+            Button(
+                onClick = onShowTransactions,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer, contentColor = MaterialTheme.colorScheme.onSecondaryContainer)
+            ) {
+                Icon(Icons.Default.History, contentDescription = null, modifier = Modifier.size(24.dp))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Geçmiş İşlemler & Düzenle", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             }
         }
 

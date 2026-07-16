@@ -3,6 +3,7 @@ package com.kazio.app.data.local.room;
 import android.database.Cursor;
 import androidx.annotation.NonNull;
 import androidx.room.CoroutinesRoom;
+import androidx.room.EntityDeletionOrUpdateAdapter;
 import androidx.room.EntityInsertionAdapter;
 import androidx.room.RoomDatabase;
 import androidx.room.RoomSQLiteQuery;
@@ -32,6 +33,8 @@ public final class ExpenseDao_Impl implements ExpenseDao {
   private final RoomDatabase __db;
 
   private final EntityInsertionAdapter<ExpenseEntity> __insertionAdapterOfExpenseEntity;
+
+  private final EntityDeletionOrUpdateAdapter<ExpenseEntity> __updateAdapterOfExpenseEntity;
 
   private final SharedSQLiteStatement __preparedStmtOfDeleteExpense;
 
@@ -63,6 +66,33 @@ public final class ExpenseDao_Impl implements ExpenseDao {
         }
       }
     };
+    this.__updateAdapterOfExpenseEntity = new EntityDeletionOrUpdateAdapter<ExpenseEntity>(__db) {
+      @Override
+      @NonNull
+      protected String createQuery() {
+        return "UPDATE OR ABORT `expenses` SET `id` = ?,`shiftId` = ?,`category` = ?,`amount` = ?,`occurredAt` = ?,`note` = ? WHERE `id` = ?";
+      }
+
+      @Override
+      protected void bind(@NonNull final SupportSQLiteStatement statement,
+          @NonNull final ExpenseEntity entity) {
+        statement.bindLong(1, entity.getId());
+        if (entity.getShiftId() == null) {
+          statement.bindNull(2);
+        } else {
+          statement.bindLong(2, entity.getShiftId());
+        }
+        statement.bindString(3, entity.getCategory());
+        statement.bindDouble(4, entity.getAmount());
+        statement.bindLong(5, entity.getOccurredAt());
+        if (entity.getNote() == null) {
+          statement.bindNull(6);
+        } else {
+          statement.bindString(6, entity.getNote());
+        }
+        statement.bindLong(7, entity.getId());
+      }
+    };
     this.__preparedStmtOfDeleteExpense = new SharedSQLiteStatement(__db) {
       @Override
       @NonNull
@@ -85,6 +115,25 @@ public final class ExpenseDao_Impl implements ExpenseDao {
           final Long _result = __insertionAdapterOfExpenseEntity.insertAndReturnId(expense);
           __db.setTransactionSuccessful();
           return _result;
+        } finally {
+          __db.endTransaction();
+        }
+      }
+    }, $completion);
+  }
+
+  @Override
+  public Object updateExpense(final ExpenseEntity expense,
+      final Continuation<? super Unit> $completion) {
+    return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
+      @Override
+      @NonNull
+      public Unit call() throws Exception {
+        __db.beginTransaction();
+        try {
+          __updateAdapterOfExpenseEntity.handle(expense);
+          __db.setTransactionSuccessful();
+          return Unit.INSTANCE;
         } finally {
           __db.endTransaction();
         }

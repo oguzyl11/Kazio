@@ -15,12 +15,20 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+import com.kazio.app.domain.usecase.UpdateIncomeUseCase
+import com.kazio.app.domain.model.IncomeEntry
+
 @HiltViewModel
 class AddIncomeViewModel @Inject constructor(
     private val getPlatformsUseCase: GetPlatformsUseCase,
     private val getActiveShiftUseCase: GetActiveShiftUseCase,
-    private val addIncomeUseCase: AddIncomeUseCase
+    private val addIncomeUseCase: AddIncomeUseCase,
+    private val updateIncomeUseCase: UpdateIncomeUseCase
 ) : ViewModel() {
+
+    private var editingIncomeId: Long? = null
+    private var editingOccurredAt: Long? = null
+    private var editingShiftId: Long? = null
 
     private val _uiState = MutableStateFlow(AddIncomeUiState())
     val uiState: StateFlow<AddIncomeUiState> = _uiState.asStateFlow()
@@ -34,6 +42,26 @@ class AddIncomeViewModel @Inject constructor(
             getPlatformsUseCase().collect { platforms ->
                 _uiState.update { it.copy(platforms = platforms) }
             }
+        }
+    }
+
+    fun setEditingIncome(income: IncomeEntry?) {
+        if (income == null) {
+            editingIncomeId = null
+            editingOccurredAt = null
+            editingShiftId = null
+            _uiState.update { it.copy(amount = "", selectedPlatformId = null) }
+        } else {
+            editingIncomeId = income.id
+            editingOccurredAt = income.occurredAt
+            editingShiftId = income.shiftId
+            
+            // Format amount to string without trailing .0
+            var amountStr = income.amount.toString()
+            if (amountStr.endsWith(".0")) {
+                amountStr = amountStr.substring(0, amountStr.length - 2)
+            }
+            _uiState.update { it.copy(amount = amountStr, selectedPlatformId = income.platformId) }
         }
     }
 
@@ -53,15 +81,28 @@ class AddIncomeViewModel @Inject constructor(
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            val activeShift = getActiveShiftUseCase().firstOrNull()
-            val shiftId = activeShift?.id
-
-            val result = addIncomeUseCase(
-                amount = amount,
-                platformId = platformId ?: 0,
-                shiftId = shiftId,
-                note = null
-            )
+            
+            val result = if (editingIncomeId != null) {
+                updateIncomeUseCase(
+                    IncomeEntry(
+                        id = editingIncomeId!!,
+                        shiftId = editingShiftId,
+                        platformId = platformId ?: 0,
+                        amount = amount,
+                        occurredAt = editingOccurredAt ?: System.currentTimeMillis(),
+                        note = null
+                    )
+                )
+            } else {
+                val activeShift = getActiveShiftUseCase().firstOrNull()
+                val shiftId = activeShift?.id
+                addIncomeUseCase(
+                    amount = amount,
+                    platformId = platformId ?: 0,
+                    shiftId = shiftId,
+                    note = null
+                )
+            }
 
             when (result) {
                 is AddIncomeResult.Success -> {

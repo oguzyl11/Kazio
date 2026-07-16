@@ -27,10 +27,15 @@ import com.kazio.app.presentation.theme.SurfaceMidnight
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddExpenseBottomSheet(
+    existingExpense: com.kazio.app.domain.model.ExpenseEntry? = null,
     onDismissRequest: () -> Unit,
     viewModel: AddExpenseViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(existingExpense) {
+        viewModel.setEditingExpense(existingExpense)
+    }
 
     LaunchedEffect(uiState.isSuccess) {
         if (uiState.isSuccess) {
@@ -51,7 +56,11 @@ fun AddExpenseBottomSheet(
                 .padding(bottom = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Gider Ekle", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.error)
+            Text(
+                text = if (existingExpense != null) "Gider Düzenle" else "Gider Ekle", 
+                style = MaterialTheme.typography.headlineMedium, 
+                color = MaterialTheme.colorScheme.error
+            )
             Spacer(modifier = Modifier.height(24.dp))
 
             val categories = ExpenseCategory.values()
@@ -142,9 +151,9 @@ fun AddExpenseBottomSheet(
                 )
             ) {
                 if (uiState.isLoading) {
-                    CircularProgressIndicator(modifier = Modifier.size(24.dp), color = MaterialTheme.colorScheme.onError)
+                    CircularProgressIndicator(modifier = Modifier.size(24.dp), color = MaterialTheme.colorScheme.onPrimary)
                 } else {
-                    Text("Kaydet", style = MaterialTheme.typography.labelLarge)
+                    Text(if (existingExpense != null) "Güncelle" else "Kaydet", style = MaterialTheme.typography.labelLarge)
                 }
             }
         }

@@ -3,6 +3,7 @@ package com.kazio.app.data.local.room;
 import android.database.Cursor;
 import androidx.annotation.NonNull;
 import androidx.room.CoroutinesRoom;
+import androidx.room.EntityDeletionOrUpdateAdapter;
 import androidx.room.EntityInsertionAdapter;
 import androidx.room.RoomDatabase;
 import androidx.room.RoomSQLiteQuery;
@@ -32,6 +33,8 @@ public final class IncomeDao_Impl implements IncomeDao {
   private final RoomDatabase __db;
 
   private final EntityInsertionAdapter<IncomeEntity> __insertionAdapterOfIncomeEntity;
+
+  private final EntityDeletionOrUpdateAdapter<IncomeEntity> __updateAdapterOfIncomeEntity;
 
   private final SharedSQLiteStatement __preparedStmtOfDeleteIncome;
 
@@ -63,6 +66,33 @@ public final class IncomeDao_Impl implements IncomeDao {
         }
       }
     };
+    this.__updateAdapterOfIncomeEntity = new EntityDeletionOrUpdateAdapter<IncomeEntity>(__db) {
+      @Override
+      @NonNull
+      protected String createQuery() {
+        return "UPDATE OR ABORT `incomes` SET `id` = ?,`shiftId` = ?,`platformId` = ?,`amount` = ?,`occurredAt` = ?,`note` = ? WHERE `id` = ?";
+      }
+
+      @Override
+      protected void bind(@NonNull final SupportSQLiteStatement statement,
+          @NonNull final IncomeEntity entity) {
+        statement.bindLong(1, entity.getId());
+        if (entity.getShiftId() == null) {
+          statement.bindNull(2);
+        } else {
+          statement.bindLong(2, entity.getShiftId());
+        }
+        statement.bindLong(3, entity.getPlatformId());
+        statement.bindDouble(4, entity.getAmount());
+        statement.bindLong(5, entity.getOccurredAt());
+        if (entity.getNote() == null) {
+          statement.bindNull(6);
+        } else {
+          statement.bindString(6, entity.getNote());
+        }
+        statement.bindLong(7, entity.getId());
+      }
+    };
     this.__preparedStmtOfDeleteIncome = new SharedSQLiteStatement(__db) {
       @Override
       @NonNull
@@ -85,6 +115,25 @@ public final class IncomeDao_Impl implements IncomeDao {
           final Long _result = __insertionAdapterOfIncomeEntity.insertAndReturnId(income);
           __db.setTransactionSuccessful();
           return _result;
+        } finally {
+          __db.endTransaction();
+        }
+      }
+    }, $completion);
+  }
+
+  @Override
+  public Object updateIncome(final IncomeEntity income,
+      final Continuation<? super Unit> $completion) {
+    return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
+      @Override
+      @NonNull
+      public Unit call() throws Exception {
+        __db.beginTransaction();
+        try {
+          __updateAdapterOfIncomeEntity.handle(income);
+          __db.setTransactionSuccessful();
+          return Unit.INSTANCE;
         } finally {
           __db.endTransaction();
         }
