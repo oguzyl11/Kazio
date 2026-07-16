@@ -46,6 +46,7 @@ fun DashboardScreen(
     var showExpenseSheet by remember { mutableStateOf(false) }
     var showReportOptions by remember { mutableStateOf(false) }
     var showTransactions by remember { mutableStateOf(false) }
+    var showShiftManagement by remember { mutableStateOf(false) }
     var editingIncome by remember { mutableStateOf<com.kazio.app.domain.model.IncomeEntry?>(null) }
     var editingExpense by remember { mutableStateOf<com.kazio.app.domain.model.ExpenseEntry?>(null) }
 
@@ -123,7 +124,7 @@ fun DashboardScreen(
                             state = state,
                             onNavigateToSummary = onNavigateToSummary,
                             onStartShift = viewModel::startShift,
-                            onEndShift = viewModel::endShift,
+                            onShiftCardClick = { showShiftManagement = true },
                             onIncomeClick = { showIncomeSheet = true },
                             onExpenseClick = { showExpenseSheet = true },
                             onIncomePositioned = { incomeButtonRect = it },
@@ -203,6 +204,18 @@ fun DashboardScreen(
             }
         )
     }
+
+    if (showShiftManagement && uiState is DashboardUiState.Success) {
+        val successState = uiState as DashboardUiState.Success
+        com.kazio.app.presentation.dashboard.ShiftManagementBottomSheet(
+            activeShift = successState.activeShift,
+            durationStr = successState.activeShiftDurationStr,
+            onDismissRequest = { showShiftManagement = false },
+            onPauseShift = viewModel::pauseShift,
+            onResumeShift = viewModel::resumeShift,
+            onEndShift = viewModel::endShift
+        )
+    }
 }
 
 @Composable
@@ -210,7 +223,7 @@ private fun DashboardContent(
     state: DashboardUiState.Success,
     onNavigateToSummary: () -> Unit,
     onStartShift: () -> Unit,
-    onEndShift: () -> Unit,
+    onShiftCardClick: () -> Unit,
     onIncomeClick: () -> Unit,
     onExpenseClick: () -> Unit,
     onIncomePositioned: (Rect) -> Unit,
@@ -238,7 +251,7 @@ private fun DashboardContent(
                     .clip(RoundedCornerShape(12.dp))
                     .background(com.kazio.app.presentation.theme.SurfaceMidnight.copy(alpha = 0.8f))
                     .border(1.dp, MaterialTheme.colorScheme.surfaceContainer, RoundedCornerShape(12.dp))
-                    .clickable { if (isOnline) onEndShift() else onStartShift() }
+                    .clickable { if (isOnline) onShiftCardClick() else onStartShift() }
                     .padding(32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
@@ -273,7 +286,10 @@ private fun DashboardContent(
                     Icon(Icons.Default.Schedule, contentDescription = null, tint = com.kazio.app.presentation.theme.TextSecondary, modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = if (isOnline) "Vardiya: ${state.activeShiftDurationStr} (Bitir)" else "Vardiya Başlat",
+                        text = if (isOnline) {
+                            if (state.activeShift?.isPaused == true) "Vardiya: ${state.activeShiftDurationStr} (Molada)" 
+                            else "Vardiya: ${state.activeShiftDurationStr} (Yönet)"
+                        } else "Vardiya Başlat",
                         style = MaterialTheme.typography.labelLarge,
                         color = if (isOnline) MaterialTheme.colorScheme.primary else com.kazio.app.presentation.theme.TextSecondary
                     )

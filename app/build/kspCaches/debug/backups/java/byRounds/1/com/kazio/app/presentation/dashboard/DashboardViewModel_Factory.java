@@ -7,6 +7,8 @@ import com.kazio.app.domain.usecase.GetActiveShiftIncomeUseCase;
 import com.kazio.app.domain.usecase.GetActiveShiftUseCase;
 import com.kazio.app.domain.usecase.GetRecommendationsUseCase;
 import com.kazio.app.domain.usecase.GetSummaryUseCase;
+import com.kazio.app.domain.usecase.PauseShiftUseCase;
+import com.kazio.app.domain.usecase.ResumeShiftUseCase;
 import com.kazio.app.domain.usecase.StartShiftUseCase;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
@@ -42,6 +44,10 @@ public final class DashboardViewModel_Factory implements Factory<DashboardViewMo
 
   private final Provider<EndShiftUseCase> endShiftUseCaseProvider;
 
+  private final Provider<PauseShiftUseCase> pauseShiftUseCaseProvider;
+
+  private final Provider<ResumeShiftUseCase> resumeShiftUseCaseProvider;
+
   private final Provider<GenerateReportUseCase> generateReportUseCaseProvider;
 
   private final Provider<DataStoreRepository> dataStoreRepositoryProvider;
@@ -52,6 +58,8 @@ public final class DashboardViewModel_Factory implements Factory<DashboardViewMo
       Provider<GetActiveShiftIncomeUseCase> getActiveShiftIncomeUseCaseProvider,
       Provider<StartShiftUseCase> startShiftUseCaseProvider,
       Provider<EndShiftUseCase> endShiftUseCaseProvider,
+      Provider<PauseShiftUseCase> pauseShiftUseCaseProvider,
+      Provider<ResumeShiftUseCase> resumeShiftUseCaseProvider,
       Provider<GenerateReportUseCase> generateReportUseCaseProvider,
       Provider<DataStoreRepository> dataStoreRepositoryProvider) {
     this.getSummaryUseCaseProvider = getSummaryUseCaseProvider;
@@ -60,13 +68,15 @@ public final class DashboardViewModel_Factory implements Factory<DashboardViewMo
     this.getActiveShiftIncomeUseCaseProvider = getActiveShiftIncomeUseCaseProvider;
     this.startShiftUseCaseProvider = startShiftUseCaseProvider;
     this.endShiftUseCaseProvider = endShiftUseCaseProvider;
+    this.pauseShiftUseCaseProvider = pauseShiftUseCaseProvider;
+    this.resumeShiftUseCaseProvider = resumeShiftUseCaseProvider;
     this.generateReportUseCaseProvider = generateReportUseCaseProvider;
     this.dataStoreRepositoryProvider = dataStoreRepositoryProvider;
   }
 
   @Override
   public DashboardViewModel get() {
-    return newInstance(getSummaryUseCaseProvider.get(), getRecommendationsUseCaseProvider.get(), getActiveShiftUseCaseProvider.get(), getActiveShiftIncomeUseCaseProvider.get(), startShiftUseCaseProvider.get(), endShiftUseCaseProvider.get(), generateReportUseCaseProvider.get(), dataStoreRepositoryProvider.get());
+    return newInstance(getSummaryUseCaseProvider.get(), getRecommendationsUseCaseProvider.get(), getActiveShiftUseCaseProvider.get(), getActiveShiftIncomeUseCaseProvider.get(), startShiftUseCaseProvider.get(), endShiftUseCaseProvider.get(), pauseShiftUseCaseProvider.get(), resumeShiftUseCaseProvider.get(), generateReportUseCaseProvider.get(), dataStoreRepositoryProvider.get());
   }
 
   public static DashboardViewModel_Factory create(
@@ -76,17 +86,20 @@ public final class DashboardViewModel_Factory implements Factory<DashboardViewMo
       Provider<GetActiveShiftIncomeUseCase> getActiveShiftIncomeUseCaseProvider,
       Provider<StartShiftUseCase> startShiftUseCaseProvider,
       Provider<EndShiftUseCase> endShiftUseCaseProvider,
+      Provider<PauseShiftUseCase> pauseShiftUseCaseProvider,
+      Provider<ResumeShiftUseCase> resumeShiftUseCaseProvider,
       Provider<GenerateReportUseCase> generateReportUseCaseProvider,
       Provider<DataStoreRepository> dataStoreRepositoryProvider) {
-    return new DashboardViewModel_Factory(getSummaryUseCaseProvider, getRecommendationsUseCaseProvider, getActiveShiftUseCaseProvider, getActiveShiftIncomeUseCaseProvider, startShiftUseCaseProvider, endShiftUseCaseProvider, generateReportUseCaseProvider, dataStoreRepositoryProvider);
+    return new DashboardViewModel_Factory(getSummaryUseCaseProvider, getRecommendationsUseCaseProvider, getActiveShiftUseCaseProvider, getActiveShiftIncomeUseCaseProvider, startShiftUseCaseProvider, endShiftUseCaseProvider, pauseShiftUseCaseProvider, resumeShiftUseCaseProvider, generateReportUseCaseProvider, dataStoreRepositoryProvider);
   }
 
   public static DashboardViewModel newInstance(GetSummaryUseCase getSummaryUseCase,
       GetRecommendationsUseCase getRecommendationsUseCase,
       GetActiveShiftUseCase getActiveShiftUseCase,
       GetActiveShiftIncomeUseCase getActiveShiftIncomeUseCase, StartShiftUseCase startShiftUseCase,
-      EndShiftUseCase endShiftUseCase, GenerateReportUseCase generateReportUseCase,
+      EndShiftUseCase endShiftUseCase, PauseShiftUseCase pauseShiftUseCase,
+      ResumeShiftUseCase resumeShiftUseCase, GenerateReportUseCase generateReportUseCase,
       DataStoreRepository dataStoreRepository) {
-    return new DashboardViewModel(getSummaryUseCase, getRecommendationsUseCase, getActiveShiftUseCase, getActiveShiftIncomeUseCase, startShiftUseCase, endShiftUseCase, generateReportUseCase, dataStoreRepository);
+    return new DashboardViewModel(getSummaryUseCase, getRecommendationsUseCase, getActiveShiftUseCase, getActiveShiftIncomeUseCase, startShiftUseCase, endShiftUseCase, pauseShiftUseCase, resumeShiftUseCase, generateReportUseCase, dataStoreRepository);
   }
 }

@@ -36,13 +36,15 @@ public final class ShiftDao_Impl implements ShiftDao {
 
   private final SharedSQLiteStatement __preparedStmtOfUpdateShiftEnd;
 
+  private final SharedSQLiteStatement __preparedStmtOfUpdateShiftPauseState;
+
   public ShiftDao_Impl(@NonNull final RoomDatabase __db) {
     this.__db = __db;
     this.__insertionAdapterOfShiftEntity = new EntityInsertionAdapter<ShiftEntity>(__db) {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR ABORT INTO `shifts` (`id`,`vehicleId`,`startAt`,`endAt`,`note`) VALUES (nullif(?, 0),?,?,?,?)";
+        return "INSERT OR ABORT INTO `shifts` (`id`,`vehicleId`,`startAt`,`endAt`,`note`,`totalPausedDuration`,`isPaused`,`lastPausedAt`) VALUES (nullif(?, 0),?,?,?,?,?,?,?)";
       }
 
       @Override
@@ -61,6 +63,14 @@ public final class ShiftDao_Impl implements ShiftDao {
         } else {
           statement.bindString(5, entity.getNote());
         }
+        statement.bindLong(6, entity.getTotalPausedDuration());
+        final int _tmp = entity.isPaused() ? 1 : 0;
+        statement.bindLong(7, _tmp);
+        if (entity.getLastPausedAt() == null) {
+          statement.bindNull(8);
+        } else {
+          statement.bindLong(8, entity.getLastPausedAt());
+        }
       }
     };
     this.__preparedStmtOfUpdateShiftEnd = new SharedSQLiteStatement(__db) {
@@ -68,6 +78,14 @@ public final class ShiftDao_Impl implements ShiftDao {
       @NonNull
       public String createQuery() {
         final String _query = "UPDATE shifts SET endAt = ? WHERE id = ?";
+        return _query;
+      }
+    };
+    this.__preparedStmtOfUpdateShiftPauseState = new SharedSQLiteStatement(__db) {
+      @Override
+      @NonNull
+      public String createQuery() {
+        final String _query = "UPDATE shifts SET isPaused = ?, lastPausedAt = ?, totalPausedDuration = ? WHERE id = ?";
         return _query;
       }
     };
@@ -120,6 +138,44 @@ public final class ShiftDao_Impl implements ShiftDao {
   }
 
   @Override
+  public Object updateShiftPauseState(final long shiftId, final boolean isPaused,
+      final Long lastPausedAt, final long totalPausedDuration,
+      final Continuation<? super Unit> $completion) {
+    return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
+      @Override
+      @NonNull
+      public Unit call() throws Exception {
+        final SupportSQLiteStatement _stmt = __preparedStmtOfUpdateShiftPauseState.acquire();
+        int _argIndex = 1;
+        final int _tmp = isPaused ? 1 : 0;
+        _stmt.bindLong(_argIndex, _tmp);
+        _argIndex = 2;
+        if (lastPausedAt == null) {
+          _stmt.bindNull(_argIndex);
+        } else {
+          _stmt.bindLong(_argIndex, lastPausedAt);
+        }
+        _argIndex = 3;
+        _stmt.bindLong(_argIndex, totalPausedDuration);
+        _argIndex = 4;
+        _stmt.bindLong(_argIndex, shiftId);
+        try {
+          __db.beginTransaction();
+          try {
+            _stmt.executeUpdateDelete();
+            __db.setTransactionSuccessful();
+            return Unit.INSTANCE;
+          } finally {
+            __db.endTransaction();
+          }
+        } finally {
+          __preparedStmtOfUpdateShiftPauseState.release(_stmt);
+        }
+      }
+    }, $completion);
+  }
+
+  @Override
   public Flow<ShiftEntity> getActiveShift() {
     final String _sql = "SELECT * FROM shifts WHERE endAt IS NULL ORDER BY startAt DESC LIMIT 1";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
@@ -134,6 +190,9 @@ public final class ShiftDao_Impl implements ShiftDao {
           final int _cursorIndexOfStartAt = CursorUtil.getColumnIndexOrThrow(_cursor, "startAt");
           final int _cursorIndexOfEndAt = CursorUtil.getColumnIndexOrThrow(_cursor, "endAt");
           final int _cursorIndexOfNote = CursorUtil.getColumnIndexOrThrow(_cursor, "note");
+          final int _cursorIndexOfTotalPausedDuration = CursorUtil.getColumnIndexOrThrow(_cursor, "totalPausedDuration");
+          final int _cursorIndexOfIsPaused = CursorUtil.getColumnIndexOrThrow(_cursor, "isPaused");
+          final int _cursorIndexOfLastPausedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "lastPausedAt");
           final ShiftEntity _result;
           if (_cursor.moveToFirst()) {
             final long _tmpId;
@@ -154,7 +213,19 @@ public final class ShiftDao_Impl implements ShiftDao {
             } else {
               _tmpNote = _cursor.getString(_cursorIndexOfNote);
             }
-            _result = new ShiftEntity(_tmpId,_tmpVehicleId,_tmpStartAt,_tmpEndAt,_tmpNote);
+            final long _tmpTotalPausedDuration;
+            _tmpTotalPausedDuration = _cursor.getLong(_cursorIndexOfTotalPausedDuration);
+            final boolean _tmpIsPaused;
+            final int _tmp;
+            _tmp = _cursor.getInt(_cursorIndexOfIsPaused);
+            _tmpIsPaused = _tmp != 0;
+            final Long _tmpLastPausedAt;
+            if (_cursor.isNull(_cursorIndexOfLastPausedAt)) {
+              _tmpLastPausedAt = null;
+            } else {
+              _tmpLastPausedAt = _cursor.getLong(_cursorIndexOfLastPausedAt);
+            }
+            _result = new ShiftEntity(_tmpId,_tmpVehicleId,_tmpStartAt,_tmpEndAt,_tmpNote,_tmpTotalPausedDuration,_tmpIsPaused,_tmpLastPausedAt);
           } else {
             _result = null;
           }
@@ -190,6 +261,9 @@ public final class ShiftDao_Impl implements ShiftDao {
           final int _cursorIndexOfStartAt = CursorUtil.getColumnIndexOrThrow(_cursor, "startAt");
           final int _cursorIndexOfEndAt = CursorUtil.getColumnIndexOrThrow(_cursor, "endAt");
           final int _cursorIndexOfNote = CursorUtil.getColumnIndexOrThrow(_cursor, "note");
+          final int _cursorIndexOfTotalPausedDuration = CursorUtil.getColumnIndexOrThrow(_cursor, "totalPausedDuration");
+          final int _cursorIndexOfIsPaused = CursorUtil.getColumnIndexOrThrow(_cursor, "isPaused");
+          final int _cursorIndexOfLastPausedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "lastPausedAt");
           final List<ShiftEntity> _result = new ArrayList<ShiftEntity>(_cursor.getCount());
           while (_cursor.moveToNext()) {
             final ShiftEntity _item;
@@ -211,7 +285,19 @@ public final class ShiftDao_Impl implements ShiftDao {
             } else {
               _tmpNote = _cursor.getString(_cursorIndexOfNote);
             }
-            _item = new ShiftEntity(_tmpId,_tmpVehicleId,_tmpStartAt,_tmpEndAt,_tmpNote);
+            final long _tmpTotalPausedDuration;
+            _tmpTotalPausedDuration = _cursor.getLong(_cursorIndexOfTotalPausedDuration);
+            final boolean _tmpIsPaused;
+            final int _tmp;
+            _tmp = _cursor.getInt(_cursorIndexOfIsPaused);
+            _tmpIsPaused = _tmp != 0;
+            final Long _tmpLastPausedAt;
+            if (_cursor.isNull(_cursorIndexOfLastPausedAt)) {
+              _tmpLastPausedAt = null;
+            } else {
+              _tmpLastPausedAt = _cursor.getLong(_cursorIndexOfLastPausedAt);
+            }
+            _item = new ShiftEntity(_tmpId,_tmpVehicleId,_tmpStartAt,_tmpEndAt,_tmpNote,_tmpTotalPausedDuration,_tmpIsPaused,_tmpLastPausedAt);
             _result.add(_item);
           }
           return _result;

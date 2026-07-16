@@ -44,7 +44,15 @@ object DatabaseModule {
                     platformDao.insertPlatform(com.kazio.app.data.local.room.PlatformEntity(name = "BiTaksi", colorTag = "#FFD54F", isCustom = false))
                 }
             }
-        }).build()
+        }).addMigrations(
+            object : androidx.room.migration.Migration(1, 2) {
+                override fun migrate(db: androidx.sqlite.db.SupportSQLiteDatabase) {
+                    db.execSQL("ALTER TABLE shifts ADD COLUMN totalPausedDuration INTEGER NOT NULL DEFAULT 0")
+                    db.execSQL("ALTER TABLE shifts ADD COLUMN isPaused INTEGER NOT NULL DEFAULT 0")
+                    db.execSQL("ALTER TABLE shifts ADD COLUMN lastPausedAt INTEGER DEFAULT NULL")
+                }
+            }
+        ).build()
     }
 
     @Provides

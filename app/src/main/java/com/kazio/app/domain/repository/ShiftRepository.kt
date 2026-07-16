@@ -8,4 +8,5 @@ interface ShiftRepository {
     fun getShiftsForDateRange(startAt: Long, endAt: Long): Flow<List<Shift>>
     suspend fun startShift(vehicleId: Long, startAt: Long, note: String?): Long
     suspend fun endShift(shiftId: Long, endAt: Long)
+    suspend fun updateShiftPauseState(shiftId: Long, isPaused: Boolean, lastPausedAt: Long?, totalPausedDuration: Long)
 }

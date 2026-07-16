@@ -37,15 +37,15 @@ public final class KazioDatabase_Impl extends KazioDatabase {
   @Override
   @NonNull
   protected SupportSQLiteOpenHelper createOpenHelper(@NonNull final DatabaseConfiguration config) {
-    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(1) {
+    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(2) {
       @Override
       public void createAllTables(@NonNull final SupportSQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS `incomes` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shiftId` INTEGER, `platformId` INTEGER NOT NULL, `amount` REAL NOT NULL, `occurredAt` INTEGER NOT NULL, `note` TEXT)");
         db.execSQL("CREATE TABLE IF NOT EXISTS `expenses` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shiftId` INTEGER, `category` TEXT NOT NULL, `amount` REAL NOT NULL, `occurredAt` INTEGER NOT NULL, `note` TEXT)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS `shifts` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `vehicleId` INTEGER NOT NULL, `startAt` INTEGER NOT NULL, `endAt` INTEGER, `note` TEXT)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `shifts` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `vehicleId` INTEGER NOT NULL, `startAt` INTEGER NOT NULL, `endAt` INTEGER, `note` TEXT, `totalPausedDuration` INTEGER NOT NULL, `isPaused` INTEGER NOT NULL, `lastPausedAt` INTEGER)");
         db.execSQL("CREATE TABLE IF NOT EXISTS `platforms` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `colorTag` TEXT NOT NULL, `isCustom` INTEGER NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '02d599ae183ec9fd3c387a07d61a4ec8')");
+        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '55023bf1c39826086e2c1d22cd7bbdd9')");
       }
 
       @Override
@@ -129,12 +129,15 @@ public final class KazioDatabase_Impl extends KazioDatabase {
                   + " Expected:\n" + _infoExpenses + "\n"
                   + " Found:\n" + _existingExpenses);
         }
-        final HashMap<String, TableInfo.Column> _columnsShifts = new HashMap<String, TableInfo.Column>(5);
+        final HashMap<String, TableInfo.Column> _columnsShifts = new HashMap<String, TableInfo.Column>(8);
         _columnsShifts.put("id", new TableInfo.Column("id", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsShifts.put("vehicleId", new TableInfo.Column("vehicleId", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsShifts.put("startAt", new TableInfo.Column("startAt", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsShifts.put("endAt", new TableInfo.Column("endAt", "INTEGER", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsShifts.put("note", new TableInfo.Column("note", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsShifts.put("totalPausedDuration", new TableInfo.Column("totalPausedDuration", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsShifts.put("isPaused", new TableInfo.Column("isPaused", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsShifts.put("lastPausedAt", new TableInfo.Column("lastPausedAt", "INTEGER", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
         final HashSet<TableInfo.ForeignKey> _foreignKeysShifts = new HashSet<TableInfo.ForeignKey>(0);
         final HashSet<TableInfo.Index> _indicesShifts = new HashSet<TableInfo.Index>(0);
         final TableInfo _infoShifts = new TableInfo("shifts", _columnsShifts, _foreignKeysShifts, _indicesShifts);
@@ -160,7 +163,7 @@ public final class KazioDatabase_Impl extends KazioDatabase {
         }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "02d599ae183ec9fd3c387a07d61a4ec8", "1a583e9ec277aa9889f51e97f5c7328e");
+    }, "55023bf1c39826086e2c1d22cd7bbdd9", "2bc890463cd7a5155c5e8189e349b0bb");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(config.context).name(config.name).callback(_openCallback).build();
     final SupportSQLiteOpenHelper _helper = config.sqliteOpenHelperFactory.create(_sqliteConfig);
     return _helper;

@@ -8,6 +8,8 @@ import com.kazio.app.domain.usecase.GetActiveShiftUseCase
 import com.kazio.app.domain.usecase.GetRecommendationsUseCase
 import com.kazio.app.domain.usecase.GetSummaryUseCase
 import com.kazio.app.domain.usecase.StartShiftUseCase
+import com.kazio.app.domain.usecase.PauseShiftUseCase
+import com.kazio.app.domain.usecase.ResumeShiftUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,6 +45,8 @@ class DashboardViewModel @Inject constructor(
     private val getActiveShiftIncomeUseCase: GetActiveShiftIncomeUseCase,
     private val startShiftUseCase: StartShiftUseCase,
     private val endShiftUseCase: EndShiftUseCase,
+    private val pauseShiftUseCase: PauseShiftUseCase,
+    private val resumeShiftUseCase: ResumeShiftUseCase,
     private val generateReportUseCase: GenerateReportUseCase,
     private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
@@ -81,10 +85,22 @@ class DashboardViewModel @Inject constructor(
         val activeShiftIncome = activeShiftData.second
         
         val durationStr = if (activeShift != null) {
-            val diff = currentTime - activeShift.startAt
-            val hours = (diff / (1000 * 60 * 60))
-            val minutes = (diff / (1000 * 60)) % 60
-            String.format(Locale.getDefault(), "%02d:%02d", hours, minutes)
+            val diff = if (activeShift.isPaused && activeShift.lastPausedAt != null) {
+                // If paused, time is frozen at lastPausedAt
+                activeShift.lastPausedAt - activeShift.startAt - activeShift.totalPausedDuration
+            } else {
+                // If running, time continues to tick
+                currentTime - activeShift.startAt - activeShift.totalPausedDuration
+            }
+            
+            val hours = (diff / (1000 * 60 * 60)).coerceAtLeast(0)
+            val minutes = ((diff / (1000 * 60)) % 60).coerceAtLeast(0)
+            val seconds = ((diff / 1000) % 60).coerceAtLeast(0)
+            if (hours > 0) {
+                String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds)
+            } else {
+                String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
+            }
         } else {
             ""
         }
@@ -125,6 +141,18 @@ class DashboardViewModel @Inject constructor(
     fun endShift() {
         viewModelScope.launch {
             endShiftUseCase()
+        }
+    }
+
+    fun pauseShift() {
+        viewModelScope.launch {
+            pauseShiftUseCase()
+        }
+    }
+
+    fun resumeShift() {
+        viewModelScope.launch {
+            resumeShiftUseCase()
         }
     }
 

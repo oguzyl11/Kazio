@@ -10,7 +10,7 @@ import androidx.room.RoomDatabase
         ShiftEntity::class,
         PlatformEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class KazioDatabase : RoomDatabase() {

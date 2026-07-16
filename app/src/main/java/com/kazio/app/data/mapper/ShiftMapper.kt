@@ -8,7 +8,10 @@ fun ShiftEntity.toDomain() = Shift(
     vehicleId = vehicleId,
     startAt = startAt,
     endAt = endAt,
-    note = note
+    note = note,
+    totalPausedDuration = totalPausedDuration,
+    isPaused = isPaused,
+    lastPausedAt = lastPausedAt
 )
 
 fun Shift.toEntity() = ShiftEntity(
@@ -16,5 +19,8 @@ fun Shift.toEntity() = ShiftEntity(
     vehicleId = vehicleId,
     startAt = startAt,
     endAt = endAt,
-    note = note
+    note = note,
+    totalPausedDuration = totalPausedDuration,
+    isPaused = isPaused,
+    lastPausedAt = lastPausedAt
 )

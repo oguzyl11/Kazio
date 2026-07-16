@@ -18,4 +18,7 @@ interface ShiftDao {
 
     @Query("UPDATE shifts SET endAt = :endAt WHERE id = :shiftId")
     suspend fun updateShiftEnd(shiftId: Long, endAt: Long)
+
+    @Query("UPDATE shifts SET isPaused = :isPaused, lastPausedAt = :lastPausedAt, totalPausedDuration = :totalPausedDuration WHERE id = :shiftId")
+    suspend fun updateShiftPauseState(shiftId: Long, isPaused: Boolean, lastPausedAt: Long?, totalPausedDuration: Long)
 }

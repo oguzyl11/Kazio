@@ -10,5 +10,8 @@ data class ShiftEntity(
     val vehicleId: Long,
     val startAt: Long,
     val endAt: Long?,
-    val note: String?
+    val note: String?,
+    val totalPausedDuration: Long = 0L,
+    val isPaused: Boolean = false,
+    val lastPausedAt: Long? = null
 )

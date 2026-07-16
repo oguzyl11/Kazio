@@ -36,4 +36,8 @@ class ShiftRepositoryImpl @Inject constructor(
     override suspend fun endShift(shiftId: Long, endAt: Long) {
         shiftDao.updateShiftEnd(shiftId, endAt)
     }
+
+    override suspend fun updateShiftPauseState(shiftId: Long, isPaused: Boolean, lastPausedAt: Long?, totalPausedDuration: Long) {
+        shiftDao.updateShiftPauseState(shiftId, isPaused, lastPausedAt, totalPausedDuration)
+    }
 }
