@@ -10,29 +10,35 @@ import com.kazio.app.data.local.datastore.DataStoreRepository;
 import com.kazio.app.data.local.room.ExpenseDao;
 import com.kazio.app.data.local.room.IncomeDao;
 import com.kazio.app.data.local.room.KazioDatabase;
+import com.kazio.app.data.local.room.PersonalRecordDao;
 import com.kazio.app.data.local.room.PlatformDao;
 import com.kazio.app.data.local.room.ShiftDao;
 import com.kazio.app.data.repository.ExpenseRepositoryImpl;
 import com.kazio.app.data.repository.IncomeRepositoryImpl;
+import com.kazio.app.data.repository.PersonalRecordRepositoryImpl;
 import com.kazio.app.data.repository.PlatformRepositoryImpl;
 import com.kazio.app.data.repository.ShiftRepositoryImpl;
 import com.kazio.app.di.DatabaseModule_ProvideExpenseDaoFactory;
 import com.kazio.app.di.DatabaseModule_ProvideIncomeDaoFactory;
 import com.kazio.app.di.DatabaseModule_ProvideKazioDatabaseFactory;
+import com.kazio.app.di.DatabaseModule_ProvidePersonalRecordDaoFactory;
 import com.kazio.app.di.DatabaseModule_ProvidePlatformDaoFactory;
 import com.kazio.app.di.DatabaseModule_ProvideShiftDaoFactory;
 import com.kazio.app.domain.repository.ExpenseRepository;
 import com.kazio.app.domain.repository.IncomeRepository;
+import com.kazio.app.domain.repository.PersonalRecordRepository;
 import com.kazio.app.domain.repository.PlatformRepository;
 import com.kazio.app.domain.repository.ShiftRepository;
 import com.kazio.app.domain.usecase.AddExpenseUseCase;
 import com.kazio.app.domain.usecase.AddIncomeUseCase;
+import com.kazio.app.domain.usecase.CheckAndUpdateRecordsUseCase;
 import com.kazio.app.domain.usecase.DeleteExpenseUseCase;
 import com.kazio.app.domain.usecase.DeleteIncomeUseCase;
 import com.kazio.app.domain.usecase.EndShiftUseCase;
 import com.kazio.app.domain.usecase.GenerateReportUseCase;
 import com.kazio.app.domain.usecase.GetActiveShiftIncomeUseCase;
 import com.kazio.app.domain.usecase.GetActiveShiftUseCase;
+import com.kazio.app.domain.usecase.GetPersonalRecordsUseCase;
 import com.kazio.app.domain.usecase.GetPlatformsUseCase;
 import com.kazio.app.domain.usecase.GetRecommendationsUseCase;
 import com.kazio.app.domain.usecase.GetSummaryUseCase;
@@ -442,19 +448,25 @@ public final class DaggerKazioApplication_HiltComponents_SingletonC {
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
+      static String com_kazio_app_presentation_settings_SettingsViewModel = "com.kazio.app.presentation.settings.SettingsViewModel";
+
+      static String com_kazio_app_presentation_dashboard_DashboardViewModel = "com.kazio.app.presentation.dashboard.DashboardViewModel";
+
       static String com_kazio_app_presentation_auth_AuthViewModel = "com.kazio.app.presentation.auth.AuthViewModel";
 
       static String com_kazio_app_presentation_addexpense_AddExpenseViewModel = "com.kazio.app.presentation.addexpense.AddExpenseViewModel";
 
-      static String com_kazio_app_presentation_addincome_AddIncomeViewModel = "com.kazio.app.presentation.addincome.AddIncomeViewModel";
-
-      static String com_kazio_app_presentation_dashboard_DashboardViewModel = "com.kazio.app.presentation.dashboard.DashboardViewModel";
-
-      static String com_kazio_app_presentation_settings_SettingsViewModel = "com.kazio.app.presentation.settings.SettingsViewModel";
-
       static String com_kazio_app_presentation_summary_SummaryViewModel = "com.kazio.app.presentation.summary.SummaryViewModel";
 
+      static String com_kazio_app_presentation_addincome_AddIncomeViewModel = "com.kazio.app.presentation.addincome.AddIncomeViewModel";
+
       static String com_kazio_app_presentation_transactions_TransactionsViewModel = "com.kazio.app.presentation.transactions.TransactionsViewModel";
+
+      @KeepFieldType
+      SettingsViewModel com_kazio_app_presentation_settings_SettingsViewModel2;
+
+      @KeepFieldType
+      DashboardViewModel com_kazio_app_presentation_dashboard_DashboardViewModel2;
 
       @KeepFieldType
       AuthViewModel com_kazio_app_presentation_auth_AuthViewModel2;
@@ -463,16 +475,10 @@ public final class DaggerKazioApplication_HiltComponents_SingletonC {
       AddExpenseViewModel com_kazio_app_presentation_addexpense_AddExpenseViewModel2;
 
       @KeepFieldType
-      AddIncomeViewModel com_kazio_app_presentation_addincome_AddIncomeViewModel2;
-
-      @KeepFieldType
-      DashboardViewModel com_kazio_app_presentation_dashboard_DashboardViewModel2;
-
-      @KeepFieldType
-      SettingsViewModel com_kazio_app_presentation_settings_SettingsViewModel2;
-
-      @KeepFieldType
       SummaryViewModel com_kazio_app_presentation_summary_SummaryViewModel2;
+
+      @KeepFieldType
+      AddIncomeViewModel com_kazio_app_presentation_addincome_AddIncomeViewModel2;
 
       @KeepFieldType
       TransactionsViewModel com_kazio_app_presentation_transactions_TransactionsViewModel2;
@@ -514,8 +520,12 @@ public final class DaggerKazioApplication_HiltComponents_SingletonC {
       return new GetActiveShiftUseCase(singletonCImpl.bindShiftRepositoryProvider.get());
     }
 
+    private CheckAndUpdateRecordsUseCase checkAndUpdateRecordsUseCase() {
+      return new CheckAndUpdateRecordsUseCase(singletonCImpl.bindPersonalRecordRepositoryProvider.get(), singletonCImpl.getSummaryUseCase());
+    }
+
     private AddExpenseUseCase addExpenseUseCase() {
-      return new AddExpenseUseCase(singletonCImpl.bindExpenseRepositoryProvider.get());
+      return new AddExpenseUseCase(singletonCImpl.bindExpenseRepositoryProvider.get(), checkAndUpdateRecordsUseCase());
     }
 
     private UpdateExpenseUseCase updateExpenseUseCase() {
@@ -527,7 +537,7 @@ public final class DaggerKazioApplication_HiltComponents_SingletonC {
     }
 
     private AddIncomeUseCase addIncomeUseCase() {
-      return new AddIncomeUseCase(singletonCImpl.bindIncomeRepositoryProvider.get());
+      return new AddIncomeUseCase(singletonCImpl.bindIncomeRepositoryProvider.get(), checkAndUpdateRecordsUseCase());
     }
 
     private UpdateIncomeUseCase updateIncomeUseCase() {
@@ -543,7 +553,7 @@ public final class DaggerKazioApplication_HiltComponents_SingletonC {
     }
 
     private EndShiftUseCase endShiftUseCase() {
-      return new EndShiftUseCase(singletonCImpl.bindShiftRepositoryProvider.get(), getActiveShiftUseCase());
+      return new EndShiftUseCase(singletonCImpl.bindShiftRepositoryProvider.get(), getActiveShiftUseCase(), getActiveShiftIncomeUseCase(), checkAndUpdateRecordsUseCase());
     }
 
     private PauseShiftUseCase pauseShiftUseCase() {
@@ -556,6 +566,10 @@ public final class DaggerKazioApplication_HiltComponents_SingletonC {
 
     private GenerateReportUseCase generateReportUseCase() {
       return new GenerateReportUseCase(singletonCImpl.bindShiftRepositoryProvider.get(), singletonCImpl.bindIncomeRepositoryProvider.get(), singletonCImpl.bindExpenseRepositoryProvider.get());
+    }
+
+    private GetPersonalRecordsUseCase getPersonalRecordsUseCase() {
+      return new GetPersonalRecordsUseCase(singletonCImpl.bindPersonalRecordRepositoryProvider.get());
     }
 
     private DeleteIncomeUseCase deleteIncomeUseCase() {
@@ -590,40 +604,40 @@ public final class DaggerKazioApplication_HiltComponents_SingletonC {
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
-      static String com_kazio_app_presentation_addincome_AddIncomeViewModel = "com.kazio.app.presentation.addincome.AddIncomeViewModel";
-
-      static String com_kazio_app_presentation_dashboard_DashboardViewModel = "com.kazio.app.presentation.dashboard.DashboardViewModel";
-
-      static String com_kazio_app_presentation_summary_SummaryViewModel = "com.kazio.app.presentation.summary.SummaryViewModel";
-
-      static String com_kazio_app_presentation_auth_AuthViewModel = "com.kazio.app.presentation.auth.AuthViewModel";
-
-      static String com_kazio_app_presentation_settings_SettingsViewModel = "com.kazio.app.presentation.settings.SettingsViewModel";
-
       static String com_kazio_app_presentation_transactions_TransactionsViewModel = "com.kazio.app.presentation.transactions.TransactionsViewModel";
+
+      static String com_kazio_app_presentation_addincome_AddIncomeViewModel = "com.kazio.app.presentation.addincome.AddIncomeViewModel";
 
       static String com_kazio_app_presentation_addexpense_AddExpenseViewModel = "com.kazio.app.presentation.addexpense.AddExpenseViewModel";
 
-      @KeepFieldType
-      AddIncomeViewModel com_kazio_app_presentation_addincome_AddIncomeViewModel2;
+      static String com_kazio_app_presentation_settings_SettingsViewModel = "com.kazio.app.presentation.settings.SettingsViewModel";
 
-      @KeepFieldType
-      DashboardViewModel com_kazio_app_presentation_dashboard_DashboardViewModel2;
+      static String com_kazio_app_presentation_dashboard_DashboardViewModel = "com.kazio.app.presentation.dashboard.DashboardViewModel";
 
-      @KeepFieldType
-      SummaryViewModel com_kazio_app_presentation_summary_SummaryViewModel2;
+      static String com_kazio_app_presentation_auth_AuthViewModel = "com.kazio.app.presentation.auth.AuthViewModel";
 
-      @KeepFieldType
-      AuthViewModel com_kazio_app_presentation_auth_AuthViewModel2;
-
-      @KeepFieldType
-      SettingsViewModel com_kazio_app_presentation_settings_SettingsViewModel2;
+      static String com_kazio_app_presentation_summary_SummaryViewModel = "com.kazio.app.presentation.summary.SummaryViewModel";
 
       @KeepFieldType
       TransactionsViewModel com_kazio_app_presentation_transactions_TransactionsViewModel2;
 
       @KeepFieldType
+      AddIncomeViewModel com_kazio_app_presentation_addincome_AddIncomeViewModel2;
+
+      @KeepFieldType
       AddExpenseViewModel com_kazio_app_presentation_addexpense_AddExpenseViewModel2;
+
+      @KeepFieldType
+      SettingsViewModel com_kazio_app_presentation_settings_SettingsViewModel2;
+
+      @KeepFieldType
+      DashboardViewModel com_kazio_app_presentation_dashboard_DashboardViewModel2;
+
+      @KeepFieldType
+      AuthViewModel com_kazio_app_presentation_auth_AuthViewModel2;
+
+      @KeepFieldType
+      SummaryViewModel com_kazio_app_presentation_summary_SummaryViewModel2;
     }
 
     private static final class SwitchingProvider<T> implements Provider<T> {
@@ -657,13 +671,13 @@ public final class DaggerKazioApplication_HiltComponents_SingletonC {
           return (T) new AuthViewModel(singletonCImpl.dataStoreRepositoryProvider.get());
 
           case 3: // com.kazio.app.presentation.dashboard.DashboardViewModel 
-          return (T) new DashboardViewModel(singletonCImpl.getSummaryUseCase(), singletonCImpl.getRecommendationsUseCase(), viewModelCImpl.getActiveShiftUseCase(), viewModelCImpl.getActiveShiftIncomeUseCase(), viewModelCImpl.startShiftUseCase(), viewModelCImpl.endShiftUseCase(), viewModelCImpl.pauseShiftUseCase(), viewModelCImpl.resumeShiftUseCase(), viewModelCImpl.generateReportUseCase(), singletonCImpl.dataStoreRepositoryProvider.get());
+          return (T) new DashboardViewModel(singletonCImpl.getSummaryUseCase(), singletonCImpl.getRecommendationsUseCase(), viewModelCImpl.getActiveShiftUseCase(), viewModelCImpl.getActiveShiftIncomeUseCase(), viewModelCImpl.startShiftUseCase(), viewModelCImpl.endShiftUseCase(), viewModelCImpl.pauseShiftUseCase(), viewModelCImpl.resumeShiftUseCase(), viewModelCImpl.generateReportUseCase(), singletonCImpl.dataStoreRepositoryProvider.get(), singletonCImpl.bindPersonalRecordRepositoryProvider.get());
 
           case 4: // com.kazio.app.presentation.settings.SettingsViewModel 
           return (T) new SettingsViewModel(singletonCImpl.dataStoreRepositoryProvider.get());
 
           case 5: // com.kazio.app.presentation.summary.SummaryViewModel 
-          return (T) new SummaryViewModel(singletonCImpl.getSummaryUseCase(), viewModelCImpl.generateReportUseCase());
+          return (T) new SummaryViewModel(singletonCImpl.getSummaryUseCase(), viewModelCImpl.generateReportUseCase(), viewModelCImpl.getPersonalRecordsUseCase());
 
           case 6: // com.kazio.app.presentation.transactions.TransactionsViewModel 
           return (T) new TransactionsViewModel(singletonCImpl.bindIncomeRepositoryProvider.get(), singletonCImpl.bindExpenseRepositoryProvider.get(), viewModelCImpl.deleteIncomeUseCase(), viewModelCImpl.deleteExpenseUseCase());
@@ -768,6 +782,10 @@ public final class DaggerKazioApplication_HiltComponents_SingletonC {
 
     private Provider<ShiftRepository> bindShiftRepositoryProvider;
 
+    private Provider<PersonalRecordRepositoryImpl> personalRecordRepositoryImplProvider;
+
+    private Provider<PersonalRecordRepository> bindPersonalRecordRepositoryProvider;
+
     private SingletonCImpl(ApplicationContextModule applicationContextModuleParam) {
       this.applicationContextModule = applicationContextModuleParam;
       initialize(applicationContextModuleParam);
@@ -790,6 +808,10 @@ public final class DaggerKazioApplication_HiltComponents_SingletonC {
       return DatabaseModule_ProvideShiftDaoFactory.provideShiftDao(provideKazioDatabaseProvider.get());
     }
 
+    private PersonalRecordDao personalRecordDao() {
+      return DatabaseModule_ProvidePersonalRecordDaoFactory.providePersonalRecordDao(provideKazioDatabaseProvider.get());
+    }
+
     @SuppressWarnings("unchecked")
     private void initialize(final ApplicationContextModule applicationContextModuleParam) {
       this.provideKazioDatabaseProvider = new DelegateFactory<>();
@@ -803,6 +825,8 @@ public final class DaggerKazioApplication_HiltComponents_SingletonC {
       this.dataStoreRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<DataStoreRepository>(singletonCImpl, 4));
       this.shiftRepositoryImplProvider = new SwitchingProvider<>(singletonCImpl, 5);
       this.bindShiftRepositoryProvider = DoubleCheck.provider((Provider) shiftRepositoryImplProvider);
+      this.personalRecordRepositoryImplProvider = new SwitchingProvider<>(singletonCImpl, 6);
+      this.bindPersonalRecordRepositoryProvider = DoubleCheck.provider((Provider) personalRecordRepositoryImplProvider);
     }
 
     @Override
@@ -865,6 +889,9 @@ public final class DaggerKazioApplication_HiltComponents_SingletonC {
 
           case 5: // com.kazio.app.data.repository.ShiftRepositoryImpl 
           return (T) new ShiftRepositoryImpl(singletonCImpl.shiftDao());
+
+          case 6: // com.kazio.app.data.repository.PersonalRecordRepositoryImpl 
+          return (T) new PersonalRecordRepositoryImpl(singletonCImpl.personalRecordDao());
 
           default: throw new AssertionError(id);
         }

@@ -28,8 +28,7 @@
         android:icon="@drawable/kazio_logo_bg"
         android:label="Kazio"
         android:roundIcon="@drawable/kazio_logo_bg"
-        android:supportsRtl="true"
-        android:testOnly="true" >
+        android:supportsRtl="true" >
         <activity
             android:name="com.kazio.app.MainActivity"
             android:exported="true" >

@@ -25,21 +25,27 @@ import javax.inject.Provider;
 public final class AddExpenseUseCase_Factory implements Factory<AddExpenseUseCase> {
   private final Provider<ExpenseRepository> expenseRepositoryProvider;
 
-  public AddExpenseUseCase_Factory(Provider<ExpenseRepository> expenseRepositoryProvider) {
+  private final Provider<CheckAndUpdateRecordsUseCase> checkAndUpdateRecordsUseCaseProvider;
+
+  public AddExpenseUseCase_Factory(Provider<ExpenseRepository> expenseRepositoryProvider,
+      Provider<CheckAndUpdateRecordsUseCase> checkAndUpdateRecordsUseCaseProvider) {
     this.expenseRepositoryProvider = expenseRepositoryProvider;
+    this.checkAndUpdateRecordsUseCaseProvider = checkAndUpdateRecordsUseCaseProvider;
   }
 
   @Override
   public AddExpenseUseCase get() {
-    return newInstance(expenseRepositoryProvider.get());
+    return newInstance(expenseRepositoryProvider.get(), checkAndUpdateRecordsUseCaseProvider.get());
   }
 
   public static AddExpenseUseCase_Factory create(
-      Provider<ExpenseRepository> expenseRepositoryProvider) {
-    return new AddExpenseUseCase_Factory(expenseRepositoryProvider);
+      Provider<ExpenseRepository> expenseRepositoryProvider,
+      Provider<CheckAndUpdateRecordsUseCase> checkAndUpdateRecordsUseCaseProvider) {
+    return new AddExpenseUseCase_Factory(expenseRepositoryProvider, checkAndUpdateRecordsUseCaseProvider);
   }
 
-  public static AddExpenseUseCase newInstance(ExpenseRepository expenseRepository) {
-    return new AddExpenseUseCase(expenseRepository);
+  public static AddExpenseUseCase newInstance(ExpenseRepository expenseRepository,
+      CheckAndUpdateRecordsUseCase checkAndUpdateRecordsUseCase) {
+    return new AddExpenseUseCase(expenseRepository, checkAndUpdateRecordsUseCase);
   }
 }

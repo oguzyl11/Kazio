@@ -6,6 +6,7 @@ import com.kazio.app.data.local.room.ExpenseDao
 import com.kazio.app.data.local.room.IncomeDao
 import com.kazio.app.data.local.room.KazioDatabase
 import com.kazio.app.data.local.room.PlatformDao
+import com.kazio.app.data.local.room.PersonalRecordDao
 import com.kazio.app.data.local.room.ShiftDao
 import dagger.Module
 import dagger.Provides
@@ -51,6 +52,11 @@ object DatabaseModule {
                     db.execSQL("ALTER TABLE shifts ADD COLUMN isPaused INTEGER NOT NULL DEFAULT 0")
                     db.execSQL("ALTER TABLE shifts ADD COLUMN lastPausedAt INTEGER DEFAULT NULL")
                 }
+            },
+            object : androidx.room.migration.Migration(2, 3) {
+                override fun migrate(db: androidx.sqlite.db.SupportSQLiteDatabase) {
+                    db.execSQL("CREATE TABLE IF NOT EXISTS `personal_records` (`type` TEXT NOT NULL, `value` REAL NOT NULL, `achievedAt` INTEGER NOT NULL, PRIMARY KEY(`type`))")
+                }
             }
         ).build()
     }
@@ -66,4 +72,7 @@ object DatabaseModule {
 
     @Provides
     fun providePlatformDao(database: KazioDatabase): PlatformDao = database.platformDao()
+
+    @Provides
+    fun providePersonalRecordDao(database: KazioDatabase): PersonalRecordDao = database.personalRecordDao()
 }

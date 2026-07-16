@@ -25,21 +25,26 @@ import javax.inject.Provider;
 public final class AddIncomeUseCase_Factory implements Factory<AddIncomeUseCase> {
   private final Provider<IncomeRepository> incomeRepositoryProvider;
 
-  public AddIncomeUseCase_Factory(Provider<IncomeRepository> incomeRepositoryProvider) {
+  private final Provider<CheckAndUpdateRecordsUseCase> checkAndUpdateRecordsUseCaseProvider;
+
+  public AddIncomeUseCase_Factory(Provider<IncomeRepository> incomeRepositoryProvider,
+      Provider<CheckAndUpdateRecordsUseCase> checkAndUpdateRecordsUseCaseProvider) {
     this.incomeRepositoryProvider = incomeRepositoryProvider;
+    this.checkAndUpdateRecordsUseCaseProvider = checkAndUpdateRecordsUseCaseProvider;
   }
 
   @Override
   public AddIncomeUseCase get() {
-    return newInstance(incomeRepositoryProvider.get());
+    return newInstance(incomeRepositoryProvider.get(), checkAndUpdateRecordsUseCaseProvider.get());
   }
 
-  public static AddIncomeUseCase_Factory create(
-      Provider<IncomeRepository> incomeRepositoryProvider) {
-    return new AddIncomeUseCase_Factory(incomeRepositoryProvider);
+  public static AddIncomeUseCase_Factory create(Provider<IncomeRepository> incomeRepositoryProvider,
+      Provider<CheckAndUpdateRecordsUseCase> checkAndUpdateRecordsUseCaseProvider) {
+    return new AddIncomeUseCase_Factory(incomeRepositoryProvider, checkAndUpdateRecordsUseCaseProvider);
   }
 
-  public static AddIncomeUseCase newInstance(IncomeRepository incomeRepository) {
-    return new AddIncomeUseCase(incomeRepository);
+  public static AddIncomeUseCase newInstance(IncomeRepository incomeRepository,
+      CheckAndUpdateRecordsUseCase checkAndUpdateRecordsUseCase) {
+    return new AddIncomeUseCase(incomeRepository, checkAndUpdateRecordsUseCase);
   }
 }

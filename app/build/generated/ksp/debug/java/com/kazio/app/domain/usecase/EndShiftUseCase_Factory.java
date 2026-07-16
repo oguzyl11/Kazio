@@ -27,24 +27,36 @@ public final class EndShiftUseCase_Factory implements Factory<EndShiftUseCase> {
 
   private final Provider<GetActiveShiftUseCase> getActiveShiftUseCaseProvider;
 
+  private final Provider<GetActiveShiftIncomeUseCase> getActiveShiftIncomeUseCaseProvider;
+
+  private final Provider<CheckAndUpdateRecordsUseCase> checkAndUpdateRecordsUseCaseProvider;
+
   public EndShiftUseCase_Factory(Provider<ShiftRepository> shiftRepositoryProvider,
-      Provider<GetActiveShiftUseCase> getActiveShiftUseCaseProvider) {
+      Provider<GetActiveShiftUseCase> getActiveShiftUseCaseProvider,
+      Provider<GetActiveShiftIncomeUseCase> getActiveShiftIncomeUseCaseProvider,
+      Provider<CheckAndUpdateRecordsUseCase> checkAndUpdateRecordsUseCaseProvider) {
     this.shiftRepositoryProvider = shiftRepositoryProvider;
     this.getActiveShiftUseCaseProvider = getActiveShiftUseCaseProvider;
+    this.getActiveShiftIncomeUseCaseProvider = getActiveShiftIncomeUseCaseProvider;
+    this.checkAndUpdateRecordsUseCaseProvider = checkAndUpdateRecordsUseCaseProvider;
   }
 
   @Override
   public EndShiftUseCase get() {
-    return newInstance(shiftRepositoryProvider.get(), getActiveShiftUseCaseProvider.get());
+    return newInstance(shiftRepositoryProvider.get(), getActiveShiftUseCaseProvider.get(), getActiveShiftIncomeUseCaseProvider.get(), checkAndUpdateRecordsUseCaseProvider.get());
   }
 
   public static EndShiftUseCase_Factory create(Provider<ShiftRepository> shiftRepositoryProvider,
-      Provider<GetActiveShiftUseCase> getActiveShiftUseCaseProvider) {
-    return new EndShiftUseCase_Factory(shiftRepositoryProvider, getActiveShiftUseCaseProvider);
+      Provider<GetActiveShiftUseCase> getActiveShiftUseCaseProvider,
+      Provider<GetActiveShiftIncomeUseCase> getActiveShiftIncomeUseCaseProvider,
+      Provider<CheckAndUpdateRecordsUseCase> checkAndUpdateRecordsUseCaseProvider) {
+    return new EndShiftUseCase_Factory(shiftRepositoryProvider, getActiveShiftUseCaseProvider, getActiveShiftIncomeUseCaseProvider, checkAndUpdateRecordsUseCaseProvider);
   }
 
   public static EndShiftUseCase newInstance(ShiftRepository shiftRepository,
-      GetActiveShiftUseCase getActiveShiftUseCase) {
-    return new EndShiftUseCase(shiftRepository, getActiveShiftUseCase);
+      GetActiveShiftUseCase getActiveShiftUseCase,
+      GetActiveShiftIncomeUseCase getActiveShiftIncomeUseCase,
+      CheckAndUpdateRecordsUseCase checkAndUpdateRecordsUseCase) {
+    return new EndShiftUseCase(shiftRepository, getActiveShiftUseCase, getActiveShiftIncomeUseCase, checkAndUpdateRecordsUseCase);
   }
 }

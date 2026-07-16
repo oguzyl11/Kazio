@@ -36,6 +36,7 @@ import com.kazio.app.presentation.components.ShowcaseTarget
 import com.kazio.app.presentation.components.ReportOptionsBottomSheet
 import java.text.NumberFormat
 import java.util.Locale
+import com.kazio.app.domain.model.RecordType
 
 @Composable
 fun DashboardScreen(
@@ -51,6 +52,7 @@ fun DashboardScreen(
     var editingExpense by remember { mutableStateOf<com.kazio.app.domain.model.ExpenseEntry?>(null) }
 
     val uiState by viewModel.uiState.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     // Showcase States
     var incomeButtonRect by remember { mutableStateOf<Rect?>(null) }
@@ -90,8 +92,29 @@ fun DashboardScreen(
         }
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.newRecordEvent.collect { record ->
+            val title = when(record.type) {
+                RecordType.HIGHEST_DAILY_PROFIT -> "En Yüksek Günlük Kâr"
+                RecordType.HIGHEST_WEEKLY_PROFIT -> "En Yüksek Haftalık Kâr"
+                RecordType.HIGHEST_HOURLY_PROFIT -> "En Yüksek Saatlik Ortalama"
+                RecordType.LONGEST_SHIFT -> "En Uzun Vardiya"
+            }
+            val valueStr = if (record.type == RecordType.LONGEST_SHIFT) {
+                val hours = (record.value / (1000 * 60 * 60)).toInt()
+                val minutes = ((record.value / (1000 * 60)) % 60).toInt()
+                "${hours}s ${minutes}dk"
+            } else {
+                val formatter = NumberFormat.getCurrencyInstance(Locale("tr", "TR"))
+                formatter.format(record.value)
+            }
+            snackbarHostState.showSnackbar("🎉 Yeni Rekor! $title: $valueStr")
+        }
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
+            snackbarHost = { SnackbarHost(snackbarHostState) },
             topBar = {
                 com.kazio.app.presentation.components.KazioTopBar(
                     actions = {
@@ -293,6 +316,13 @@ private fun DashboardContent(
                         style = MaterialTheme.typography.labelLarge,
                         color = if (isOnline) MaterialTheme.colorScheme.primary else com.kazio.app.presentation.theme.TextSecondary
                     )
+                }
+
+                // Break-Even Indicator
+                if (state.totalIncome > 0 || state.totalExpense > 0) {
+                    Spacer(modifier = Modifier.height(24.dp))
+                    Divider(color = MaterialTheme.colorScheme.surfaceContainerHigh, thickness = 1.dp, modifier = Modifier.fillMaxWidth(0.8f))
+                    BreakEvenIndicator(state = state, formatter = formatter)
                 }
             }
         }
@@ -536,5 +566,60 @@ fun RecommendationCard(recommendation: Recommendation) {
             style = MaterialTheme.typography.bodyMedium,
             color = com.kazio.app.presentation.theme.TextSecondary
         )
+    }
+}
+
+@Composable
+private fun BreakEvenIndicator(state: DashboardUiState.Success, formatter: NumberFormat) {
+    if (state.totalIncome <= 0 && state.totalExpense <= 0) return
+
+    val progress: Float
+    val message: String
+    val color: Color
+
+    if (state.totalExpense > 0 && state.totalIncome < state.totalExpense) {
+        val remaining = state.totalExpense - state.totalIncome
+        progress = (state.totalIncome / state.totalExpense).toFloat().coerceIn(0f, 1f)
+        message = "Giderlerini karşılamana ${formatter.format(remaining)} kaldı"
+        color = MaterialTheme.colorScheme.secondary
+    } else {
+        progress = 1f
+        message = "Bugünkü net kârın başladı 🎉"
+        color = MaterialTheme.colorScheme.primary
+    }
+
+    val animatedProgress by androidx.compose.animation.core.animateFloatAsState(
+        targetValue = progress,
+        animationSpec = androidx.compose.animation.core.tween(durationMillis = 1000, easing = androidx.compose.animation.core.FastOutSlowInEasing)
+    )
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = message,
+            style = MaterialTheme.typography.labelMedium,
+            color = color,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(8.dp)
+                .clip(RoundedCornerShape(4.dp))
+                .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(animatedProgress)
+                    .height(8.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(color)
+            )
+        }
     }
 }

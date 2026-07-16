@@ -2,6 +2,7 @@ package com.kazio.app.presentation.summary
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kazio.app.domain.usecase.GetPersonalRecordsUseCase
 import com.kazio.app.domain.usecase.GetSummaryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -25,7 +26,8 @@ import com.kazio.app.domain.usecase.GenerateReportUseCase
 @HiltViewModel
 class SummaryViewModel @Inject constructor(
     private val getSummaryUseCase: GetSummaryUseCase,
-    private val generateReportUseCase: GenerateReportUseCase
+    private val generateReportUseCase: GenerateReportUseCase,
+    private val getPersonalRecordsUseCase: GetPersonalRecordsUseCase
 ) : ViewModel() {
 
     private val _pdfUriEvent = MutableSharedFlow<Uri>()
@@ -35,8 +37,11 @@ class SummaryViewModel @Inject constructor(
     
     val uiState: StateFlow<SummaryUiState> = _selectedPeriod.flatMapLatest { period ->
         val (startAt, endAt) = getTimestampsForPeriod(period)
-        getSummaryUseCase(startAt, endAt).map { result ->
-            SummaryUiState.Success(period, result) as SummaryUiState
+        kotlinx.coroutines.flow.combine(
+            getSummaryUseCase(startAt, endAt),
+            getPersonalRecordsUseCase()
+        ) { result, records ->
+            SummaryUiState.Success(period, result, records) as SummaryUiState
         }
     }.stateIn(
         scope = viewModelScope,

@@ -8,9 +8,10 @@ import androidx.room.RoomDatabase
         IncomeEntity::class,
         ExpenseEntity::class,
         ShiftEntity::class,
-        PlatformEntity::class
+        PlatformEntity::class,
+        PersonalRecordEntity::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 abstract class KazioDatabase : RoomDatabase() {
@@ -18,4 +19,5 @@ abstract class KazioDatabase : RoomDatabase() {
     abstract fun expenseDao(): ExpenseDao
     abstract fun shiftDao(): ShiftDao
     abstract fun platformDao(): PlatformDao
+    abstract fun personalRecordDao(): PersonalRecordDao
 }

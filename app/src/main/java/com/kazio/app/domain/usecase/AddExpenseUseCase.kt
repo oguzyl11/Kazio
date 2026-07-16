@@ -17,7 +17,8 @@ sealed interface AddExpenseResult {
 }
 
 class AddExpenseUseCase @Inject constructor(
-    private val expenseRepository: ExpenseRepository
+    private val expenseRepository: ExpenseRepository,
+    private val checkAndUpdateRecordsUseCase: CheckAndUpdateRecordsUseCase
 ) {
     suspend operator fun invoke(
         amount: Double,
@@ -37,6 +38,10 @@ class AddExpenseUseCase @Inject constructor(
             note = note
         )
         val id = expenseRepository.addExpense(entry)
+        
+        checkAndUpdateRecordsUseCase.checkDailyProfit()
+        checkAndUpdateRecordsUseCase.checkWeeklyProfit()
+        
         return AddExpenseResult.Success(id)
     }
 }

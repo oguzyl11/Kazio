@@ -9,6 +9,7 @@ import com.kazio.app.domain.usecase.GetRecommendationsUseCase
 import com.kazio.app.domain.usecase.GetSummaryUseCase
 import com.kazio.app.domain.usecase.StartShiftUseCase
 import com.kazio.app.domain.usecase.PauseShiftUseCase
+import com.kazio.app.domain.repository.PersonalRecordRepository
 import com.kazio.app.domain.usecase.ResumeShiftUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -48,8 +49,11 @@ class DashboardViewModel @Inject constructor(
     private val pauseShiftUseCase: PauseShiftUseCase,
     private val resumeShiftUseCase: ResumeShiftUseCase,
     private val generateReportUseCase: GenerateReportUseCase,
-    private val dataStoreRepository: DataStoreRepository
+    private val dataStoreRepository: DataStoreRepository,
+    private val personalRecordRepository: PersonalRecordRepository
 ) : ViewModel() {
+
+    val newRecordEvent = personalRecordRepository.newRecordEvent
 
     private val _pdfUriEvent = MutableSharedFlow<Uri>()
     val pdfUriEvent = _pdfUriEvent.asSharedFlow()

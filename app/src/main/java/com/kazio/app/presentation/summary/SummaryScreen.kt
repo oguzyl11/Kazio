@@ -21,7 +21,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kazio.app.domain.model.PlatformProfit
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
+import com.kazio.app.domain.model.PersonalRecord
+import com.kazio.app.domain.model.RecordType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -178,6 +182,13 @@ private fun SummaryContent(
             PlatformProfitItem(platformProfit, formatter)
             Spacer(modifier = Modifier.height(16.dp))
         }
+
+        if (state.records.isNotEmpty()) {
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+                PersonalRecordsCard(records = state.records, formatter = formatter)
+            }
+        }
     }
 }
 
@@ -239,6 +250,64 @@ private fun PlatformProfitItem(profit: PlatformProfit, formatter: NumberFormat) 
                         .background(borderColor)
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun PersonalRecordsCard(records: List<PersonalRecord>, formatter: NumberFormat) {
+    val dateFormatter = remember { SimpleDateFormat("d MMM yyyy", Locale("tr", "TR")) }
+    
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .background(com.kazio.app.presentation.theme.SurfaceMidnight)
+            .border(1.dp, MaterialTheme.colorScheme.surfaceContainerHigh, RoundedCornerShape(12.dp))
+            .padding(16.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(text = "🏆", style = MaterialTheme.typography.headlineMedium)
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = "Kişisel Rekorların",
+                style = MaterialTheme.typography.titleMedium,
+                color = com.kazio.app.presentation.theme.TextPrimary,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+
+        records.forEach { record ->
+            val title = when(record.type) {
+                RecordType.HIGHEST_DAILY_PROFIT -> "En Yüksek Günlük Kâr"
+                RecordType.HIGHEST_WEEKLY_PROFIT -> "En Yüksek Haftalık Kâr"
+                RecordType.HIGHEST_HOURLY_PROFIT -> "En Yüksek Saatlik Ortalama"
+                RecordType.LONGEST_SHIFT -> "En Uzun Vardiya"
+            }
+
+            val valueStr = if (record.type == RecordType.LONGEST_SHIFT) {
+                val hours = (record.value / (1000 * 60 * 60)).toInt()
+                val minutes = ((record.value / (1000 * 60)) % 60).toInt()
+                "${hours}s ${minutes}dk"
+            } else {
+                formatter.format(record.value)
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Text(text = title, style = MaterialTheme.typography.labelMedium, color = com.kazio.app.presentation.theme.TextSecondary)
+                    Text(text = dateFormatter.format(Date(record.achievedAt)), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                }
+                Text(text = valueStr, style = MaterialTheme.typography.bodyLarge, color = com.kazio.app.presentation.theme.TextPrimary, fontWeight = FontWeight.Bold)
+            }
+            Divider(color = MaterialTheme.colorScheme.surfaceContainer, thickness = 1.dp)
         }
     }
 }

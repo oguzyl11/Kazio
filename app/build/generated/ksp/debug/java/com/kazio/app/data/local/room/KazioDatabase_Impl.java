@@ -34,18 +34,21 @@ public final class KazioDatabase_Impl extends KazioDatabase {
 
   private volatile PlatformDao _platformDao;
 
+  private volatile PersonalRecordDao _personalRecordDao;
+
   @Override
   @NonNull
   protected SupportSQLiteOpenHelper createOpenHelper(@NonNull final DatabaseConfiguration config) {
-    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(2) {
+    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(3) {
       @Override
       public void createAllTables(@NonNull final SupportSQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS `incomes` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shiftId` INTEGER, `platformId` INTEGER NOT NULL, `amount` REAL NOT NULL, `occurredAt` INTEGER NOT NULL, `note` TEXT)");
         db.execSQL("CREATE TABLE IF NOT EXISTS `expenses` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shiftId` INTEGER, `category` TEXT NOT NULL, `amount` REAL NOT NULL, `occurredAt` INTEGER NOT NULL, `note` TEXT)");
         db.execSQL("CREATE TABLE IF NOT EXISTS `shifts` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `vehicleId` INTEGER NOT NULL, `startAt` INTEGER NOT NULL, `endAt` INTEGER, `note` TEXT, `totalPausedDuration` INTEGER NOT NULL, `isPaused` INTEGER NOT NULL, `lastPausedAt` INTEGER)");
         db.execSQL("CREATE TABLE IF NOT EXISTS `platforms` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `colorTag` TEXT NOT NULL, `isCustom` INTEGER NOT NULL)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `personal_records` (`type` TEXT NOT NULL, `value` REAL NOT NULL, `achievedAt` INTEGER NOT NULL, PRIMARY KEY(`type`))");
         db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '55023bf1c39826086e2c1d22cd7bbdd9')");
+        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e79e5f7383a10e7803dfa2eb562b34f0')");
       }
 
       @Override
@@ -54,6 +57,7 @@ public final class KazioDatabase_Impl extends KazioDatabase {
         db.execSQL("DROP TABLE IF EXISTS `expenses`");
         db.execSQL("DROP TABLE IF EXISTS `shifts`");
         db.execSQL("DROP TABLE IF EXISTS `platforms`");
+        db.execSQL("DROP TABLE IF EXISTS `personal_records`");
         final List<? extends RoomDatabase.Callback> _callbacks = mCallbacks;
         if (_callbacks != null) {
           for (RoomDatabase.Callback _callback : _callbacks) {
@@ -161,9 +165,22 @@ public final class KazioDatabase_Impl extends KazioDatabase {
                   + " Expected:\n" + _infoPlatforms + "\n"
                   + " Found:\n" + _existingPlatforms);
         }
+        final HashMap<String, TableInfo.Column> _columnsPersonalRecords = new HashMap<String, TableInfo.Column>(3);
+        _columnsPersonalRecords.put("type", new TableInfo.Column("type", "TEXT", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsPersonalRecords.put("value", new TableInfo.Column("value", "REAL", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsPersonalRecords.put("achievedAt", new TableInfo.Column("achievedAt", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        final HashSet<TableInfo.ForeignKey> _foreignKeysPersonalRecords = new HashSet<TableInfo.ForeignKey>(0);
+        final HashSet<TableInfo.Index> _indicesPersonalRecords = new HashSet<TableInfo.Index>(0);
+        final TableInfo _infoPersonalRecords = new TableInfo("personal_records", _columnsPersonalRecords, _foreignKeysPersonalRecords, _indicesPersonalRecords);
+        final TableInfo _existingPersonalRecords = TableInfo.read(db, "personal_records");
+        if (!_infoPersonalRecords.equals(_existingPersonalRecords)) {
+          return new RoomOpenHelper.ValidationResult(false, "personal_records(com.kazio.app.data.local.room.PersonalRecordEntity).\n"
+                  + " Expected:\n" + _infoPersonalRecords + "\n"
+                  + " Found:\n" + _existingPersonalRecords);
+        }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "55023bf1c39826086e2c1d22cd7bbdd9", "2bc890463cd7a5155c5e8189e349b0bb");
+    }, "e79e5f7383a10e7803dfa2eb562b34f0", "37cdc95fec295708e00cc487ba8f949d");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(config.context).name(config.name).callback(_openCallback).build();
     final SupportSQLiteOpenHelper _helper = config.sqliteOpenHelperFactory.create(_sqliteConfig);
     return _helper;
@@ -174,7 +191,7 @@ public final class KazioDatabase_Impl extends KazioDatabase {
   protected InvalidationTracker createInvalidationTracker() {
     final HashMap<String, String> _shadowTablesMap = new HashMap<String, String>(0);
     final HashMap<String, Set<String>> _viewTables = new HashMap<String, Set<String>>(0);
-    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "incomes","expenses","shifts","platforms");
+    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "incomes","expenses","shifts","platforms","personal_records");
   }
 
   @Override
@@ -187,6 +204,7 @@ public final class KazioDatabase_Impl extends KazioDatabase {
       _db.execSQL("DELETE FROM `expenses`");
       _db.execSQL("DELETE FROM `shifts`");
       _db.execSQL("DELETE FROM `platforms`");
+      _db.execSQL("DELETE FROM `personal_records`");
       super.setTransactionSuccessful();
     } finally {
       super.endTransaction();
@@ -205,6 +223,7 @@ public final class KazioDatabase_Impl extends KazioDatabase {
     _typeConvertersMap.put(ExpenseDao.class, ExpenseDao_Impl.getRequiredConverters());
     _typeConvertersMap.put(ShiftDao.class, ShiftDao_Impl.getRequiredConverters());
     _typeConvertersMap.put(PlatformDao.class, PlatformDao_Impl.getRequiredConverters());
+    _typeConvertersMap.put(PersonalRecordDao.class, PersonalRecordDao_Impl.getRequiredConverters());
     return _typeConvertersMap;
   }
 
@@ -275,6 +294,20 @@ public final class KazioDatabase_Impl extends KazioDatabase {
           _platformDao = new PlatformDao_Impl(this);
         }
         return _platformDao;
+      }
+    }
+  }
+
+  @Override
+  public PersonalRecordDao personalRecordDao() {
+    if (_personalRecordDao != null) {
+      return _personalRecordDao;
+    } else {
+      synchronized(this) {
+        if(_personalRecordDao == null) {
+          _personalRecordDao = new PersonalRecordDao_Impl(this);
+        }
+        return _personalRecordDao;
       }
     }
   }
