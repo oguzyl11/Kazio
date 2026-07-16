@@ -10,10 +10,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.TrendingUp
+import androidx.compose.material.icons.filled.PictureAsPdf
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,6 +31,19 @@ fun SummaryScreen(
     viewModel: SummaryViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    var showReportOptions by remember { mutableStateOf(false) }
+    
+    val context = androidx.compose.ui.platform.LocalContext.current
+
+    LaunchedEffect(Unit) {
+        viewModel.pdfUriEvent.collect { uri ->
+            val intent = android.content.Intent(android.content.Intent.ACTION_VIEW).apply {
+                setDataAndType(uri, "application/pdf")
+                flags = android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
+            }
+            context.startActivity(android.content.Intent.createChooser(intent, "PDF Raporunu Görüntüle/Paylaş"))
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -40,6 +52,11 @@ fun SummaryScreen(
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Geri")
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { showReportOptions = true }) {
+                        Icon(Icons.Default.PictureAsPdf, contentDescription = "PDF Rapor", tint = MaterialTheme.colorScheme.primary)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -67,6 +84,16 @@ fun SummaryScreen(
                     SummaryContent(state, viewModel::onPeriodSelected)
                 }
             }
+        }
+        
+        if (showReportOptions) {
+            com.kazio.app.presentation.components.ReportOptionsBottomSheet(
+                onDismissRequest = { showReportOptions = false },
+                onSelectReport = { reportType ->
+                    viewModel.generateReport(context, reportType)
+                    showReportOptions = false
+                }
+            )
         }
     }
 }

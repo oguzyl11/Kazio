@@ -33,6 +33,7 @@ import com.kazio.app.domain.model.Recommendation
 import com.kazio.app.domain.model.RecommendationType
 import com.kazio.app.presentation.components.ShowcaseOverlay
 import com.kazio.app.presentation.components.ShowcaseTarget
+import com.kazio.app.presentation.components.ReportOptionsBottomSheet
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -499,89 +500,5 @@ fun RecommendationCard(recommendation: Recommendation) {
             style = MaterialTheme.typography.bodyMedium,
             color = com.kazio.app.presentation.theme.TextSecondary
         )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ReportOptionsBottomSheet(
-    onDismissRequest: () -> Unit,
-    onSelectReport: (com.kazio.app.domain.model.ReportType) -> Unit
-) {
-    ModalBottomSheet(
-        onDismissRequest = onDismissRequest,
-        containerColor = MaterialTheme.colorScheme.surface,
-        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "Rapor Türü Seçin",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Spacer(modifier = Modifier.height(24.dp))
-            
-            ReportOptionItem(
-                title = "Günlük Rapor",
-                description = "Sadece bugüne ait özet rapor",
-                icon = Icons.Default.Today,
-                onClick = { onSelectReport(com.kazio.app.domain.model.ReportType.DAILY) }
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            ReportOptionItem(
-                title = "Haftalık Rapor",
-                description = "Bu haftanın genel özeti",
-                icon = Icons.Default.DateRange,
-                onClick = { onSelectReport(com.kazio.app.domain.model.ReportType.WEEKLY) }
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            ReportOptionItem(
-                title = "Aylık Rapor",
-                description = "Bu ayın gün gün detaylı dökümü",
-                icon = Icons.Default.Event,
-                onClick = { onSelectReport(com.kazio.app.domain.model.ReportType.MONTHLY) }
-            )
-            Spacer(modifier = Modifier.height(32.dp))
-        }
-    }
-}
-
-@Composable
-private fun ReportOptionItem(
-    title: String,
-    description: String,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
-    onClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-            .clickable(onClick = onClick)
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
-            modifier = Modifier
-                .size(48.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.primaryContainer),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimaryContainer)
-        }
-        Spacer(modifier = Modifier.width(16.dp))
-        Column(modifier = Modifier.weight(1f)) {
-            Text(text = title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)
-            Text(text = description, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        }
-        Icon(Icons.Default.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }

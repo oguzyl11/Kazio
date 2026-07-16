@@ -11,14 +11,25 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
+import android.content.Context
+import android.net.Uri
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import com.kazio.app.domain.model.ReportType
+import com.kazio.app.domain.usecase.GenerateReportUseCase
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class SummaryViewModel @Inject constructor(
-    private val getSummaryUseCase: GetSummaryUseCase
+    private val getSummaryUseCase: GetSummaryUseCase,
+    private val generateReportUseCase: GenerateReportUseCase
 ) : ViewModel() {
+
+    private val _pdfUriEvent = MutableSharedFlow<Uri>()
+    val pdfUriEvent = _pdfUriEvent.asSharedFlow()
 
     private val _selectedPeriod = MutableStateFlow(SummaryPeriod.WEEKLY)
     
@@ -35,6 +46,15 @@ class SummaryViewModel @Inject constructor(
 
     fun onPeriodSelected(period: SummaryPeriod) {
         _selectedPeriod.value = period
+    }
+
+    fun generateReport(context: Context, type: ReportType) {
+        viewModelScope.launch {
+            val uri = generateReportUseCase(context, type)
+            if (uri != null) {
+                _pdfUriEvent.emit(uri)
+            }
+        }
     }
 
     private fun getTimestampsForPeriod(period: SummaryPeriod): Pair<Long, Long> {
