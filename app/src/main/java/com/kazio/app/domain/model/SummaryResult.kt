@@ -5,7 +5,8 @@ data class PlatformProfit(
     val platformName: String,
     val colorTag: String,
     val totalIncome: Double,
-    val percentage: Float
+    val percentage: Float,
+    val hourlyRate: Double = 0.0
 )
 
 data class SummaryResult(

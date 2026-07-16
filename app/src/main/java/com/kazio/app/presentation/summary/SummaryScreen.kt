@@ -227,7 +227,15 @@ private fun PlatformProfitItem(profit: PlatformProfit, formatter: NumberFormat) 
                 Text(text = formatter.format(profit.totalIncome), style = MaterialTheme.typography.bodyMedium, color = com.kazio.app.presentation.theme.TextPrimary, fontWeight = FontWeight.Bold)
             }
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "Gelir", style = MaterialTheme.typography.labelMedium, color = com.kazio.app.presentation.theme.TextSecondary)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(text = "Gelir", style = MaterialTheme.typography.labelMedium, color = com.kazio.app.presentation.theme.TextSecondary)
+                    if (profit.hourlyRate > 0) {
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(text = "•", style = MaterialTheme.typography.labelSmall, color = com.kazio.app.presentation.theme.TextSecondary)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(text = "${formatter.format(profit.hourlyRate)}/saat", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                    }
+                }
                 Text(text = "${(profit.percentage * 100).toInt()}%", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
             }
             val animatedProgress by androidx.compose.animation.core.animateFloatAsState(

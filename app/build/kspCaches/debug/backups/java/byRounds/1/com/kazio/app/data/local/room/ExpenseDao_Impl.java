@@ -167,6 +167,61 @@ public final class ExpenseDao_Impl implements ExpenseDao {
   }
 
   @Override
+  public Flow<List<ExpenseEntity>> getAllExpenses() {
+    final String _sql = "SELECT * FROM expenses";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
+    return CoroutinesRoom.createFlow(__db, false, new String[] {"expenses"}, new Callable<List<ExpenseEntity>>() {
+      @Override
+      @NonNull
+      public List<ExpenseEntity> call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfShiftId = CursorUtil.getColumnIndexOrThrow(_cursor, "shiftId");
+          final int _cursorIndexOfCategory = CursorUtil.getColumnIndexOrThrow(_cursor, "category");
+          final int _cursorIndexOfAmount = CursorUtil.getColumnIndexOrThrow(_cursor, "amount");
+          final int _cursorIndexOfOccurredAt = CursorUtil.getColumnIndexOrThrow(_cursor, "occurredAt");
+          final int _cursorIndexOfNote = CursorUtil.getColumnIndexOrThrow(_cursor, "note");
+          final List<ExpenseEntity> _result = new ArrayList<ExpenseEntity>(_cursor.getCount());
+          while (_cursor.moveToNext()) {
+            final ExpenseEntity _item;
+            final long _tmpId;
+            _tmpId = _cursor.getLong(_cursorIndexOfId);
+            final Long _tmpShiftId;
+            if (_cursor.isNull(_cursorIndexOfShiftId)) {
+              _tmpShiftId = null;
+            } else {
+              _tmpShiftId = _cursor.getLong(_cursorIndexOfShiftId);
+            }
+            final String _tmpCategory;
+            _tmpCategory = _cursor.getString(_cursorIndexOfCategory);
+            final double _tmpAmount;
+            _tmpAmount = _cursor.getDouble(_cursorIndexOfAmount);
+            final long _tmpOccurredAt;
+            _tmpOccurredAt = _cursor.getLong(_cursorIndexOfOccurredAt);
+            final String _tmpNote;
+            if (_cursor.isNull(_cursorIndexOfNote)) {
+              _tmpNote = null;
+            } else {
+              _tmpNote = _cursor.getString(_cursorIndexOfNote);
+            }
+            _item = new ExpenseEntity(_tmpId,_tmpShiftId,_tmpCategory,_tmpAmount,_tmpOccurredAt,_tmpNote);
+            _result.add(_item);
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+        }
+      }
+
+      @Override
+      protected void finalize() {
+        _statement.release();
+      }
+    });
+  }
+
+  @Override
   public Flow<List<ExpenseEntity>> getExpensesForDateRange(final long startAt, final long endAt) {
     final String _sql = "SELECT * FROM expenses WHERE occurredAt >= ? AND occurredAt <= ?";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 2);

@@ -82,7 +82,36 @@ fun AddIncomeBottomSheet(
                 style = MaterialTheme.typography.headlineMedium, 
                 color = MaterialTheme.colorScheme.primary
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (uiState.frequentIncomes.isNotEmpty() && existingIncome == null) {
+                LazyRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(uiState.frequentIncomes) { frequentIncome ->
+                        val platform = uiState.platforms.find { it.id == frequentIncome.platformId }
+                        val platformName = platform?.name ?: ""
+                        val amountStr = frequentIncome.amount.toString().removeSuffix(".0")
+                        
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(MaterialTheme.colorScheme.secondaryContainer)
+                                .clickable { viewModel.onFrequentIncomeSelect(frequentIncome) }
+                                .padding(horizontal = 12.dp, vertical = 8.dp)
+                        ) {
+                            Text(
+                                text = "⚡ $platformName - $amountStr ₺",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+            }
 
             LazyRow(
                 modifier = Modifier.fillMaxWidth(),

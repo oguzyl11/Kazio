@@ -6,6 +6,7 @@ import com.kazio.app.domain.usecase.AddIncomeResult
 import com.kazio.app.domain.usecase.AddIncomeUseCase
 import com.kazio.app.domain.usecase.GetActiveShiftUseCase
 import com.kazio.app.domain.usecase.GetPlatformsUseCase
+import com.kazio.app.domain.usecase.GetRecentFrequentIncomesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +24,8 @@ class AddIncomeViewModel @Inject constructor(
     private val getPlatformsUseCase: GetPlatformsUseCase,
     private val getActiveShiftUseCase: GetActiveShiftUseCase,
     private val addIncomeUseCase: AddIncomeUseCase,
-    private val updateIncomeUseCase: UpdateIncomeUseCase
+    private val updateIncomeUseCase: UpdateIncomeUseCase,
+    private val getRecentFrequentIncomesUseCase: GetRecentFrequentIncomesUseCase
 ) : ViewModel() {
 
     private var editingIncomeId: Long? = null
@@ -41,6 +43,11 @@ class AddIncomeViewModel @Inject constructor(
         viewModelScope.launch {
             getPlatformsUseCase().collect { platforms ->
                 _uiState.update { it.copy(platforms = platforms) }
+            }
+        }
+        viewModelScope.launch {
+            getRecentFrequentIncomesUseCase().collect { frequentIncomes ->
+                _uiState.update { it.copy(frequentIncomes = frequentIncomes) }
             }
         }
     }
@@ -81,6 +88,21 @@ class AddIncomeViewModel @Inject constructor(
 
     fun onPlatformSelect(platformId: Long) {
         _uiState.update { it.copy(selectedPlatformId = platformId, error = null) }
+    }
+
+    fun onFrequentIncomeSelect(frequentIncome: com.kazio.app.domain.model.FrequentIncome) {
+        var amountStr = frequentIncome.amount.toString()
+        if (amountStr.endsWith(".0")) {
+            amountStr = amountStr.substring(0, amountStr.length - 2)
+        }
+        _uiState.update { 
+            it.copy(
+                amount = amountStr,
+                selectedPlatformId = frequentIncome.platformId,
+                note = frequentIncome.note ?: "",
+                error = null
+            )
+        }
     }
 
     fun saveIncome() {

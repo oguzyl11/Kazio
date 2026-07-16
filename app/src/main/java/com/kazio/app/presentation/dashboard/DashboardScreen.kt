@@ -118,6 +118,28 @@ fun DashboardScreen(
             topBar = {
                 com.kazio.app.presentation.components.KazioTopBar(
                     actions = {
+                        if (uiState is DashboardUiState.Success) {
+                            val successState = uiState as DashboardUiState.Success
+                            if (successState.streak > 0) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(12.dp))
+                                        .background(MaterialTheme.colorScheme.primaryContainer)
+                                        .padding(horizontal = 12.dp, vertical = 6.dp)
+                                ) {
+                                    Text("🔥", fontSize = 16.sp)
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text(
+                                        text = "${successState.streak} Gün",
+                                        style = MaterialTheme.typography.labelMedium,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                                    )
+                                }
+                                Spacer(modifier = Modifier.width(8.dp))
+                            }
+                        }
                         IconButton(onClick = { showReportOptions = true }) {
                             Icon(
                                 imageVector = Icons.Default.PictureAsPdf,
@@ -530,7 +552,12 @@ private fun PlatformListItem(profit: PlatformProfit, formatter: NumberFormat) {
             }
         }
         Spacer(modifier = Modifier.width(16.dp))
-        Text(text = "+${formatter.format(profit.totalIncome)}", style = MaterialTheme.typography.labelLarge, color = borderColor)
+        Column(horizontalAlignment = Alignment.End) {
+            Text(text = "+${formatter.format(profit.totalIncome)}", style = MaterialTheme.typography.labelLarge, color = borderColor, fontWeight = FontWeight.Bold)
+            if (profit.hourlyRate > 0) {
+                Text(text = "${formatter.format(profit.hourlyRate)}/saat", style = MaterialTheme.typography.labelSmall, color = com.kazio.app.presentation.theme.TextSecondary)
+            }
+        }
     }
 }
 

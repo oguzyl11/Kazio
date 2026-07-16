@@ -8,6 +8,9 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface IncomeDao {
+    @Query("SELECT * FROM incomes")
+    fun getAllIncomes(): Flow<List<IncomeEntity>>
+
     @Query("SELECT * FROM incomes WHERE occurredAt >= :startAt AND occurredAt <= :endAt")
     fun getIncomesForDateRange(startAt: Long, endAt: Long): Flow<List<IncomeEntity>>
 

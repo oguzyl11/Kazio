@@ -12,6 +12,12 @@ import javax.inject.Inject
 class ExpenseRepositoryImpl @Inject constructor(
     private val expenseDao: ExpenseDao
 ) : ExpenseRepository {
+    override fun getAllExpenses(): Flow<List<ExpenseEntry>> {
+        return expenseDao.getAllExpenses().map { list ->
+            list.map { it.toDomain() }
+        }
+    }
+
     override fun getExpensesForDateRange(startAt: Long, endAt: Long): Flow<List<ExpenseEntry>> {
         return expenseDao.getExpensesForDateRange(startAt, endAt).map { list ->
             list.map { it.toDomain() }

@@ -10,6 +10,7 @@ import com.kazio.app.domain.usecase.GetSummaryUseCase
 import com.kazio.app.domain.usecase.StartShiftUseCase
 import com.kazio.app.domain.usecase.PauseShiftUseCase
 import com.kazio.app.domain.repository.PersonalRecordRepository
+import com.kazio.app.domain.usecase.GetStreakUseCase
 import com.kazio.app.domain.usecase.ResumeShiftUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -44,6 +45,7 @@ class DashboardViewModel @Inject constructor(
     private val getRecommendationsUseCase: GetRecommendationsUseCase,
     private val getActiveShiftUseCase: GetActiveShiftUseCase,
     private val getActiveShiftIncomeUseCase: GetActiveShiftIncomeUseCase,
+    private val getStreakUseCase: GetStreakUseCase,
     private val startShiftUseCase: StartShiftUseCase,
     private val endShiftUseCase: EndShiftUseCase,
     private val pauseShiftUseCase: PauseShiftUseCase,
@@ -82,9 +84,16 @@ class DashboardViewModel @Inject constructor(
         getSummaryUseCase(getStartOfDay(currentTimestamp.value), getEndOfDay(currentTimestamp.value)),
         activeShiftWithIncomeFlow,
         tickerFlow,
-        dataStoreRepository.userPreferencesFlow,
-        getRecommendationsUseCase()
-    ) { summaryResult, activeShiftData, currentTime, preferences, recommendations ->
+        combine(
+            dataStoreRepository.userPreferencesFlow,
+            getRecommendationsUseCase(),
+            getStreakUseCase()
+        ) { prefs, recs, streak -> Triple(prefs, recs, streak) }
+    ) { summaryResult, activeShiftData, currentTime, combinedData ->
+        val preferences = combinedData.first
+        val recommendations = combinedData.second
+        val streak = combinedData.third
+
         val activeShift = activeShiftData.first
         val activeShiftIncome = activeShiftData.second
         
@@ -118,7 +127,8 @@ class DashboardViewModel @Inject constructor(
             activeShiftIncome = activeShiftIncome,
             platformProfits = summaryResult.platformProfits.take(3),
             showOnboarding = !preferences.isOnboardingSeen,
-            recommendations = recommendations
+            recommendations = recommendations,
+            streak = streak
         ) as DashboardUiState
     }
         .catch { e ->

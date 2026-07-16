@@ -6,6 +6,7 @@ import com.kazio.app.domain.model.ExpenseCategory
 import com.kazio.app.domain.usecase.AddExpenseResult
 import com.kazio.app.domain.usecase.AddExpenseUseCase
 import com.kazio.app.domain.usecase.GetActiveShiftUseCase
+import com.kazio.app.domain.usecase.GetRecentFrequentExpensesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,7 +23,8 @@ import com.kazio.app.domain.model.ExpenseEntry
 class AddExpenseViewModel @Inject constructor(
     private val getActiveShiftUseCase: GetActiveShiftUseCase,
     private val addExpenseUseCase: AddExpenseUseCase,
-    private val updateExpenseUseCase: UpdateExpenseUseCase
+    private val updateExpenseUseCase: UpdateExpenseUseCase,
+    private val getRecentFrequentExpensesUseCase: GetRecentFrequentExpensesUseCase
 ) : ViewModel() {
 
     private var editingExpenseId: Long? = null
@@ -31,6 +33,18 @@ class AddExpenseViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(AddExpenseUiState())
     val uiState: StateFlow<AddExpenseUiState> = _uiState.asStateFlow()
+
+    init {
+        loadFrequentExpenses()
+    }
+
+    private fun loadFrequentExpenses() {
+        viewModelScope.launch {
+            getRecentFrequentExpensesUseCase().collect { frequentExpenses ->
+                _uiState.update { it.copy(frequentExpenses = frequentExpenses) }
+            }
+        }
+    }
 
     fun setEditingExpense(expense: ExpenseEntry?) {
         if (expense == null) {
@@ -67,6 +81,21 @@ class AddExpenseViewModel @Inject constructor(
 
     fun onCategorySelect(category: ExpenseCategory) {
         _uiState.update { it.copy(selectedCategory = category, error = null) }
+    }
+
+    fun onFrequentExpenseSelect(frequentExpense: com.kazio.app.domain.model.FrequentExpense) {
+        var amountStr = frequentExpense.amount.toString()
+        if (amountStr.endsWith(".0")) {
+            amountStr = amountStr.substring(0, amountStr.length - 2)
+        }
+        _uiState.update { 
+            it.copy(
+                amount = amountStr,
+                selectedCategory = frequentExpense.category,
+                note = frequentExpense.note ?: "",
+                error = null
+            )
+        }
     }
 
     fun saveExpense() {

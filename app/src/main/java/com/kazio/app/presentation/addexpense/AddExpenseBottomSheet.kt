@@ -83,7 +83,42 @@ fun AddExpenseBottomSheet(
                 style = MaterialTheme.typography.headlineMedium, 
                 color = MaterialTheme.colorScheme.error
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (uiState.frequentExpenses.isNotEmpty() && existingExpense == null) {
+                LazyRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(uiState.frequentExpenses) { frequentExpense ->
+                        val categoryName = when (frequentExpense.category) {
+                            ExpenseCategory.FUEL -> "Yakıt"
+                            ExpenseCategory.MAINTENANCE -> "Bakım"
+                            ExpenseCategory.FINE -> "Ceza"
+                            ExpenseCategory.PARKING -> "Park"
+                            ExpenseCategory.WASHING -> "Yıkama"
+                            ExpenseCategory.OTHER -> "Diğer"
+                        }
+                        val amountStr = frequentExpense.amount.toString().removeSuffix(".0")
+                        
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(MaterialTheme.colorScheme.secondaryContainer)
+                                .clickable { viewModel.onFrequentExpenseSelect(frequentExpense) }
+                                .padding(horizontal = 12.dp, vertical = 8.dp)
+                        ) {
+                            Text(
+                                text = "⚡ $categoryName - $amountStr ₺",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+            }
 
             val categories = ExpenseCategory.values()
             LazyRow(

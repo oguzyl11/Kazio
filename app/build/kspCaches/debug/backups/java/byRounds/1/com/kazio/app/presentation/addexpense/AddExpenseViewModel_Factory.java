@@ -2,6 +2,7 @@ package com.kazio.app.presentation.addexpense;
 
 import com.kazio.app.domain.usecase.AddExpenseUseCase;
 import com.kazio.app.domain.usecase.GetActiveShiftUseCase;
+import com.kazio.app.domain.usecase.GetRecentFrequentExpensesUseCase;
 import com.kazio.app.domain.usecase.UpdateExpenseUseCase;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
@@ -31,28 +32,34 @@ public final class AddExpenseViewModel_Factory implements Factory<AddExpenseView
 
   private final Provider<UpdateExpenseUseCase> updateExpenseUseCaseProvider;
 
+  private final Provider<GetRecentFrequentExpensesUseCase> getRecentFrequentExpensesUseCaseProvider;
+
   public AddExpenseViewModel_Factory(Provider<GetActiveShiftUseCase> getActiveShiftUseCaseProvider,
       Provider<AddExpenseUseCase> addExpenseUseCaseProvider,
-      Provider<UpdateExpenseUseCase> updateExpenseUseCaseProvider) {
+      Provider<UpdateExpenseUseCase> updateExpenseUseCaseProvider,
+      Provider<GetRecentFrequentExpensesUseCase> getRecentFrequentExpensesUseCaseProvider) {
     this.getActiveShiftUseCaseProvider = getActiveShiftUseCaseProvider;
     this.addExpenseUseCaseProvider = addExpenseUseCaseProvider;
     this.updateExpenseUseCaseProvider = updateExpenseUseCaseProvider;
+    this.getRecentFrequentExpensesUseCaseProvider = getRecentFrequentExpensesUseCaseProvider;
   }
 
   @Override
   public AddExpenseViewModel get() {
-    return newInstance(getActiveShiftUseCaseProvider.get(), addExpenseUseCaseProvider.get(), updateExpenseUseCaseProvider.get());
+    return newInstance(getActiveShiftUseCaseProvider.get(), addExpenseUseCaseProvider.get(), updateExpenseUseCaseProvider.get(), getRecentFrequentExpensesUseCaseProvider.get());
   }
 
   public static AddExpenseViewModel_Factory create(
       Provider<GetActiveShiftUseCase> getActiveShiftUseCaseProvider,
       Provider<AddExpenseUseCase> addExpenseUseCaseProvider,
-      Provider<UpdateExpenseUseCase> updateExpenseUseCaseProvider) {
-    return new AddExpenseViewModel_Factory(getActiveShiftUseCaseProvider, addExpenseUseCaseProvider, updateExpenseUseCaseProvider);
+      Provider<UpdateExpenseUseCase> updateExpenseUseCaseProvider,
+      Provider<GetRecentFrequentExpensesUseCase> getRecentFrequentExpensesUseCaseProvider) {
+    return new AddExpenseViewModel_Factory(getActiveShiftUseCaseProvider, addExpenseUseCaseProvider, updateExpenseUseCaseProvider, getRecentFrequentExpensesUseCaseProvider);
   }
 
   public static AddExpenseViewModel newInstance(GetActiveShiftUseCase getActiveShiftUseCase,
-      AddExpenseUseCase addExpenseUseCase, UpdateExpenseUseCase updateExpenseUseCase) {
-    return new AddExpenseViewModel(getActiveShiftUseCase, addExpenseUseCase, updateExpenseUseCase);
+      AddExpenseUseCase addExpenseUseCase, UpdateExpenseUseCase updateExpenseUseCase,
+      GetRecentFrequentExpensesUseCase getRecentFrequentExpensesUseCase) {
+    return new AddExpenseViewModel(getActiveShiftUseCase, addExpenseUseCase, updateExpenseUseCase, getRecentFrequentExpensesUseCase);
   }
 }

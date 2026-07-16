@@ -12,6 +12,12 @@ import javax.inject.Inject
 class IncomeRepositoryImpl @Inject constructor(
     private val incomeDao: IncomeDao
 ) : IncomeRepository {
+    override fun getAllIncomes(): Flow<List<IncomeEntry>> {
+        return incomeDao.getAllIncomes().map { list ->
+            list.map { it.toDomain() }
+        }
+    }
+
     override fun getIncomesForDateRange(startAt: Long, endAt: Long): Flow<List<IncomeEntry>> {
         return incomeDao.getIncomesForDateRange(startAt, endAt).map { list ->
             list.map { it.toDomain() }
