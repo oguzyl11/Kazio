@@ -10,6 +10,9 @@ interface ShiftDao {
     @Query("SELECT * FROM shifts WHERE endAt IS NULL ORDER BY startAt DESC LIMIT 1")
     fun getActiveShift(): Flow<ShiftEntity?>
 
+    @Query("SELECT * FROM shifts WHERE startAt >= :startAt AND startAt <= :endAt")
+    fun getShiftsForDateRange(startAt: Long, endAt: Long): Flow<List<ShiftEntity>>
+
     @Insert
     suspend fun insertShift(shift: ShiftEntity): Long
 

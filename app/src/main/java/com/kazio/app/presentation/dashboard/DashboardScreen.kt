@@ -75,14 +75,13 @@ fun DashboardScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             topBar = {
-                Row(
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(64.dp)
                         .background(MaterialTheme.colorScheme.background)
                         .padding(horizontal = 20.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    contentAlignment = Alignment.Center
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(
@@ -99,7 +98,17 @@ fun DashboardScreen(
                             letterSpacing = 2.sp
                         )
                     }
-                    // Removed profile icon
+                    
+                    IconButton(
+                        onClick = { viewModel.generateMonthlyReport() },
+                        modifier = Modifier.align(Alignment.CenterEnd)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.PictureAsPdf,
+                            contentDescription = "PDF Rapor",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
                 }
             }
         ) { paddingValues ->
@@ -205,17 +214,31 @@ private fun DashboardContent(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(
-                    text = "Bugün net kazancın",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = com.kazio.app.presentation.theme.TextSecondary
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = formatter.format(state.dailyNetProfit),
-                    style = MaterialTheme.typography.headlineLarge,
-                    color = MaterialTheme.colorScheme.primary
-                )
+                if (isOnline) {
+                    Text(
+                        text = "Aktif Vardiya Kazancı",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = com.kazio.app.presentation.theme.TextSecondary
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = formatter.format(state.activeShiftIncome),
+                        style = MaterialTheme.typography.headlineLarge,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                } else {
+                    Text(
+                        text = "Bugün net kazancın",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = com.kazio.app.presentation.theme.TextSecondary
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = formatter.format(state.dailyNetProfit),
+                        style = MaterialTheme.typography.headlineLarge,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(Icons.Default.Schedule, contentDescription = null, tint = com.kazio.app.presentation.theme.TextSecondary, modifier = Modifier.size(18.dp))

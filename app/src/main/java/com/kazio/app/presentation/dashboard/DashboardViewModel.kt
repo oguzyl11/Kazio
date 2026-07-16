@@ -22,15 +22,32 @@ import java.util.Calendar
 import java.util.Locale
 import javax.inject.Inject
 
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import com.kazio.app.domain.usecase.GetActiveShiftIncomeUseCase
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+
+import android.content.Context
+import android.net.Uri
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import com.kazio.app.domain.usecase.GenerateMonthlyReportUseCase
+
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
     private val getSummaryUseCase: GetSummaryUseCase,
     private val getRecommendationsUseCase: GetRecommendationsUseCase,
     private val getActiveShiftUseCase: GetActiveShiftUseCase,
+    private val getActiveShiftIncomeUseCase: GetActiveShiftIncomeUseCase,
     private val startShiftUseCase: StartShiftUseCase,
     private val endShiftUseCase: EndShiftUseCase,
+    private val generateMonthlyReportUseCase: GenerateMonthlyReportUseCase,
     private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
+
+    private val _pdfUriEvent = MutableSharedFlow<Uri>()
+    val pdfUriEvent = _pdfUriEvent.asSharedFlow()
 
     private val currentTimestamp = MutableStateFlow(Calendar.getInstance().timeInMillis)
 
@@ -41,13 +58,27 @@ class DashboardViewModel @Inject constructor(
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val activeShiftWithIncomeFlow = getActiveShiftUseCase().flatMapLatest { shift ->
+        if (shift != null) {
+            getActiveShiftIncomeUseCase(shift.id).map { income ->
+                Pair(shift, income)
+            }
+        } else {
+            flowOf(Pair(null, 0.0))
+        }
+    }
+
     val uiState: StateFlow<DashboardUiState> = combine(
         getSummaryUseCase(getStartOfDay(currentTimestamp.value), getEndOfDay(currentTimestamp.value)),
-        getActiveShiftUseCase(),
+        activeShiftWithIncomeFlow,
         tickerFlow,
         dataStoreRepository.userPreferencesFlow,
         getRecommendationsUseCase()
-    ) { summaryResult, activeShift, currentTime, preferences, recommendations ->
+    ) { summaryResult, activeShiftData, currentTime, preferences, recommendations ->
+        val activeShift = activeShiftData.first
+        val activeShiftIncome = activeShiftData.second
+        
         val durationStr = if (activeShift != null) {
             val diff = currentTime - activeShift.startAt
             val hours = (diff / (1000 * 60 * 60))
@@ -63,6 +94,7 @@ class DashboardViewModel @Inject constructor(
             totalExpense = summaryResult.totalExpense,
             activeShift = activeShift,
             activeShiftDurationStr = durationStr,
+            activeShiftIncome = activeShiftIncome,
             platformProfits = summaryResult.platformProfits.take(3),
             showOnboarding = !preferences.isOnboardingSeen,
             recommendations = recommendations
@@ -92,6 +124,15 @@ class DashboardViewModel @Inject constructor(
     fun endShift() {
         viewModelScope.launch {
             endShiftUseCase()
+        }
+    }
+
+    fun generateMonthlyReport(context: Context) {
+        viewModelScope.launch {
+            val uri = generateMonthlyReportUseCase(context)
+            if (uri != null) {
+                _pdfUriEvent.emit(uri)
+            }
         }
     }
 

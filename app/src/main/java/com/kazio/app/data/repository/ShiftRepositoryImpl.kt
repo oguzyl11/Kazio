@@ -16,6 +16,12 @@ class ShiftRepositoryImpl @Inject constructor(
         return shiftDao.getActiveShift().map { it?.toDomain() }
     }
 
+    override fun getShiftsForDateRange(startAt: Long, endAt: Long): Flow<List<Shift>> {
+        return shiftDao.getShiftsForDateRange(startAt, endAt).map { list ->
+            list.map { it.toDomain() }
+        }
+    }
+
     override suspend fun startShift(vehicleId: Long, startAt: Long, note: String?): Long {
         return shiftDao.insertShift(
             ShiftEntity(

@@ -18,6 +18,12 @@ class IncomeRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getIncomesForShift(shiftId: Long): Flow<List<IncomeEntry>> {
+        return incomeDao.getIncomesForShift(shiftId).map { list ->
+            list.map { it.toDomain() }
+        }
+    }
+
     override suspend fun addIncome(entry: IncomeEntry): Long {
         return incomeDao.insertIncome(entry.toEntity())
     }
