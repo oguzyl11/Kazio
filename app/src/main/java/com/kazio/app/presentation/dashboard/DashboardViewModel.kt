@@ -32,7 +32,8 @@ import android.content.Context
 import android.net.Uri
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import com.kazio.app.domain.usecase.GenerateMonthlyReportUseCase
+import com.kazio.app.domain.model.ReportType
+import com.kazio.app.domain.usecase.GenerateReportUseCase
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
@@ -42,7 +43,7 @@ class DashboardViewModel @Inject constructor(
     private val getActiveShiftIncomeUseCase: GetActiveShiftIncomeUseCase,
     private val startShiftUseCase: StartShiftUseCase,
     private val endShiftUseCase: EndShiftUseCase,
-    private val generateMonthlyReportUseCase: GenerateMonthlyReportUseCase,
+    private val generateReportUseCase: GenerateReportUseCase,
     private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
 
@@ -127,9 +128,9 @@ class DashboardViewModel @Inject constructor(
         }
     }
 
-    fun generateMonthlyReport(context: Context) {
+    fun generateReport(context: Context, type: ReportType) {
         viewModelScope.launch {
-            val uri = generateMonthlyReportUseCase(context)
+            val uri = generateReportUseCase(context, type)
             if (uri != null) {
                 _pdfUriEvent.emit(uri)
             }

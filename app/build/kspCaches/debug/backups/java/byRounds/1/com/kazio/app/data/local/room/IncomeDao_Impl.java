@@ -176,6 +176,63 @@ public final class IncomeDao_Impl implements IncomeDao {
     });
   }
 
+  @Override
+  public Flow<List<IncomeEntity>> getIncomesForShift(final long shiftId) {
+    final String _sql = "SELECT * FROM incomes WHERE shiftId = ?";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    int _argIndex = 1;
+    _statement.bindLong(_argIndex, shiftId);
+    return CoroutinesRoom.createFlow(__db, false, new String[] {"incomes"}, new Callable<List<IncomeEntity>>() {
+      @Override
+      @NonNull
+      public List<IncomeEntity> call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfShiftId = CursorUtil.getColumnIndexOrThrow(_cursor, "shiftId");
+          final int _cursorIndexOfPlatformId = CursorUtil.getColumnIndexOrThrow(_cursor, "platformId");
+          final int _cursorIndexOfAmount = CursorUtil.getColumnIndexOrThrow(_cursor, "amount");
+          final int _cursorIndexOfOccurredAt = CursorUtil.getColumnIndexOrThrow(_cursor, "occurredAt");
+          final int _cursorIndexOfNote = CursorUtil.getColumnIndexOrThrow(_cursor, "note");
+          final List<IncomeEntity> _result = new ArrayList<IncomeEntity>(_cursor.getCount());
+          while (_cursor.moveToNext()) {
+            final IncomeEntity _item;
+            final long _tmpId;
+            _tmpId = _cursor.getLong(_cursorIndexOfId);
+            final Long _tmpShiftId;
+            if (_cursor.isNull(_cursorIndexOfShiftId)) {
+              _tmpShiftId = null;
+            } else {
+              _tmpShiftId = _cursor.getLong(_cursorIndexOfShiftId);
+            }
+            final long _tmpPlatformId;
+            _tmpPlatformId = _cursor.getLong(_cursorIndexOfPlatformId);
+            final double _tmpAmount;
+            _tmpAmount = _cursor.getDouble(_cursorIndexOfAmount);
+            final long _tmpOccurredAt;
+            _tmpOccurredAt = _cursor.getLong(_cursorIndexOfOccurredAt);
+            final String _tmpNote;
+            if (_cursor.isNull(_cursorIndexOfNote)) {
+              _tmpNote = null;
+            } else {
+              _tmpNote = _cursor.getString(_cursorIndexOfNote);
+            }
+            _item = new IncomeEntity(_tmpId,_tmpShiftId,_tmpPlatformId,_tmpAmount,_tmpOccurredAt,_tmpNote);
+            _result.add(_item);
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+        }
+      }
+
+      @Override
+      protected void finalize() {
+        _statement.release();
+      }
+    });
+  }
+
   @NonNull
   public static List<Class<?>> getRequiredConverters() {
     return Collections.emptyList();

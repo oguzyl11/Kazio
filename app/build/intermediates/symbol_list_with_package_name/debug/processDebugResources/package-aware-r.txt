@@ -1711,3 +1711,4 @@ styleable NavInclude graph
 styleable Navigator android_label android_id route
 xml kazio_large_widget_info
 xml kazio_small_widget_info
+xml provider_paths

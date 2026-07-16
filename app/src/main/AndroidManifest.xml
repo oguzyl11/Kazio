@@ -37,6 +37,8 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/kazio_large_widget_info" />
+        </receiver>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

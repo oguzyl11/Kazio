@@ -1784,3 +1784,4 @@ int styleable Navigator_android_id 1
 int styleable Navigator_route 2
 int xml kazio_large_widget_info 0x7f100000
 int xml kazio_small_widget_info 0x7f100001
+int xml provider_paths 0x7f100002

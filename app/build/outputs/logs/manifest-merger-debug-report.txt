@@ -1,9 +1,20 @@
 -- Merging decision tree log ---
+provider#androidx.core.content.FileProvider
+INJECTED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:42:9-50:20
+	android:grantUriPermissions
+		ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:46:13-47
+	android:authorities
+		INJECTED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:44:13-60
+	android:exported
+		ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:45:13-37
+	android:name
+		ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:43:13-62
 manifest
-ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:2:1-43:12
-INJECTED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:2:1-43:12
-INJECTED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:2:1-43:12
-INJECTED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:2:1-43:12
+ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:2:1-53:12
+INJECTED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:2:1-53:12
+INJECTED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:2:1-53:12
+INJECTED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:2:1-53:12
 MERGED from [androidx.glance:glance:1.0.0] C:\Users\OGUZHAN\.gradle\caches\8.11.1\transforms\fdabfa657e6f959ed0df16c254d21f5a\transformed\glance-1.0.0\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.glance:glance-material3:1.0.0] C:\Users\OGUZHAN\.gradle\caches\8.11.1\transforms\66f5bac234bd5edfd6bb4122e1352c3b\transformed\glance-material3-1.0.0\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.glance:glance-appwidget:1.0.0] C:\Users\OGUZHAN\.gradle\caches\8.11.1\transforms\463532d7fede0ed717650c4447972f6a\transformed\glance-appwidget-1.0.0\AndroidManifest.xml:17:1-56:12
@@ -89,8 +100,8 @@ MERGED from [com.google.dagger:dagger-lint-aar:2.51.1] C:\Users\OGUZHAN\.gradle\
 	xmlns:android
 		ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:2:11-69
 application
-ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:4:5-41:19
-INJECTED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:4:5-41:19
+ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:4:5-51:19
+INJECTED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:4:5-51:19
 MERGED from [androidx.glance:glance-appwidget:1.0.0] C:\Users\OGUZHAN\.gradle\caches\8.11.1\transforms\463532d7fede0ed717650c4447972f6a\transformed\glance-appwidget-1.0.0\AndroidManifest.xml:22:5-54:19
 MERGED from [androidx.glance:glance-appwidget:1.0.0] C:\Users\OGUZHAN\.gradle\caches\8.11.1\transforms\463532d7fede0ed717650c4447972f6a\transformed\glance-appwidget-1.0.0\AndroidManifest.xml:22:5-54:19
 MERGED from [androidx.core:core-remoteviews:1.0.0] C:\Users\OGUZHAN\.gradle\caches\8.11.1\transforms\55e8912cb53497ab10d3eaa801be9318\transformed\core-remoteviews-1.0.0\AndroidManifest.xml:23:5-28:19
@@ -173,6 +184,12 @@ ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.
 		ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:33:13-36
 	android:name
 		ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:32:13-60
+meta-data#android.support.FILE_PROVIDER_PATHS
+ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:47:13-49:58
+	android:resource
+		ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:49:17-55
+	android:name
+		ADDED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml:48:17-67
 uses-sdk
 INJECTED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\OGUZHAN\OneDrive\Desktop\Kazio\app\src\main\AndroidManifest.xml

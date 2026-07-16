@@ -18,6 +18,7 @@ import java.lang.Object;
 import java.lang.Override;
 import java.lang.String;
 import java.lang.SuppressWarnings;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -156,6 +157,62 @@ public final class ShiftDao_Impl implements ShiftDao {
             _result = new ShiftEntity(_tmpId,_tmpVehicleId,_tmpStartAt,_tmpEndAt,_tmpNote);
           } else {
             _result = null;
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+        }
+      }
+
+      @Override
+      protected void finalize() {
+        _statement.release();
+      }
+    });
+  }
+
+  @Override
+  public Flow<List<ShiftEntity>> getShiftsForDateRange(final long startAt, final long endAt) {
+    final String _sql = "SELECT * FROM shifts WHERE startAt >= ? AND startAt <= ?";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 2);
+    int _argIndex = 1;
+    _statement.bindLong(_argIndex, startAt);
+    _argIndex = 2;
+    _statement.bindLong(_argIndex, endAt);
+    return CoroutinesRoom.createFlow(__db, false, new String[] {"shifts"}, new Callable<List<ShiftEntity>>() {
+      @Override
+      @NonNull
+      public List<ShiftEntity> call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfVehicleId = CursorUtil.getColumnIndexOrThrow(_cursor, "vehicleId");
+          final int _cursorIndexOfStartAt = CursorUtil.getColumnIndexOrThrow(_cursor, "startAt");
+          final int _cursorIndexOfEndAt = CursorUtil.getColumnIndexOrThrow(_cursor, "endAt");
+          final int _cursorIndexOfNote = CursorUtil.getColumnIndexOrThrow(_cursor, "note");
+          final List<ShiftEntity> _result = new ArrayList<ShiftEntity>(_cursor.getCount());
+          while (_cursor.moveToNext()) {
+            final ShiftEntity _item;
+            final long _tmpId;
+            _tmpId = _cursor.getLong(_cursorIndexOfId);
+            final long _tmpVehicleId;
+            _tmpVehicleId = _cursor.getLong(_cursorIndexOfVehicleId);
+            final long _tmpStartAt;
+            _tmpStartAt = _cursor.getLong(_cursorIndexOfStartAt);
+            final Long _tmpEndAt;
+            if (_cursor.isNull(_cursorIndexOfEndAt)) {
+              _tmpEndAt = null;
+            } else {
+              _tmpEndAt = _cursor.getLong(_cursorIndexOfEndAt);
+            }
+            final String _tmpNote;
+            if (_cursor.isNull(_cursorIndexOfNote)) {
+              _tmpNote = null;
+            } else {
+              _tmpNote = _cursor.getString(_cursorIndexOfNote);
+            }
+            _item = new ShiftEntity(_tmpId,_tmpVehicleId,_tmpStartAt,_tmpEndAt,_tmpNote);
+            _result.add(_item);
           }
           return _result;
         } finally {

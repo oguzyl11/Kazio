@@ -13,3 +13,4 @@ drawable widget_main_bg
 layout widget_initial_layout
 xml kazio_large_widget_info
 xml kazio_small_widget_info
+xml provider_paths
