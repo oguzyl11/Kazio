@@ -89,41 +89,17 @@ fun DashboardScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             topBar = {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(64.dp)
-                        .background(MaterialTheme.colorScheme.background)
-                        .padding(horizontal = 20.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Image(
-                            painter = painterResource(id = R.drawable.kazio_logo_transparent),
-                            contentDescription = "Logo",
-                            modifier = Modifier.size(32.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = "KAZIO",
-                            style = MaterialTheme.typography.headlineMedium,
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.ExtraBold,
-                            letterSpacing = 2.sp
-                        )
+                com.kazio.app.presentation.components.KazioTopBar(
+                    actions = {
+                        IconButton(onClick = { showReportOptions = true }) {
+                            Icon(
+                                imageVector = Icons.Default.PictureAsPdf,
+                                contentDescription = "PDF Rapor",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
                     }
-                    
-                    IconButton(
-                        onClick = { showReportOptions = true },
-                        modifier = Modifier.align(Alignment.CenterEnd)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.PictureAsPdf,
-                            contentDescription = "PDF Rapor",
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                }
+                )
             }
         ) { paddingValues ->
             Box(
