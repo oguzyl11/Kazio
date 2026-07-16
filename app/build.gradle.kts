@@ -107,6 +107,9 @@ dependencies {
     // Widget (Glance)
     implementation("androidx.glance:glance-appwidget:1.0.0")
     implementation("androidx.glance:glance-material3:1.0.0")
+
+    // Billing
+    implementation("com.android.billingclient:billing-ktx:6.1.0")
 }
 
 tasks.withType<Test> {

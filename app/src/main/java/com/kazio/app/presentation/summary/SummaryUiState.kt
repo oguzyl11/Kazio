@@ -12,7 +12,8 @@ sealed interface SummaryUiState {
     data class Success(
         val period: SummaryPeriod,
         val result: SummaryResult,
-        val records: List<PersonalRecord> = emptyList()
+        val records: List<PersonalRecord> = emptyList(),
+        val isPremium: Boolean = false
     ) : SummaryUiState
     data class Error(val message: String) : SummaryUiState
 }

@@ -21,6 +21,9 @@ animator fragment_open_exit
 attr action
 attr alpha
 attr argType
+attr buttonSize
+attr circleCrop
+attr colorScheme
 attr data
 attr dataPattern
 attr destination
@@ -39,6 +42,8 @@ attr fontVariationSettings
 attr fontWeight
 attr glance_isTopLevelLayout
 attr graph
+attr imageAspectRatio
+attr imageAspectRatioAdjust
 attr lStar
 attr launchSingleTop
 attr mimeType
@@ -53,6 +58,7 @@ attr popUpToSaveState
 attr queryPatterns
 attr restoreState
 attr route
+attr scopeUris
 attr shortcutMatchRequired
 attr startDestination
 attr targetPackage
@@ -67,6 +73,17 @@ color androidx_core_ripple_material_light
 color androidx_core_secondary_text_default_material_light
 color call_notification_answer_color
 color call_notification_decline_color
+color common_google_signin_btn_text_dark
+color common_google_signin_btn_text_dark_default
+color common_google_signin_btn_text_dark_disabled
+color common_google_signin_btn_text_dark_focused
+color common_google_signin_btn_text_dark_pressed
+color common_google_signin_btn_text_light
+color common_google_signin_btn_text_light_default
+color common_google_signin_btn_text_light_disabled
+color common_google_signin_btn_text_light_focused
+color common_google_signin_btn_text_light_pressed
+color common_google_signin_btn_tint
 color glance_colorBackground
 color glance_colorError
 color glance_colorErrorContainer
@@ -132,6 +149,25 @@ dimen notification_small_icon_size_as_large
 dimen notification_subtext_size
 dimen notification_top_pad
 dimen notification_top_pad_large_text
+drawable common_full_open_on_phone
+drawable common_google_signin_btn_icon_dark
+drawable common_google_signin_btn_icon_dark_focused
+drawable common_google_signin_btn_icon_dark_normal
+drawable common_google_signin_btn_icon_dark_normal_background
+drawable common_google_signin_btn_icon_disabled
+drawable common_google_signin_btn_icon_light
+drawable common_google_signin_btn_icon_light_focused
+drawable common_google_signin_btn_icon_light_normal
+drawable common_google_signin_btn_icon_light_normal_background
+drawable common_google_signin_btn_text_dark
+drawable common_google_signin_btn_text_dark_focused
+drawable common_google_signin_btn_text_dark_normal
+drawable common_google_signin_btn_text_dark_normal_background
+drawable common_google_signin_btn_text_disabled
+drawable common_google_signin_btn_text_light
+drawable common_google_signin_btn_text_light_focused
+drawable common_google_signin_btn_text_light_normal
+drawable common_google_signin_btn_text_light_normal_background
 drawable glance_abc_btn_check_material_anim_enabled
 drawable glance_btn_checkbox_checked_mtrl
 drawable glance_btn_checkbox_checked_to_unchecked_mtrl_animation
@@ -153,6 +189,8 @@ drawable glance_switch_thumb_off_to_on
 drawable glance_switch_thumb_on
 drawable glance_switch_thumb_on_to_off
 drawable glance_switch_track
+drawable googleg_disabled_color_18
+drawable googleg_standard_color_18
 drawable ic_call_answer
 drawable ic_call_answer_low
 drawable ic_call_answer_video
@@ -220,8 +258,11 @@ id action_divider
 id action_image
 id action_text
 id actions
+id adjust_height
+id adjust_width
 id androidx_compose_ui_view_composition_context
 id async
+id auto
 id blocking
 id checkBox
 id checkBoxIcon
@@ -320,6 +361,7 @@ id childStub9_wrap_wrap
 id chronometer
 id compose_view_saveable_id_tag
 id consume_window_insets_tag
+id dark
 id deletedViewId
 id dialog_button
 id edit_text_id
@@ -333,13 +375,16 @@ id hide_ime_id
 id hide_in_inspector_tag
 id icon
 id icon_group
+id icon_only
 id info
 id inspection_slot_table_set
 id is_pooling_container_tag
 id italic
+id light
 id line1
 id line3
 id nav_controller_view_tag
+id none
 id normal
 id notification_background
 id notification_main_column
@@ -358,6 +403,7 @@ id rootView
 id sizeView
 id sizeViewStub
 id special_effects_controller_view_tag
+id standard
 id switchText
 id switchThumb
 id switchTrack
@@ -384,7 +430,9 @@ id view_tree_on_back_pressed_dispatcher_owner
 id view_tree_saved_state_registry_owner
 id view_tree_view_model_store_owner
 id visible_removing_fragment_view_tag
+id wide
 id wrapped_composition_tag
+integer google_play_services_version
 integer status_bar_notification_info_maxnum
 interpolator glance_btn_checkbox_checked_mtrl_animation_interpolator_0
 interpolator glance_btn_checkbox_checked_mtrl_animation_interpolator_1
@@ -1563,6 +1611,8 @@ layout size_match_wrap
 layout size_wrap_match
 layout size_wrap_wrap
 layout widget_initial_layout
+raw com_android_billingclient_heterodyne_info
+raw com_android_billingclient_registration_info
 raw glance_appwidget_keep
 string androidx_startup
 string call_notification_answer_action
@@ -1574,6 +1624,24 @@ string call_notification_ongoing_text
 string call_notification_screening_text
 string close_drawer
 string close_sheet
+string common_google_play_services_enable_button
+string common_google_play_services_enable_text
+string common_google_play_services_enable_title
+string common_google_play_services_install_button
+string common_google_play_services_install_text
+string common_google_play_services_install_title
+string common_google_play_services_notification_channel_name
+string common_google_play_services_notification_ticker
+string common_google_play_services_unknown_issue
+string common_google_play_services_unsupported_text
+string common_google_play_services_update_button
+string common_google_play_services_update_text
+string common_google_play_services_update_title
+string common_google_play_services_updating_text
+string common_google_play_services_wear_update_text
+string common_open_on_phone
+string common_signin_button_text
+string common_signin_button_text_long
 string default_error_message
 string default_popup_window_title
 string dropdown_menu
@@ -1702,6 +1770,7 @@ styleable FragmentContainerView android_name android_tag
 styleable GlanceAppWidget glance_isTopLevelLayout
 styleable GradientColor android_startColor android_endColor android_type android_centerX android_centerY android_gradientRadius android_tileMode android_centerColor android_startX android_startY android_endX android_endY
 styleable GradientColorItem android_color android_offset
+styleable LoadingImageView circleCrop imageAspectRatio imageAspectRatioAdjust
 styleable NavAction android_id destination enterAnim exitAnim launchSingleTop popEnterAnim popExitAnim popUpTo popUpToInclusive popUpToSaveState restoreState
 styleable NavArgument android_name android_defaultValue argType nullable
 styleable NavDeepLink android_autoVerify action mimeType uri
@@ -1709,6 +1778,8 @@ styleable NavGraphNavigator startDestination
 styleable NavHost navGraph
 styleable NavInclude graph
 styleable Navigator android_label android_id route
+styleable SignInButton buttonSize colorScheme scopeUris
+xml com_android_billingclient_phenotype
 xml kazio_large_widget_info
 xml kazio_small_widget_info
 xml provider_paths

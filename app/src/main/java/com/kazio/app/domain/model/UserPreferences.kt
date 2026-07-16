@@ -8,5 +8,6 @@ data class UserPreferences(
     val userPin: String,
     val isOnboardingSeen: Boolean,
     val vehicleModel: String = "",
-    val vehiclePlate: String = ""
+    val vehiclePlate: String = "",
+    val isPremium: Boolean = false
 )

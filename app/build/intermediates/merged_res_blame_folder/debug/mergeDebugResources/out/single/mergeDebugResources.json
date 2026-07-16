@@ -1,58 +1,58 @@
 [
     {
-        "merged": "com.kazio.app-debug-70:/xml_kazio_small_widget_info.xml.flat",
-        "source": "com.kazio.app-main-72:/xml/kazio_small_widget_info.xml"
+        "merged": "com.kazio.app-debug-73:/drawable_ic_widget_trophy.xml.flat",
+        "source": "com.kazio.app-main-75:/drawable/ic_widget_trophy.xml"
     },
     {
-        "merged": "com.kazio.app-debug-70:/drawable_widget_card_bg_green.xml.flat",
-        "source": "com.kazio.app-main-72:/drawable/widget_card_bg_green.xml"
+        "merged": "com.kazio.app-debug-73:/xml_kazio_small_widget_info.xml.flat",
+        "source": "com.kazio.app-main-75:/xml/kazio_small_widget_info.xml"
     },
     {
-        "merged": "com.kazio.app-debug-70:/drawable_ic_widget_arrow_down.xml.flat",
-        "source": "com.kazio.app-main-72:/drawable/ic_widget_arrow_down.xml"
+        "merged": "com.kazio.app-debug-73:/drawable_kazio_logo_transparent.png.flat",
+        "source": "com.kazio.app-main-75:/drawable/kazio_logo_transparent.png"
     },
     {
-        "merged": "com.kazio.app-debug-70:/drawable_ic_widget_calendar.xml.flat",
-        "source": "com.kazio.app-main-72:/drawable/ic_widget_calendar.xml"
+        "merged": "com.kazio.app-debug-73:/drawable_ic_widget_calendar.xml.flat",
+        "source": "com.kazio.app-main-75:/drawable/ic_widget_calendar.xml"
     },
     {
-        "merged": "com.kazio.app-debug-70:/drawable_ic_widget_trophy.xml.flat",
-        "source": "com.kazio.app-main-72:/drawable/ic_widget_trophy.xml"
+        "merged": "com.kazio.app-debug-73:/drawable_ic_widget_arrow_up.xml.flat",
+        "source": "com.kazio.app-main-75:/drawable/ic_widget_arrow_up.xml"
     },
     {
-        "merged": "com.kazio.app-debug-70:/drawable_ic_widget_wallet.xml.flat",
-        "source": "com.kazio.app-main-72:/drawable/ic_widget_wallet.xml"
+        "merged": "com.kazio.app-debug-73:/drawable_kazio_logo_bg.png.flat",
+        "source": "com.kazio.app-main-75:/drawable/kazio_logo_bg.png"
     },
     {
-        "merged": "com.kazio.app-debug-70:/drawable_ic_widget_arrow_up.xml.flat",
-        "source": "com.kazio.app-main-72:/drawable/ic_widget_arrow_up.xml"
+        "merged": "com.kazio.app-debug-73:/layout_widget_initial_layout.xml.flat",
+        "source": "com.kazio.app-main-75:/layout/widget_initial_layout.xml"
     },
     {
-        "merged": "com.kazio.app-debug-70:/layout_widget_initial_layout.xml.flat",
-        "source": "com.kazio.app-main-72:/layout/widget_initial_layout.xml"
+        "merged": "com.kazio.app-debug-73:/xml_provider_paths.xml.flat",
+        "source": "com.kazio.app-main-75:/xml/provider_paths.xml"
     },
     {
-        "merged": "com.kazio.app-debug-70:/drawable_widget_main_bg.xml.flat",
-        "source": "com.kazio.app-main-72:/drawable/widget_main_bg.xml"
+        "merged": "com.kazio.app-debug-73:/xml_kazio_large_widget_info.xml.flat",
+        "source": "com.kazio.app-main-75:/xml/kazio_large_widget_info.xml"
     },
     {
-        "merged": "com.kazio.app-debug-70:/xml_provider_paths.xml.flat",
-        "source": "com.kazio.app-main-72:/xml/provider_paths.xml"
+        "merged": "com.kazio.app-debug-73:/drawable_widget_card_bg.xml.flat",
+        "source": "com.kazio.app-main-75:/drawable/widget_card_bg.xml"
     },
     {
-        "merged": "com.kazio.app-debug-70:/drawable_kazio_logo_bg.png.flat",
-        "source": "com.kazio.app-main-72:/drawable/kazio_logo_bg.png"
+        "merged": "com.kazio.app-debug-73:/drawable_widget_card_bg_green.xml.flat",
+        "source": "com.kazio.app-main-75:/drawable/widget_card_bg_green.xml"
     },
     {
-        "merged": "com.kazio.app-debug-70:/drawable_widget_card_bg.xml.flat",
-        "source": "com.kazio.app-main-72:/drawable/widget_card_bg.xml"
+        "merged": "com.kazio.app-debug-73:/drawable_widget_main_bg.xml.flat",
+        "source": "com.kazio.app-main-75:/drawable/widget_main_bg.xml"
     },
     {
-        "merged": "com.kazio.app-debug-70:/drawable_kazio_logo_transparent.png.flat",
-        "source": "com.kazio.app-main-72:/drawable/kazio_logo_transparent.png"
+        "merged": "com.kazio.app-debug-73:/drawable_ic_widget_arrow_down.xml.flat",
+        "source": "com.kazio.app-main-75:/drawable/ic_widget_arrow_down.xml"
     },
     {
-        "merged": "com.kazio.app-debug-70:/xml_kazio_large_widget_info.xml.flat",
-        "source": "com.kazio.app-main-72:/xml/kazio_large_widget_info.xml"
+        "merged": "com.kazio.app-debug-73:/drawable_ic_widget_wallet.xml.flat",
+        "source": "com.kazio.app-main-75:/drawable/ic_widget_wallet.xml"
     }
 ]

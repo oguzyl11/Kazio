@@ -16,7 +16,8 @@ sealed interface DashboardUiState {
         val platformProfits: List<PlatformProfit> = emptyList(),
         val showOnboarding: Boolean = false,
         val recommendations: List<Recommendation> = emptyList(),
-        val streak: Int = 0
+        val streak: Int = 0,
+        val isPremium: Boolean = false
     ) : DashboardUiState
     data class Error(val message: String) : DashboardUiState
 }

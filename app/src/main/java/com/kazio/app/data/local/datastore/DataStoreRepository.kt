@@ -28,6 +28,7 @@ class DataStoreRepository @Inject constructor(
         val IS_ONBOARDING_SEEN = booleanPreferencesKey("is_onboarding_seen")
         val VEHICLE_MODEL = stringPreferencesKey("vehicle_model")
         val VEHICLE_PLATE = stringPreferencesKey("vehicle_plate")
+        val IS_PREMIUM = booleanPreferencesKey("is_premium")
     }
 
     val userPreferencesFlow: Flow<UserPreferences> = context.dataStore.data
@@ -47,6 +48,7 @@ class DataStoreRepository @Inject constructor(
             val isOnboardingSeen = preferences[PreferencesKeys.IS_ONBOARDING_SEEN] ?: false
             val vehicleModel = preferences[PreferencesKeys.VEHICLE_MODEL] ?: ""
             val vehiclePlate = preferences[PreferencesKeys.VEHICLE_PLATE] ?: ""
+            val isPremium = preferences[PreferencesKeys.IS_PREMIUM] ?: false
 
             UserPreferences(
                 isRegistered = isRegistered,
@@ -56,7 +58,8 @@ class DataStoreRepository @Inject constructor(
                 userPin = userPin,
                 isOnboardingSeen = isOnboardingSeen,
                 vehicleModel = vehicleModel,
-                vehiclePlate = vehiclePlate
+                vehiclePlate = vehiclePlate,
+                isPremium = isPremium
             )
         }
 
@@ -90,6 +93,12 @@ class DataStoreRepository @Inject constructor(
         }
     }
 
+    suspend fun setPremium(isPremium: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.IS_PREMIUM] = isPremium
+        }
+    }
+
     suspend fun clearUser() {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.IS_REGISTERED] = false
@@ -99,6 +108,7 @@ class DataStoreRepository @Inject constructor(
             preferences[PreferencesKeys.USER_PIN] = ""
             preferences[PreferencesKeys.VEHICLE_MODEL] = ""
             preferences[PreferencesKeys.VEHICLE_PLATE] = ""
+            preferences[PreferencesKeys.IS_PREMIUM] = false
         }
     }
 }

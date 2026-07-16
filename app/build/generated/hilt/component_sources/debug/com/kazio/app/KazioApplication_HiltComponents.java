@@ -6,6 +6,7 @@ import com.kazio.app.presentation.addexpense.AddExpenseViewModel_HiltModules;
 import com.kazio.app.presentation.addincome.AddIncomeViewModel_HiltModules;
 import com.kazio.app.presentation.auth.AuthViewModel_HiltModules;
 import com.kazio.app.presentation.dashboard.DashboardViewModel_HiltModules;
+import com.kazio.app.presentation.premium.PremiumViewModel_HiltModules;
 import com.kazio.app.presentation.settings.SettingsViewModel_HiltModules;
 import com.kazio.app.presentation.summary.SummaryViewModel_HiltModules;
 import com.kazio.app.presentation.transactions.TransactionsViewModel_HiltModules;
@@ -171,6 +172,7 @@ public final class KazioApplication_HiltComponents {
           HiltWrapper_SavedStateHandleModule.class,
           ActivityCBuilderModule.class,
           ViewModelCBuilderModule.class,
+          PremiumViewModel_HiltModules.KeyModule.class,
           SettingsViewModel_HiltModules.KeyModule.class,
           SummaryViewModel_HiltModules.KeyModule.class,
           TransactionsViewModel_HiltModules.KeyModule.class
@@ -214,6 +216,7 @@ public final class KazioApplication_HiltComponents {
           AuthViewModel_HiltModules.BindsModule.class,
           DashboardViewModel_HiltModules.BindsModule.class,
           HiltWrapper_HiltViewModelFactory_ViewModelModule.class,
+          PremiumViewModel_HiltModules.BindsModule.class,
           SettingsViewModel_HiltModules.BindsModule.class,
           SummaryViewModel_HiltModules.BindsModule.class,
           TransactionsViewModel_HiltModules.BindsModule.class

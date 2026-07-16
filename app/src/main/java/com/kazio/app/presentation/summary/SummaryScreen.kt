@@ -31,6 +31,7 @@ import com.kazio.app.domain.model.RecordType
 @Composable
 fun SummaryScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToPremium: () -> Unit,
     viewModel: SummaryViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -52,7 +53,16 @@ fun SummaryScreen(
         topBar = {
             com.kazio.app.presentation.components.KazioTopBar(
                 actions = {
-                    IconButton(onClick = { showReportOptions = true }) {
+                    IconButton(onClick = { 
+                        if (uiState is SummaryUiState.Success) {
+                            val state = uiState as SummaryUiState.Success
+                            if (state.isPremium) {
+                                showReportOptions = true
+                            } else {
+                                onNavigateToPremium()
+                            }
+                        }
+                    }) {
                         Icon(Icons.Default.PictureAsPdf, contentDescription = "PDF Rapor", tint = MaterialTheme.colorScheme.primary)
                     }
                 }

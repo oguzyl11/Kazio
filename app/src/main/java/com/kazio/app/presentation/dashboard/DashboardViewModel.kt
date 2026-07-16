@@ -128,7 +128,8 @@ class DashboardViewModel @Inject constructor(
             platformProfits = summaryResult.platformProfits.take(3),
             showOnboarding = !preferences.isOnboardingSeen,
             recommendations = recommendations,
-            streak = streak
+            streak = streak,
+            isPremium = preferences.isPremium
         ) as DashboardUiState
     }
         .catch { e ->

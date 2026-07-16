@@ -41,6 +41,7 @@ import com.kazio.app.domain.model.RecordType
 @Composable
 fun DashboardScreen(
     onNavigateToSummary: () -> Unit,
+    onNavigateToPremium: () -> Unit,
     viewModel: DashboardViewModel = hiltViewModel()
 ) {
     var showIncomeSheet by remember { mutableStateOf(false) }
@@ -140,7 +141,16 @@ fun DashboardScreen(
                                 Spacer(modifier = Modifier.width(8.dp))
                             }
                         }
-                        IconButton(onClick = { showReportOptions = true }) {
+                        IconButton(onClick = { 
+                            if (uiState is DashboardUiState.Success) {
+                                val state = uiState as DashboardUiState.Success
+                                if (state.isPremium) {
+                                    showReportOptions = true
+                                } else {
+                                    onNavigateToPremium()
+                                }
+                            }
+                        }) {
                             Icon(
                                 imageVector = Icons.Default.PictureAsPdf,
                                 contentDescription = "PDF Rapor",

@@ -25,6 +25,7 @@ import com.kazio.app.presentation.components.BottomNavigationBar
 import com.kazio.app.presentation.dashboard.DashboardScreen
 import com.kazio.app.presentation.settings.SettingsScreen
 import com.kazio.app.presentation.summary.SummaryScreen
+import com.kazio.app.presentation.premium.PremiumScreen
 import com.kazio.app.presentation.theme.KazioTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -98,7 +99,8 @@ class MainActivity : ComponentActivity() {
                             ) { paddingValues ->
                                 Box(modifier = Modifier.padding(paddingValues)) {
                                     DashboardScreen(
-                                        onNavigateToSummary = { navController.navigate("summary") }
+                                        onNavigateToSummary = { navController.navigate("summary") },
+                                        onNavigateToPremium = { navController.navigate("premium") }
                                     )
                                 }
                             }
@@ -120,7 +122,8 @@ class MainActivity : ComponentActivity() {
                             ) { paddingValues ->
                                 Box(modifier = Modifier.padding(paddingValues)) {
                                     SummaryScreen(
-                                        onNavigateBack = { navController.popBackStack() }
+                                        onNavigateBack = { navController.popBackStack() },
+                                        onNavigateToPremium = { navController.navigate("premium") }
                                     )
                                 }
                             }
@@ -149,6 +152,11 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
                             }
+                        }
+                        composable("premium") {
+                            PremiumScreen(
+                                onNavigateBack = { navController.popBackStack() }
+                            )
                         }
                     }
                 }
