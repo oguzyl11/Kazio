@@ -100,14 +100,14 @@ fun PremiumScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 PremiumFeatureItem(
                     icon = Icons.Default.CloudDone,
-                    title = "Gelişmiş Bulut Yedekleme",
-                    description = "Verileriniz buluta güvende. Telefonunuz değişse bile hiçbir veriniz kaybolmaz."
+                    title = "Sıfır Reklam Deneyimi",
+                    description = "Uygulama içindeki tüm reklamlar kaldırılır, kazancınızı hesaplarken asla bölünmezsiniz."
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 PremiumFeatureItem(
                     icon = Icons.Default.Insights,
-                    title = "Detaylı Analitik",
-                    description = "Hangi saatlerde, hangi bölgelerde en çok kazandığınızı gösteren ısı haritaları."
+                    title = "Gelişmiş Seri Takibi",
+                    description = "Çok yakında gelecek olan profil, kurye yönetimi ve seri takibine ilk siz erişin."
                 )
 
                 Spacer(modifier = Modifier.height(48.dp))

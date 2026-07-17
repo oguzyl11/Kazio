@@ -6,6 +6,9 @@ import android.view.View;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.kazio.app.data.billing.BillingManager;
 import com.kazio.app.data.local.datastore.DataStoreRepository;
 import com.kazio.app.data.local.room.ExpenseDao;
@@ -88,10 +91,8 @@ import dagger.internal.DoubleCheck;
 import dagger.internal.IdentifierNameString;
 import dagger.internal.KeepFieldType;
 import dagger.internal.LazyClassKeyMap;
-import dagger.internal.MapBuilder;
 import dagger.internal.Preconditions;
 import dagger.internal.Provider;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import javax.annotation.processing.Generated;
@@ -429,7 +430,7 @@ public final class DaggerKazioApplication_HiltComponents_SingletonC {
 
     @Override
     public Map<Class<?>, Boolean> getViewModelKeys() {
-      return LazyClassKeyMap.<Boolean>of(MapBuilder.<String, Boolean>newMapBuilder(8).put(LazyClassKeyProvider.com_kazio_app_presentation_addexpense_AddExpenseViewModel, AddExpenseViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_kazio_app_presentation_addincome_AddIncomeViewModel, AddIncomeViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_kazio_app_presentation_auth_AuthViewModel, AuthViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_kazio_app_presentation_dashboard_DashboardViewModel, DashboardViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_kazio_app_presentation_premium_PremiumViewModel, PremiumViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_kazio_app_presentation_settings_SettingsViewModel, SettingsViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_kazio_app_presentation_summary_SummaryViewModel, SummaryViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_kazio_app_presentation_transactions_TransactionsViewModel, TransactionsViewModel_HiltModules.KeyModule.provide()).build());
+      return LazyClassKeyMap.<Boolean>of(ImmutableMap.<String, Boolean>builderWithExpectedSize(8).put(LazyClassKeyProvider.com_kazio_app_presentation_addexpense_AddExpenseViewModel, AddExpenseViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_kazio_app_presentation_addincome_AddIncomeViewModel, AddIncomeViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_kazio_app_presentation_auth_AuthViewModel, AuthViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_kazio_app_presentation_dashboard_DashboardViewModel, DashboardViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_kazio_app_presentation_premium_PremiumViewModel, PremiumViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_kazio_app_presentation_settings_SettingsViewModel, SettingsViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_kazio_app_presentation_summary_SummaryViewModel, SummaryViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_kazio_app_presentation_transactions_TransactionsViewModel, TransactionsViewModel_HiltModules.KeyModule.provide()).build());
     }
 
     @Override
@@ -447,6 +448,7 @@ public final class DaggerKazioApplication_HiltComponents_SingletonC {
       return new ViewCBuilder(singletonCImpl, activityRetainedCImpl, activityCImpl);
     }
 
+    @CanIgnoreReturnValue
     private MainActivity injectMainActivity2(MainActivity instance) {
       MainActivity_MembersInjector.injectDataStoreRepository(instance, singletonCImpl.dataStoreRepositoryProvider.get());
       return instance;
@@ -456,22 +458,28 @@ public final class DaggerKazioApplication_HiltComponents_SingletonC {
     private static final class LazyClassKeyProvider {
       static String com_kazio_app_presentation_addincome_AddIncomeViewModel = "com.kazio.app.presentation.addincome.AddIncomeViewModel";
 
+      static String com_kazio_app_presentation_dashboard_DashboardViewModel = "com.kazio.app.presentation.dashboard.DashboardViewModel";
+
+      static String com_kazio_app_presentation_settings_SettingsViewModel = "com.kazio.app.presentation.settings.SettingsViewModel";
+
       static String com_kazio_app_presentation_transactions_TransactionsViewModel = "com.kazio.app.presentation.transactions.TransactionsViewModel";
 
       static String com_kazio_app_presentation_premium_PremiumViewModel = "com.kazio.app.presentation.premium.PremiumViewModel";
 
-      static String com_kazio_app_presentation_settings_SettingsViewModel = "com.kazio.app.presentation.settings.SettingsViewModel";
-
-      static String com_kazio_app_presentation_dashboard_DashboardViewModel = "com.kazio.app.presentation.dashboard.DashboardViewModel";
-
       static String com_kazio_app_presentation_addexpense_AddExpenseViewModel = "com.kazio.app.presentation.addexpense.AddExpenseViewModel";
-
-      static String com_kazio_app_presentation_summary_SummaryViewModel = "com.kazio.app.presentation.summary.SummaryViewModel";
 
       static String com_kazio_app_presentation_auth_AuthViewModel = "com.kazio.app.presentation.auth.AuthViewModel";
 
+      static String com_kazio_app_presentation_summary_SummaryViewModel = "com.kazio.app.presentation.summary.SummaryViewModel";
+
       @KeepFieldType
       AddIncomeViewModel com_kazio_app_presentation_addincome_AddIncomeViewModel2;
+
+      @KeepFieldType
+      DashboardViewModel com_kazio_app_presentation_dashboard_DashboardViewModel2;
+
+      @KeepFieldType
+      SettingsViewModel com_kazio_app_presentation_settings_SettingsViewModel2;
 
       @KeepFieldType
       TransactionsViewModel com_kazio_app_presentation_transactions_TransactionsViewModel2;
@@ -480,19 +488,13 @@ public final class DaggerKazioApplication_HiltComponents_SingletonC {
       PremiumViewModel com_kazio_app_presentation_premium_PremiumViewModel2;
 
       @KeepFieldType
-      SettingsViewModel com_kazio_app_presentation_settings_SettingsViewModel2;
-
-      @KeepFieldType
-      DashboardViewModel com_kazio_app_presentation_dashboard_DashboardViewModel2;
-
-      @KeepFieldType
       AddExpenseViewModel com_kazio_app_presentation_addexpense_AddExpenseViewModel2;
 
       @KeepFieldType
-      SummaryViewModel com_kazio_app_presentation_summary_SummaryViewModel2;
+      AuthViewModel com_kazio_app_presentation_auth_AuthViewModel2;
 
       @KeepFieldType
-      AuthViewModel com_kazio_app_presentation_auth_AuthViewModel2;
+      SummaryViewModel com_kazio_app_presentation_summary_SummaryViewModel2;
     }
   }
 
@@ -620,55 +622,55 @@ public final class DaggerKazioApplication_HiltComponents_SingletonC {
 
     @Override
     public Map<Class<?>, javax.inject.Provider<ViewModel>> getHiltViewModelMap() {
-      return LazyClassKeyMap.<javax.inject.Provider<ViewModel>>of(MapBuilder.<String, javax.inject.Provider<ViewModel>>newMapBuilder(8).put(LazyClassKeyProvider.com_kazio_app_presentation_addexpense_AddExpenseViewModel, ((Provider) addExpenseViewModelProvider)).put(LazyClassKeyProvider.com_kazio_app_presentation_addincome_AddIncomeViewModel, ((Provider) addIncomeViewModelProvider)).put(LazyClassKeyProvider.com_kazio_app_presentation_auth_AuthViewModel, ((Provider) authViewModelProvider)).put(LazyClassKeyProvider.com_kazio_app_presentation_dashboard_DashboardViewModel, ((Provider) dashboardViewModelProvider)).put(LazyClassKeyProvider.com_kazio_app_presentation_premium_PremiumViewModel, ((Provider) premiumViewModelProvider)).put(LazyClassKeyProvider.com_kazio_app_presentation_settings_SettingsViewModel, ((Provider) settingsViewModelProvider)).put(LazyClassKeyProvider.com_kazio_app_presentation_summary_SummaryViewModel, ((Provider) summaryViewModelProvider)).put(LazyClassKeyProvider.com_kazio_app_presentation_transactions_TransactionsViewModel, ((Provider) transactionsViewModelProvider)).build());
+      return LazyClassKeyMap.<javax.inject.Provider<ViewModel>>of(ImmutableMap.<String, javax.inject.Provider<ViewModel>>builderWithExpectedSize(8).put(LazyClassKeyProvider.com_kazio_app_presentation_addexpense_AddExpenseViewModel, ((Provider) addExpenseViewModelProvider)).put(LazyClassKeyProvider.com_kazio_app_presentation_addincome_AddIncomeViewModel, ((Provider) addIncomeViewModelProvider)).put(LazyClassKeyProvider.com_kazio_app_presentation_auth_AuthViewModel, ((Provider) authViewModelProvider)).put(LazyClassKeyProvider.com_kazio_app_presentation_dashboard_DashboardViewModel, ((Provider) dashboardViewModelProvider)).put(LazyClassKeyProvider.com_kazio_app_presentation_premium_PremiumViewModel, ((Provider) premiumViewModelProvider)).put(LazyClassKeyProvider.com_kazio_app_presentation_settings_SettingsViewModel, ((Provider) settingsViewModelProvider)).put(LazyClassKeyProvider.com_kazio_app_presentation_summary_SummaryViewModel, ((Provider) summaryViewModelProvider)).put(LazyClassKeyProvider.com_kazio_app_presentation_transactions_TransactionsViewModel, ((Provider) transactionsViewModelProvider)).build());
     }
 
     @Override
     public Map<Class<?>, Object> getHiltViewModelAssistedMap() {
-      return Collections.<Class<?>, Object>emptyMap();
+      return ImmutableMap.<Class<?>, Object>of();
     }
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
-      static String com_kazio_app_presentation_summary_SummaryViewModel = "com.kazio.app.presentation.summary.SummaryViewModel";
-
-      static String com_kazio_app_presentation_transactions_TransactionsViewModel = "com.kazio.app.presentation.transactions.TransactionsViewModel";
-
-      static String com_kazio_app_presentation_dashboard_DashboardViewModel = "com.kazio.app.presentation.dashboard.DashboardViewModel";
-
-      static String com_kazio_app_presentation_addexpense_AddExpenseViewModel = "com.kazio.app.presentation.addexpense.AddExpenseViewModel";
+      static String com_kazio_app_presentation_premium_PremiumViewModel = "com.kazio.app.presentation.premium.PremiumViewModel";
 
       static String com_kazio_app_presentation_auth_AuthViewModel = "com.kazio.app.presentation.auth.AuthViewModel";
 
-      static String com_kazio_app_presentation_settings_SettingsViewModel = "com.kazio.app.presentation.settings.SettingsViewModel";
-
-      static String com_kazio_app_presentation_premium_PremiumViewModel = "com.kazio.app.presentation.premium.PremiumViewModel";
+      static String com_kazio_app_presentation_dashboard_DashboardViewModel = "com.kazio.app.presentation.dashboard.DashboardViewModel";
 
       static String com_kazio_app_presentation_addincome_AddIncomeViewModel = "com.kazio.app.presentation.addincome.AddIncomeViewModel";
 
-      @KeepFieldType
-      SummaryViewModel com_kazio_app_presentation_summary_SummaryViewModel2;
+      static String com_kazio_app_presentation_transactions_TransactionsViewModel = "com.kazio.app.presentation.transactions.TransactionsViewModel";
 
-      @KeepFieldType
-      TransactionsViewModel com_kazio_app_presentation_transactions_TransactionsViewModel2;
+      static String com_kazio_app_presentation_addexpense_AddExpenseViewModel = "com.kazio.app.presentation.addexpense.AddExpenseViewModel";
 
-      @KeepFieldType
-      DashboardViewModel com_kazio_app_presentation_dashboard_DashboardViewModel2;
+      static String com_kazio_app_presentation_summary_SummaryViewModel = "com.kazio.app.presentation.summary.SummaryViewModel";
 
-      @KeepFieldType
-      AddExpenseViewModel com_kazio_app_presentation_addexpense_AddExpenseViewModel2;
-
-      @KeepFieldType
-      AuthViewModel com_kazio_app_presentation_auth_AuthViewModel2;
-
-      @KeepFieldType
-      SettingsViewModel com_kazio_app_presentation_settings_SettingsViewModel2;
+      static String com_kazio_app_presentation_settings_SettingsViewModel = "com.kazio.app.presentation.settings.SettingsViewModel";
 
       @KeepFieldType
       PremiumViewModel com_kazio_app_presentation_premium_PremiumViewModel2;
 
       @KeepFieldType
+      AuthViewModel com_kazio_app_presentation_auth_AuthViewModel2;
+
+      @KeepFieldType
+      DashboardViewModel com_kazio_app_presentation_dashboard_DashboardViewModel2;
+
+      @KeepFieldType
       AddIncomeViewModel com_kazio_app_presentation_addincome_AddIncomeViewModel2;
+
+      @KeepFieldType
+      TransactionsViewModel com_kazio_app_presentation_transactions_TransactionsViewModel2;
+
+      @KeepFieldType
+      AddExpenseViewModel com_kazio_app_presentation_addexpense_AddExpenseViewModel2;
+
+      @KeepFieldType
+      SummaryViewModel com_kazio_app_presentation_summary_SummaryViewModel2;
+
+      @KeepFieldType
+      SettingsViewModel com_kazio_app_presentation_settings_SettingsViewModel2;
     }
 
     private static final class SwitchingProvider<T> implements Provider<T> {
@@ -882,7 +884,7 @@ public final class DaggerKazioApplication_HiltComponents_SingletonC {
 
     @Override
     public Set<Boolean> getDisableFragmentGetContextFix() {
-      return Collections.<Boolean>emptySet();
+      return ImmutableSet.<Boolean>of();
     }
 
     @Override

@@ -83,7 +83,14 @@ fun SummaryScreen(
                     Text(text = "Hata: ${state.message}", color = MaterialTheme.colorScheme.error, modifier = Modifier.align(Alignment.Center))
                 }
                 is SummaryUiState.Success -> {
-                    SummaryContent(state, viewModel::onPeriodSelected)
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        Box(modifier = Modifier.weight(1f)) {
+                            SummaryContent(state, viewModel::onPeriodSelected)
+                        }
+                        if (!state.isPremium) {
+                            com.kazio.app.presentation.components.AdBanner()
+                        }
+                    }
                 }
             }
         }

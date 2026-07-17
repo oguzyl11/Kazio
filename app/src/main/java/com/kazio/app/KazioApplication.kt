@@ -1,6 +1,7 @@
 package com.kazio.app
 
 import android.app.Application
+import com.google.android.gms.ads.MobileAds
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
@@ -9,6 +10,9 @@ class KazioApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
+        
+        // Initialize AdMob
+        MobileAds.initialize(this) {}
         
         setupGlobalExceptionHandler()
     }

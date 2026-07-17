@@ -91,7 +91,11 @@ class MainActivity : ComponentActivity() {
                                         currentRoute = "dashboard",
                                         onNavigate = { route ->
                                             if (route != "dashboard") {
-                                                navController.navigate(route)
+                                                navController.navigate(route) {
+                                                    popUpTo("dashboard") { saveState = true }
+                                                    launchSingleTop = true
+                                                    restoreState = true
+                                                }
                                             }
                                         }
                                     )
@@ -113,7 +117,9 @@ class MainActivity : ComponentActivity() {
                                         onNavigate = { route ->
                                             if (route != "summary") {
                                                 navController.navigate(route) {
-                                                    popUpTo("dashboard")
+                                                    popUpTo("dashboard") { saveState = true }
+                                                    launchSingleTop = true
+                                                    restoreState = true
                                                 }
                                             }
                                         }
@@ -131,7 +137,15 @@ class MainActivity : ComponentActivity() {
                         composable("settings") {
                             Scaffold(
                                 bottomBar = {
-                                    BottomNavigationBar(currentRoute = "settings", onNavigate = { navController.navigate(it) })
+                                    BottomNavigationBar(currentRoute = "settings", onNavigate = { route ->
+                                        if (route != "settings") {
+                                            navController.navigate(route) {
+                                                popUpTo("dashboard") { saveState = true }
+                                                launchSingleTop = true
+                                                restoreState = true
+                                            }
+                                        }
+                                    })
                                 }
                             ) { paddingValues ->
                                 Box(modifier = Modifier.padding(paddingValues)) {

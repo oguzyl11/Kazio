@@ -19,6 +19,9 @@ animator fragment_fade_exit
 animator fragment_open_enter
 animator fragment_open_exit
 attr action
+attr adSize
+attr adSizes
+attr adUnitId
 attr alpha
 attr argType
 attr buttonSize
@@ -71,6 +74,10 @@ bool glance_appwidget_available
 bool workmanager_test_configuration
 color androidx_core_ripple_material_light
 color androidx_core_secondary_text_default_material_light
+color browser_actions_bg_grey
+color browser_actions_divider_color
+color browser_actions_text_color
+color browser_actions_title_color
 color call_notification_answer_color
 color call_notification_decline_color
 color common_google_signin_btn_text_dark
@@ -128,6 +135,8 @@ color notification_action_color_filter
 color notification_icon_bg_color
 color vector_tint_color
 color vector_tint_theme_color
+dimen browser_actions_context_menu_max_width
+dimen browser_actions_context_menu_min_padding
 dimen compat_button_inset_horizontal_material
 dimen compat_button_inset_vertical_material
 dimen compat_button_padding_horizontal_material
@@ -150,6 +159,9 @@ dimen notification_small_icon_size_as_large
 dimen notification_subtext_size
 dimen notification_top_pad
 dimen notification_top_pad_large_text
+drawable admob_close_button_black_circle_white_cross
+drawable admob_close_button_white_circle_black_cross
+drawable admob_close_button_white_cross
 drawable common_full_open_on_phone
 drawable common_google_signin_btn_icon_dark
 drawable common_google_signin_btn_icon_dark_focused
@@ -218,6 +230,8 @@ drawable notification_template_icon_bg
 drawable notification_template_icon_low_bg
 drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
+drawable offline_dialog_background
+drawable offline_dialog_default_icon_42dp
 drawable widget_card_bg
 drawable widget_card_bg_green
 drawable widget_main_bg
@@ -265,6 +279,11 @@ id androidx_compose_ui_view_composition_context
 id async
 id auto
 id blocking
+id browser_actions_header_text
+id browser_actions_menu_item_icon
+id browser_actions_menu_item_text
+id browser_actions_menu_items
+id browser_actions_menu_view
 id checkBox
 id checkBoxIcon
 id checkBoxText
@@ -381,6 +400,7 @@ id info
 id inspection_slot_table_set
 id is_pooling_container_tag
 id italic
+id layout
 id light
 id line1
 id line3
@@ -391,6 +411,9 @@ id notification_background
 id notification_main_column
 id notification_main_column_container
 id off
+id offline_dialog_advertiser_name
+id offline_dialog_image
+id offline_dialog_text
 id on
 id pooling_container_listener_holder_tag
 id radioIcon
@@ -441,6 +464,7 @@ interpolator glance_btn_checkbox_unchecked_mtrl_animation_interpolator_0
 interpolator glance_btn_checkbox_unchecked_mtrl_animation_interpolator_1
 interpolator glance_btn_radio_to_off_mtrl_animation_interpolator_0
 interpolator glance_btn_radio_to_on_mtrl_animation_interpolator_0
+layout admob_empty_layout
 layout box_center_horizontal_bottom
 layout box_center_horizontal_bottom_0children
 layout box_center_horizontal_bottom_10children
@@ -641,6 +665,8 @@ layout box_start_top_7children
 layout box_start_top_8children
 layout box_start_top_9children
 layout box_wrapwidth_expandheight
+layout browser_actions_context_menu_page
+layout browser_actions_context_menu_row
 layout column_center_horizontal_bottom
 layout column_center_horizontal_center_vertical
 layout column_center_horizontal_null_0children
@@ -1041,6 +1067,7 @@ layout notification_template_custom_big
 layout notification_template_icon_group
 layout notification_template_part_chronometer
 layout notification_template_part_time
+layout offline_ads_dialog
 layout radio_column_center_horizontal_bottom
 layout radio_column_center_horizontal_center_vertical
 layout radio_column_center_horizontal_null_0children
@@ -1645,9 +1672,13 @@ string common_google_play_services_wear_update_text
 string common_open_on_phone
 string common_signin_button_text
 string common_signin_button_text_long
+string copy_toast_msg
 string default_error_message
 string default_popup_window_title
 string dropdown_menu
+string fallback_menu_item_copy_link
+string fallback_menu_item_open_in_browser
+string fallback_menu_item_share_link
 string glance_error_layout_text
 string glance_error_layout_title
 string in_progress
@@ -1708,12 +1739,32 @@ string m3c_time_picker_period_toggle_description
 string m3c_time_picker_pm
 string m3c_tooltip_long_press_label
 string m3c_tooltip_pane_description
+string native_body
+string native_headline
+string native_media_view
 string navigation_menu
 string not_selected
+string notifications_permission_confirm
+string notifications_permission_decline
+string notifications_permission_title
 string off
+string offline_dialog_image_description
+string offline_dialog_text
+string offline_notification_title
+string offline_opt_in_confirm
+string offline_opt_in_decline
+string offline_opt_in_message
+string offline_opt_in_title
 string on
 string range_end
 string range_start
+string s1
+string s2
+string s3
+string s4
+string s5
+string s6
+string s7
 string selected
 string status_bar_notification_info_overflow
 string switch_role
@@ -1721,6 +1772,7 @@ string tab
 string template_percent
 string tooltip_description
 string tooltip_label
+string watermark_label_prefix
 style Base_Glance_AppWidget_Background
 style DialogWindowTheme
 style FloatingDialogTheme
@@ -1760,10 +1812,12 @@ style TextAppearance_Compat_Notification_Info
 style TextAppearance_Compat_Notification_Line2
 style TextAppearance_Compat_Notification_Time
 style TextAppearance_Compat_Notification_Title
+style Theme_IAPTheme
 style Widget_Compat_NotificationActionContainer
 style Widget_Compat_NotificationActionText
 style Widget_Glance_AppWidget_CallbackTrampoline
 styleable ActivityNavigator android_name action data dataPattern targetPackage
+styleable AdsAttrs adSize adSizes adUnitId
 styleable Capability queryPatterns shortcutMatchRequired
 styleable ColorStateListItem android_color android_alpha android_lStar alpha lStar
 styleable FontFamily fontProviderAuthority fontProviderCerts fontProviderFetchStrategy fontProviderFetchTimeout fontProviderPackage fontProviderQuery fontProviderSystemFontFamily
@@ -1783,6 +1837,8 @@ styleable NavInclude graph
 styleable Navigator android_label android_id route
 styleable SignInButton buttonSize colorScheme scopeUris
 xml com_android_billingclient_phenotype
+xml gma_ad_services_config
+xml image_share_filepaths
 xml kazio_large_widget_info
 xml kazio_small_widget_info
 xml provider_paths

@@ -9,6 +9,12 @@
         android:label="Kazio"
         android:theme="@android:style/Theme.Material.NoActionBar"
         android:supportsRtl="true">
+        
+        <!-- AdMob Test App ID (Gerçek yayınlama öncesi kendi ID'niz ile değiştirin) -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true">

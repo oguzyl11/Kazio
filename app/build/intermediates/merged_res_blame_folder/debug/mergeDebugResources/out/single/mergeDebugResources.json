@@ -1,66 +1,66 @@
 [
     {
-        "merged": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-debug-73:\\layout_widget_initial_layout.xml.flat",
-        "source": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-main-75:\\layout\\widget_initial_layout.xml"
+        "merged": "com.kazio.app-debug-78:/drawable_ic_widget_calendar.xml.flat",
+        "source": "com.kazio.app-main-80:/drawable/ic_widget_calendar.xml"
     },
     {
-        "merged": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-debug-73:\\drawable_ic_widget_calendar.xml.flat",
-        "source": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-main-75:\\drawable\\ic_widget_calendar.xml"
+        "merged": "com.kazio.app-debug-78:/xml_kazio_small_widget_info.xml.flat",
+        "source": "com.kazio.app-main-80:/xml/kazio_small_widget_info.xml"
     },
     {
-        "merged": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-debug-73:\\drawable_widget_main_bg.xml.flat",
-        "source": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-main-75:\\drawable\\widget_main_bg.xml"
+        "merged": "com.kazio.app-debug-78:/drawable_ic_widget_arrow_down.xml.flat",
+        "source": "com.kazio.app-main-80:/drawable/ic_widget_arrow_down.xml"
     },
     {
-        "merged": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-debug-73:\\drawable_ic_widget_trophy.xml.flat",
-        "source": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-main-75:\\drawable\\ic_widget_trophy.xml"
+        "merged": "com.kazio.app-debug-78:/drawable_widget_card_bg.xml.flat",
+        "source": "com.kazio.app-main-80:/drawable/widget_card_bg.xml"
     },
     {
-        "merged": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-debug-73:\\drawable_kazio_logo_bg.png.flat",
-        "source": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-main-75:\\drawable\\kazio_logo_bg.png"
+        "merged": "com.kazio.app-debug-78:/drawable_kazio_logo_bg.png.flat",
+        "source": "com.kazio.app-main-80:/drawable/kazio_logo_bg.png"
     },
     {
-        "merged": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-debug-73:\\drawable_ic_widget_arrow_up.xml.flat",
-        "source": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-main-75:\\drawable\\ic_widget_arrow_up.xml"
+        "merged": "com.kazio.app-debug-78:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.kazio.app-main-80:/mipmap-anydpi-v26/ic_launcher_round.xml"
     },
     {
-        "merged": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-debug-73:\\drawable_widget_card_bg_green.xml.flat",
-        "source": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-main-75:\\drawable\\widget_card_bg_green.xml"
+        "merged": "com.kazio.app-debug-78:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.kazio.app-main-80:/mipmap-anydpi-v26/ic_launcher.xml"
     },
     {
-        "merged": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-debug-73:\\xml_provider_paths.xml.flat",
-        "source": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-main-75:\\xml\\provider_paths.xml"
+        "merged": "com.kazio.app-debug-78:/layout_widget_initial_layout.xml.flat",
+        "source": "com.kazio.app-main-80:/layout/widget_initial_layout.xml"
     },
     {
-        "merged": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-debug-73:\\drawable_ic_widget_wallet.xml.flat",
-        "source": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-main-75:\\drawable\\ic_widget_wallet.xml"
+        "merged": "com.kazio.app-debug-78:/xml_kazio_large_widget_info.xml.flat",
+        "source": "com.kazio.app-main-80:/xml/kazio_large_widget_info.xml"
     },
     {
-        "merged": "com.kazio.app-debug-73:/mipmap-anydpi-v26_ic_launcher.xml.flat",
-        "source": "com.kazio.app-main-75:/mipmap-anydpi-v26/ic_launcher.xml"
+        "merged": "com.kazio.app-debug-78:/drawable_widget_main_bg.xml.flat",
+        "source": "com.kazio.app-main-80:/drawable/widget_main_bg.xml"
     },
     {
-        "merged": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-debug-73:\\xml_kazio_large_widget_info.xml.flat",
-        "source": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-main-75:\\xml\\kazio_large_widget_info.xml"
+        "merged": "com.kazio.app-debug-78:/xml_provider_paths.xml.flat",
+        "source": "com.kazio.app-main-80:/xml/provider_paths.xml"
     },
     {
-        "merged": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-debug-73:\\drawable_kazio_logo_transparent.png.flat",
-        "source": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-main-75:\\drawable\\kazio_logo_transparent.png"
+        "merged": "com.kazio.app-debug-78:/drawable_ic_widget_wallet.xml.flat",
+        "source": "com.kazio.app-main-80:/drawable/ic_widget_wallet.xml"
     },
     {
-        "merged": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-debug-73:\\drawable_ic_widget_arrow_down.xml.flat",
-        "source": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-main-75:\\drawable\\ic_widget_arrow_down.xml"
+        "merged": "com.kazio.app-debug-78:/drawable_ic_widget_arrow_up.xml.flat",
+        "source": "com.kazio.app-main-80:/drawable/ic_widget_arrow_up.xml"
     },
     {
-        "merged": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-debug-73:\\xml_kazio_small_widget_info.xml.flat",
-        "source": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-main-75:\\xml\\kazio_small_widget_info.xml"
+        "merged": "com.kazio.app-debug-78:/drawable_widget_card_bg_green.xml.flat",
+        "source": "com.kazio.app-main-80:/drawable/widget_card_bg_green.xml"
     },
     {
-        "merged": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-debug-73:\\drawable_widget_card_bg.xml.flat",
-        "source": "C:\\Users\\OGUZHAN\\.gradle\\daemon\\8.11.1\\com.kazio.app-main-75:\\drawable\\widget_card_bg.xml"
+        "merged": "com.kazio.app-debug-78:/drawable_ic_widget_trophy.xml.flat",
+        "source": "com.kazio.app-main-80:/drawable/ic_widget_trophy.xml"
     },
     {
-        "merged": "com.kazio.app-debug-73:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
-        "source": "com.kazio.app-main-75:/mipmap-anydpi-v26/ic_launcher_round.xml"
+        "merged": "com.kazio.app-debug-78:/drawable_kazio_logo_transparent.png.flat",
+        "source": "com.kazio.app-main-80:/drawable/kazio_logo_transparent.png"
     }
 ]

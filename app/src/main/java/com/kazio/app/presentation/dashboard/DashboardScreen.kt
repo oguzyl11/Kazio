@@ -175,19 +175,26 @@ fun DashboardScreen(
                         Text(text = "Hata: ${state.message}", color = MaterialTheme.colorScheme.error, modifier = Modifier.align(Alignment.Center))
                     }
                     is DashboardUiState.Success -> {
-                        DashboardContent(
-                            state = state,
-                            onNavigateToSummary = onNavigateToSummary,
-                            onStartShift = viewModel::startShift,
-                            onShiftCardClick = { showShiftManagement = true },
-                            onIncomeClick = { showIncomeSheet = true },
-                            onExpenseClick = { showExpenseSheet = true },
-                            onIncomePositioned = { incomeButtonRect = it },
-                            onExpensePositioned = { expenseButtonRect = it },
-                            onShiftCardPositioned = { shiftCardRect = it },
-                            onSummaryGridPositioned = { summaryGridRect = it },
-                            onShowTransactions = { showTransactions = true }
-                        )
+                        Column(modifier = Modifier.fillMaxSize()) {
+                            Box(modifier = Modifier.weight(1f)) {
+                                DashboardContent(
+                                    state = state,
+                                    onNavigateToSummary = onNavigateToSummary,
+                                    onStartShift = viewModel::startShift,
+                                    onShiftCardClick = { showShiftManagement = true },
+                                    onIncomeClick = { showIncomeSheet = true },
+                                    onExpenseClick = { showExpenseSheet = true },
+                                    onIncomePositioned = { incomeButtonRect = it },
+                                    onExpensePositioned = { expenseButtonRect = it },
+                                    onShiftCardPositioned = { shiftCardRect = it },
+                                    onSummaryGridPositioned = { summaryGridRect = it },
+                                    onShowTransactions = { showTransactions = true }
+                                )
+                            }
+                            if (!state.isPremium) {
+                                com.kazio.app.presentation.components.AdBanner()
+                            }
+                        }
                     }
                 }
             }
