@@ -216,20 +216,18 @@ private fun PlatformProfitItem(profit: PlatformProfit, formatter: NumberFormat) 
             .height(72.dp)
             .clip(RoundedCornerShape(8.dp))
             .background(com.kazio.app.presentation.theme.SurfaceMidnight)
-            .padding(start = 6.dp) // Space for the side bar
     ) {
         Box(
             modifier = Modifier
                 .fillMaxHeight()
                 .width(6.dp)
                 .background(borderColor)
-                .offset(x = (-6).dp)
         )
         
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(end = 16.dp, top = 12.dp, bottom = 12.dp),
+                .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 12.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {

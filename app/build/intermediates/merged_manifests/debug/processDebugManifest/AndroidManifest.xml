@@ -2,11 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kazio.app"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0.0" >
 
     <uses-sdk
         android:minSdkVersion="26"
-        android:targetSdkVersion="34" />
+        android:targetSdkVersion="36" />
 
     <uses-permission android:name="com.android.vending.BILLING" />
 
@@ -34,11 +34,12 @@
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:debuggable="true"
         android:extractNativeLibs="false"
-        android:icon="@drawable/kazio_logo_bg"
+        android:icon="@mipmap/ic_launcher"
         android:label="Kazio"
-        android:roundIcon="@drawable/kazio_logo_bg"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:testOnly="true" >
+        android:testOnly="true"
+        android:theme="@android:style/Theme.Material.NoActionBar" >
         <activity
             android:name="com.kazio.app.MainActivity"
             android:exported="true" >
