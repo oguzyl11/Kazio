@@ -26,6 +26,7 @@ import com.kazio.app.presentation.dashboard.DashboardScreen
 import com.kazio.app.presentation.settings.SettingsScreen
 import com.kazio.app.presentation.summary.SummaryScreen
 import com.kazio.app.presentation.premium.PremiumScreen
+import com.kazio.app.presentation.splash.SplashScreen
 import com.kazio.app.presentation.theme.KazioTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -52,8 +53,8 @@ class MainActivity : ComponentActivity() {
 
                 val navController = rememberNavController()
                 
-                // Determine Start Destination
-                val startDestination = if (preferences?.isRegistered != true) {
+                // Determine Actual Destination after Splash
+                val actualStartDestination = if (preferences?.isRegistered != true) {
                     "register"
                 } else if (preferences?.isLoggedIn != true) {
                     "login"
@@ -61,7 +62,17 @@ class MainActivity : ComponentActivity() {
                     "main"
                 }
 
-                NavHost(navController = navController, startDestination = startDestination) {
+                NavHost(navController = navController, startDestination = "splash") {
+                    composable("splash") {
+                        SplashScreen(
+                            nextDestination = actualStartDestination,
+                            onSplashFinished = { nextTarget ->
+                                navController.navigate(nextTarget) {
+                                    popUpTo("splash") { inclusive = true }
+                                }
+                            }
+                        )
+                    }
                     composable("register") {
                         RegisterScreen(onRegisterSuccess = {
                             navController.navigate("main") {
