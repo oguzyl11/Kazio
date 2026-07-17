@@ -62,12 +62,42 @@ fun DashboardScreen(
     var summaryGridRect by remember { mutableStateOf<Rect?>(null) }
     var showcaseStep by remember { mutableIntStateOf(0) }
 
-    val currentShowcaseTarget = remember(showcaseStep, incomeButtonRect, expenseButtonRect, shiftCardRect, summaryGridRect) {
+    val configuration = androidx.compose.ui.platform.LocalConfiguration.current
+    val density = androidx.compose.ui.platform.LocalDensity.current
+    
+    val currentShowcaseTarget = remember(showcaseStep, incomeButtonRect, expenseButtonRect, shiftCardRect, summaryGridRect, configuration, density) {
+        val screenWidthPx = with(density) { configuration.screenWidthDp.dp.toPx() }
+        val screenHeightPx = with(density) { configuration.screenHeightDp.dp.toPx() }
+        
+        val pdfRect = Rect(
+            left = screenWidthPx - with(density) { 64.dp.toPx() },
+            top = with(density) { 16.dp.toPx() },
+            right = screenWidthPx - with(density) { 16.dp.toPx() },
+            bottom = with(density) { 64.dp.toPx() }
+        )
+        
+        val summaryRect = Rect(
+            left = screenWidthPx * 0.1f,
+            top = screenHeightPx - with(density) { 80.dp.toPx() },
+            right = screenWidthPx * 0.4f,
+            bottom = screenHeightPx - with(density) { 20.dp.toPx() }
+        )
+        
+        val settingsRect = Rect(
+            left = screenWidthPx * 0.6f,
+            top = screenHeightPx - with(density) { 80.dp.toPx() },
+            right = screenWidthPx * 0.9f,
+            bottom = screenHeightPx - with(density) { 20.dp.toPx() }
+        )
+
         when (showcaseStep) {
             1 -> incomeButtonRect?.let { ShowcaseTarget(it, "Gelir Ekle", "Buraya dokunarak kazançlarınızı hızlıca kaydedebilirsiniz.") }
             2 -> expenseButtonRect?.let { ShowcaseTarget(it, "Gider Ekle", "Yakıt veya yemek gibi giderlerinizi buradan ekleyebilirsiniz.") }
             3 -> shiftCardRect?.let { ShowcaseTarget(it, "Vardiya Kontrolü", "Çalışmaya başladığınızda vardiyanızı buradan başlatıp bitirebilirsiniz.") }
             4 -> summaryGridRect?.let { ShowcaseTarget(it, "Günlük Durum", "Günlük toplam gelir ve giderinizi anlık olarak buradan takip edebilirsiniz.") }
+            5 -> ShowcaseTarget(pdfRect, "PDF Çıktısı", "Premium'a geçerek kazanç raporlarınızı PDF olarak indirebilirsiniz.")
+            6 -> ShowcaseTarget(summaryRect, "Özet Ekranı", "Haftalık ve aylık kazanç grafiklerinizi, en yüksek rekorlarınızı buradan takip edebilirsiniz.")
+            7 -> ShowcaseTarget(settingsRect, "Ayarlar", "Profilinizi yönetebilir ve premium avantajlarına buradan göz atabilirsiniz.")
             else -> null
         }
     }
@@ -206,7 +236,7 @@ fun DashboardScreen(
                 isVisible = showcaseStep > 0,
                 currentTarget = currentShowcaseTarget,
                 onNext = {
-                    if (showcaseStep < 4) {
+                    if (showcaseStep < 7) {
                         showcaseStep++
                     } else {
                         showcaseStep = 0
