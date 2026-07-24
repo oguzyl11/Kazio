@@ -47,6 +47,13 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 database.clearAllTables()
+                val platformDao = database.platformDao()
+                platformDao.insertPlatform(com.kazio.app.data.local.room.PlatformEntity(name = "Trendyol Go", colorTag = "#FF8A65", isCustom = false))
+                platformDao.insertPlatform(com.kazio.app.data.local.room.PlatformEntity(name = "Getir", colorTag = "#9575CD", isCustom = false))
+                platformDao.insertPlatform(com.kazio.app.data.local.room.PlatformEntity(name = "Yemeksepeti", colorTag = "#E57373", isCustom = false))
+                platformDao.insertPlatform(com.kazio.app.data.local.room.PlatformEntity(name = "Uber", colorTag = "#90A4AE", isCustom = false))
+                platformDao.insertPlatform(com.kazio.app.data.local.room.PlatformEntity(name = "Bolt", colorTag = "#81C784", isCustom = false))
+                platformDao.insertPlatform(com.kazio.app.data.local.room.PlatformEntity(name = "BiTaksi", colorTag = "#FFD54F", isCustom = false))
             }
             dataStoreRepository.clearUser()
             onComplete()
