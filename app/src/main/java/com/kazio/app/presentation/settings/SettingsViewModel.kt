@@ -6,10 +6,12 @@ import com.kazio.app.data.local.datastore.DataStoreRepository
 import com.kazio.app.data.local.room.KazioDatabase
 import com.kazio.app.domain.model.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -43,7 +45,9 @@ class SettingsViewModel @Inject constructor(
 
     fun deleteAccount(onComplete: () -> Unit) {
         viewModelScope.launch {
-            database.clearAllTables()
+            withContext(Dispatchers.IO) {
+                database.clearAllTables()
+            }
             dataStoreRepository.clearUser()
             onComplete()
         }
