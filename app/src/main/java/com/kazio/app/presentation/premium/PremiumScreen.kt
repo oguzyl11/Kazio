@@ -72,9 +72,10 @@ fun PremiumScreen(
                     .fillMaxSize()
                     .padding(paddingValues)
                     .verticalScroll(rememberScrollState())
-                    .padding(24.dp),
+                    .padding(horizontal = 24.dp, vertical = 48.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     text = "Kazançlarını Bir Üst Seviyeye Taşı",
                     style = MaterialTheme.typography.headlineMedium,

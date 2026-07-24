@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -85,6 +86,8 @@ fun ShowcaseOverlay(
                 modifier = Modifier
                     .offset { IntOffset(x = 64, y = textOffsetY.roundToInt()) }
                     .width(280.dp)
+                    .background(Color.Black.copy(alpha = 0.8f), androidx.compose.foundation.shape.RoundedCornerShape(12.dp))
+                    .padding(16.dp)
             ) {
                 androidx.compose.foundation.layout.Column {
                     Text(

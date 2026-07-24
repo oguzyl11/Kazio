@@ -22,8 +22,8 @@ android {
         applicationId = "com.kazio.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -137,6 +137,9 @@ dependencies {
 
     // Billing
     implementation("com.android.billingclient:billing-ktx:6.1.0")
+
+    // WorkManager for Notifications
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
 }
 
 tasks.withType<Test> {

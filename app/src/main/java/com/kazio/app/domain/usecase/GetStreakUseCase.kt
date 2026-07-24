@@ -25,14 +25,20 @@ class GetStreakUseCase @Inject constructor(
 
             var streak = 0
             val today = getStartOfDay(Calendar.getInstance().timeInMillis)
-            val yesterday = today - (24 * 60 * 60 * 1000)
+            
+            val calendar = Calendar.getInstance()
+            calendar.timeInMillis = today
+            calendar.add(Calendar.DAY_OF_YEAR, -1)
+            val yesterday = calendar.timeInMillis
 
             var expectedDate = allDates.firstOrNull { it == today || it == yesterday } ?: return@combine 0
 
             for (date in allDates) {
                 if (date == expectedDate) {
                     streak++
-                    expectedDate -= (24 * 60 * 60 * 1000)
+                    calendar.timeInMillis = expectedDate
+                    calendar.add(Calendar.DAY_OF_YEAR, -1)
+                    expectedDate = calendar.timeInMillis
                 } else if (date < expectedDate) {
                     break
                 }

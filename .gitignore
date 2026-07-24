@@ -19,3 +19,5 @@ app/build/
 
 # Android Studio logs
 *.log
+*.jks
+*.keystore
