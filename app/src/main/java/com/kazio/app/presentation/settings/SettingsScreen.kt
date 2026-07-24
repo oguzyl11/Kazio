@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExitToApp
@@ -156,6 +157,44 @@ fun SettingsScreen(
                     Icon(Icons.Default.ExitToApp, contentDescription = null)
                     Spacer(modifier = Modifier.width(8.dp))
                     Text("Çıkış Yap / Uygulamayı Kilitle", fontWeight = FontWeight.Bold)
+                }
+                
+                var showDeleteConfirmDialog by remember { mutableStateOf(false) }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = { showDeleteConfirmDialog = true },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error, contentColor = MaterialTheme.colorScheme.onError),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Icon(androidx.compose.material.icons.Icons.Default.Delete, contentDescription = null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Hesabı ve Tüm Verileri Sil", fontWeight = FontWeight.Bold)
+                }
+
+                if (showDeleteConfirmDialog) {
+                    AlertDialog(
+                        onDismissRequest = { showDeleteConfirmDialog = false },
+                        title = { Text("Hesabı Sil") },
+                        text = { Text("Tüm kayıtlarınız, ayarlarınız ve profiliniz kalıcı olarak silinecektir. Bu işlem geri alınamaz. Emin misiniz?") },
+                        confirmButton = {
+                            TextButton(
+                                onClick = {
+                                    showDeleteConfirmDialog = false
+                                    viewModel.deleteAccount(onComplete = onLogout)
+                                }
+                            ) {
+                                Text("Sil", color = MaterialTheme.colorScheme.error)
+                            }
+                        },
+                        dismissButton = {
+                            TextButton(onClick = { showDeleteConfirmDialog = false }) {
+                                Text("İptal")
+                            }
+                        }
+                    )
                 }
             }
         }

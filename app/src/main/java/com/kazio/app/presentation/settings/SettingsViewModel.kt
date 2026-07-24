@@ -3,6 +3,7 @@ package com.kazio.app.presentation.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kazio.app.data.local.datastore.DataStoreRepository
+import com.kazio.app.data.local.room.KazioDatabase
 import com.kazio.app.domain.model.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val dataStoreRepository: DataStoreRepository
+    private val dataStoreRepository: DataStoreRepository,
+    private val database: KazioDatabase
 ) : ViewModel() {
 
     val userPreferences: StateFlow<UserPreferences?> = dataStoreRepository.userPreferencesFlow
@@ -36,6 +38,14 @@ class SettingsViewModel @Inject constructor(
     fun restartOnboarding() {
         viewModelScope.launch {
             dataStoreRepository.updateOnboardingSeen(false)
+        }
+    }
+
+    fun deleteAccount(onComplete: () -> Unit) {
+        viewModelScope.launch {
+            database.clearAllTables()
+            dataStoreRepository.clearUser()
+            onComplete()
         }
     }
 }

@@ -47,44 +47,49 @@ fun ShowcaseOverlay(
         exit = fadeOut()
     ) {
         if (currentTarget == null) return@AnimatedVisibility
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .pointerInput(Unit) {
-                    detectTapGestures(
-                        onTap = { onNext() },
-                        onLongPress = { onSkip() }
-                    )
-                }
-                .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
-        ) {
-            Canvas(modifier = Modifier.fillMaxSize()) {
-                // Draw dark background
-                drawRect(color = Color.Black.copy(alpha = 0.8f))
-
-                // Cut out the target area
-                val radius = (maxOf(currentTarget.rect.width, currentTarget.rect.height) / 2) + 24.dp.toPx()
-                
-                drawCircle(
-                    color = Color.Transparent,
-                    radius = radius,
-                    center = currentTarget.rect.center,
-                    blendMode = BlendMode.Clear
-                )
+        
+        Box(modifier = Modifier.fillMaxSize().graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)) {
+            val configuration = androidx.compose.ui.platform.LocalConfiguration.current
+            val screenHeightPx = with(androidx.compose.ui.platform.LocalDensity.current) { configuration.screenHeightDp.dp.toPx() }
+            val isTargetAtTop = currentTarget.rect.center.y < (screenHeightPx / 2)
+            
+            val textOffsetY = if (isTargetAtTop) {
+                screenHeightPx * 0.65f
+            } else {
+                screenHeightPx * 0.15f
             }
 
-            // Draw Text Box
-            val isTargetAtTop = currentTarget.rect.center.y < 1000f // Rough estimate to place text below or above
-            val textOffsetY = if (isTargetAtTop) {
-                currentTarget.rect.bottom + 48f
-            } else {
-                currentTarget.rect.top - 300f
+            Canvas(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onTap = {
+                                onNext()
+                            },
+                            onLongPress = { onSkip() }
+                        )
+                    }
+            ) {
+                drawRect(
+                    color = Color.Black.copy(alpha = 0.7f),
+                    size = size
+                )
+                
+                if (currentTarget.rect.width > 0 && currentTarget.rect.height > 0) {
+                    val radius = (maxOf(currentTarget.rect.width, currentTarget.rect.height) / 2) + 24.dp.toPx()
+                    drawCircle(
+                        color = Color.Transparent,
+                        radius = radius,
+                        center = currentTarget.rect.center,
+                        blendMode = BlendMode.Clear
+                    )
+                }
             }
 
             Box(
                 modifier = Modifier
-                    .offset { IntOffset(x = 64, y = textOffsetY.roundToInt()) }
+                    .offset { IntOffset(x = 64, y = textOffsetY.toInt()) }
                     .width(280.dp)
                     .background(Color.Black.copy(alpha = 0.8f), androidx.compose.foundation.shape.RoundedCornerShape(12.dp))
                     .padding(16.dp)
