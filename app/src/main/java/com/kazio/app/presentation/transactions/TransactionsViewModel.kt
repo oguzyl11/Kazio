@@ -34,15 +34,11 @@ class TransactionsViewModel @Inject constructor(
     }
 
     private fun loadTransactions() {
-        val calendar = Calendar.getInstance()
-        val endAt = calendar.timeInMillis
-        // Load for the current month
-        calendar.set(Calendar.DAY_OF_MONTH, 1)
-        calendar.set(Calendar.HOUR_OF_DAY, 0)
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
+        val calendar = java.util.Calendar.getInstance()
+        // Load for the last 30 days or all recent
+        calendar.add(java.util.Calendar.DAY_OF_YEAR, -60)
         val startAt = calendar.timeInMillis
+        val endAt = Long.MAX_VALUE
 
         viewModelScope.launch {
             combine(
