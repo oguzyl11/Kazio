@@ -169,7 +169,7 @@ fun SettingsScreen(
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error, contentColor = MaterialTheme.colorScheme.onError),
                     shape = RoundedCornerShape(12.dp)
                 ) {
-                    Icon(androidx.compose.material.icons.Icons.Default.Delete, contentDescription = null)
+                    Icon(Icons.Default.Delete, contentDescription = null)
                     Spacer(modifier = Modifier.width(8.dp))
                     Text("Hesabı ve Tüm Verileri Sil", fontWeight = FontWeight.Bold)
                 }
